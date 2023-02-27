@@ -11,7 +11,7 @@ class Player:
         return self.username
 
 
-def insert_username_into_player_table(username):
+def insert_username_into_player_table(name):
     try:
         connection = mysql.connector.connect(host='localhost',
                                              database='players',
@@ -22,7 +22,7 @@ def insert_username_into_player_table(username):
         mysql_insert_query = """INSERT INTO Players (Username)
                                 VALUES (%s)"""
 
-        cursor.execute(mysql_insert_query, (username,))
+        cursor.execute(mysql_insert_query, (name,))
         connection.commit()
         print("Player username inserted successfully into Players table!")
 
@@ -36,6 +36,6 @@ def insert_username_into_player_table(username):
             print("MySQL connection has been closed.")
 
 
-username = 'Descole'
-insert_username_into_player_table(username)
+name = 'Descole'
+insert_username_into_player_table(name)
 
