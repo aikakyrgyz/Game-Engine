@@ -1,6 +1,6 @@
 import pygame_menu
 
-APP_TITLE = "<App Title>"
+APP_TITLE = "<Placeholder Title>"
 SURFACE_WIDTH = 1000
 SURFACE_HEIGHT = 700
 BACKGROUND_COLOR = (24, 24, 64, 90)    # DARK BLUE
