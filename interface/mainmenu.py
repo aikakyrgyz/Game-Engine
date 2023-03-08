@@ -2,18 +2,16 @@ import pygame
 import pygame_menu
 import apptheme as app_theme
 import registration as reg
+from database import game as gamesql
 from puyopuyo import puyoui as pm
 from drmario import drmui as dm
 
 
 # move or adjust this function
 def get_game_list_menu():
-    """
-    gets the list of games currently in the system
-    :return:
-    """
-    # maybe get this from the server?
-    return [("Dr. Mario", 0), ("Puyo Puyo", 1)]
+    return gamesql.return_game_list()
+    # if no database connection, use the below
+    # return [("Dr. Mario", 0), ("Puyo Puyo", 1)]
 
 
 class MainMenu:
@@ -42,23 +40,23 @@ class MainMenu:
         player1 = self.players[0].get_value()
         player2 = self.players[1].get_value()
 
-        print(f"register player 1: {player1}")
-        # register player 1
         reg.register_player(player1)
+        print(f"Registered Player 1: {player1}")
+        # register player 1
         # best to validate here or in registration?
         if player2 != "":
-            print(f"register player 2: {player2}")
+            print(f"Registered Player 2: {player2}")
             reg.register_player(player2)
 
     def start_selected_game(self):
         self.registration()
-        print("starting selected game...")
+        print("Starting selected game...")
         if self.selected_game_index == 0:
             dm.start_menu()
         elif self.selected_game_index == 1:
             pm.start_menu()
         else:
-            print("no game selected")
+            print("Mo game selected!")
 
     def start_menu(self):
 
@@ -66,7 +64,7 @@ class MainMenu:
             self.selected_game_index = self.app_menu.get_widget('select_game').get_index()
             # self.selected_game = self.app_menu.get_widget('select_game').get_attribute()
             self.selected_game = get_game_list_menu()[self.selected_game_index][0]
-            print(f"selected game: {self.selected_game}")
+            print(f"Selected Game: {self.selected_game}")
 
         #
         reg_menu = pygame_menu.Menu(
