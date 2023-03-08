@@ -2,15 +2,6 @@ import config
 import mysql.connector
 
 
-class Player:
-
-    def __init__(self, username):
-        self.username = username
-
-    def get_player(self):
-        return self.username
-
-
 def insert_username_into_player_table(name):
     try:
         connection = mysql.connector.connect(host='localhost',
@@ -34,8 +25,4 @@ def insert_username_into_player_table(name):
             cursor.close()
             connection.close()
             print("MySQL connection has been closed.")
-
-
-name = 'Descole'
-insert_username_into_player_table(name)
 
