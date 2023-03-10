@@ -19,7 +19,7 @@ def get_theme():
                              title_background_color=TITLE_BACKGR_COLOR,
                              widget_font=FONT,
                              widget_font_color=ACCENT_COLOR,
-                             # background_color=(0, 0, 0, 0),  # transparent background
+                            #  background_color=(0, 0, 0, 0),  # transparent background
                              background_color=BACKGROUND_COLOR,  # 75% opacity
                              # title_bar_style=pygame_menu.widgets.MENUBAR_STYLE_TITLE_ONLY_DIAGONAL,
                              widget_padding=25,
