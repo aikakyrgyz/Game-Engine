@@ -18,7 +18,11 @@ class TilesBoard:
     #     # maybe we just assume the tile size is the same as the sprite.
     #     self.tile_size = self.tile_size
 
+<<<<<<< HEAD
     def __init__(self, tile_size, tile_factories: TileAbstractFactory, types_board):
+=======
+    def __init__(self, tile_size, tile_factories: TileAbstractFactory, types_board: list[str][str]):
+>>>>>>> c081d3274b5d8dfa7b0a725a3c44ff2f5f121087
         self.tile_factories = tile_factories
         self.tile_size = tile_size
         # add the empty tile factory to the tile_factories

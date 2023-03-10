@@ -1,6 +1,10 @@
 from abc import ABC, abstractmethod
+<<<<<<< HEAD
 
 from engine.GameObject.direction import Direction
+=======
+from GameObject.direction import Direction
+>>>>>>> c081d3274b5d8dfa7b0a725a3c44ff2f5f121087
 
 
 class GameObject(ABC):

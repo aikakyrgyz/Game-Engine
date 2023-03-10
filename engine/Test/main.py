@@ -1,8 +1,31 @@
+<<<<<<< HEAD
 from engine.Board.tiles_board import TilesBoard
 from engine.Tile.empty_tile_factory import EmptyTileFactory
 from engine.Tile.tile import Tile
 from engine.Tile.tileAbstractFactory import TileAbstractFactory
 from engine.Tile.tileFactory import TileFactory
+=======
+
+# This is a sample Python script.
+
+# Press ⌃R to execute it or replace it with your code.
+# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+# from engine.Board.tiles_board import TilesBoard
+# from engine.Tile.tile import Tile
+# from engine.Tile.tileAbstractFactory import TileAbstractFactory
+# from engine.Tile.tileFactory import TileFactory
+# from Tile.tile import Tile
+# from Tile.tileAbstractFactory import TileAbstractFactory
+# from Tile.tileFactory import TileFactory
+# from engine.Board.tiles_board import TilesBoard
+
+
+from engine.Tile.empty_tile_factory import EmptyTileFactory
+from engine.Tile import Tile
+from engine.Board.tiles_board import TilesBoard
+from tileAbstractFactory import TileAbstractFactory
+from tileFactory import TileFactory
+>>>>>>> c081d3274b5d8dfa7b0a725a3c44ff2f5f121087
 
 
 def print_hi(name):
@@ -68,6 +91,10 @@ print(type(red_tile))
 
 
 tile_types = [["EMPTY", "EMPTY", "EMPTY"], ["EMPTY", "RED", "EMPTY"], ["YELLOW", "YELLOW", "YELLOW"]]
+<<<<<<< HEAD
 b = TilesBoard(10, factory, tile_types)
+=======
+b = TilesBoard(10, factory, )
+>>>>>>> c081d3274b5d8dfa7b0a725a3c44ff2f5f121087
 b.print_board()
 

@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 from engine.GameObject.status import Status
 from engine.Sprite.sprite import Sprite
 
+=======
+from Sprite.sprite import Sprite
+from GameObject.status import Status
+>>>>>>> c081d3274b5d8dfa7b0a725a3c44ff2f5f121087
 
 class Tile:
     def __init__(self, sprite:Sprite):
@@ -27,8 +32,11 @@ class Tile:
 
     def get_col_index(self):
         return self.col
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> c081d3274b5d8dfa7b0a725a3c44ff2f5f121087
     def set_status(self, status: Status):
         self.status = status
 

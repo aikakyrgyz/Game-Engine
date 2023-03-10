@@ -1,5 +1,6 @@
 from abc import abstractmethod
 
+<<<<<<< HEAD
 
 # later: refractor to a shape factory
 from engine.Errors.errors import InvalidBoardIndexError
@@ -7,12 +8,25 @@ from engine.GameObject.game_object import GameObject
 from engine.GameObject.status import Status, Position
 from engine.Tile.tileAbstractFactory import TileAbstractFactory
 
+=======
+# from Board.tiles_board import TilesBoard
+from Errors.errors import InvalidIndexError
+from GameObject.game_object import GameObject
+from GameObject.status import Position, Status
+from Tile.tileAbstractFactory import TileAbstractFactory
+
+# later: refractor to a shape factory
+>>>>>>> c081d3274b5d8dfa7b0a725a3c44ff2f5f121087
 
 class FallingShape(GameObject):
     # to do: try to validate the r, and c without passing tiles_board
     def __init__(self, number_of_tiles:int, tile_types: list[str], tile_factory:TileAbstractFactory):
         self.status = Status["FALLING"]
+<<<<<<< HEAD
         # position = horizontal
+=======
+        position = horizontal
+>>>>>>> c081d3274b5d8dfa7b0a725a3c44ff2f5f121087
         self.number_of_tiles = number_of_tiles
         # self.board = tiles_board
         self.tile_types = tile_types
@@ -57,7 +71,11 @@ class FallingShape(GameObject):
     def get_tile_on_index_in_falling_shape(self, index):
         # index of the tile in the list, not the index in the board
         if index < 0 or index > self.number_of_tiles:
+<<<<<<< HEAD
             raise InvalidBoardIndexError("The index of the faller tile is not valid")
+=======
+            raise InvalidIndexError("The index of the faller tile is not valid")
+>>>>>>> c081d3274b5d8dfa7b0a725a3c44ff2f5f121087
         return self._instance[index]
 
     def set_tile_status(self):

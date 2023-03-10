@@ -7,8 +7,11 @@ import datetime
 # 0:00:05.077263
 # >>> int(delta.total_seconds() * 1000) # milliseconds
 # 5077
+<<<<<<< HEAD
 from engine.Board.tiles_board import TilesBoard
 
+=======
+>>>>>>> c081d3274b5d8dfa7b0a725a3c44ff2f5f121087
 
 class TMGE:
     def __init__(self, FPS, GUI):
