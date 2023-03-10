@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from Board.tiles_board import TilesBoard
+# from Board.tiles_board import TilesBoard
 from Errors.errors import InvalidIndexError
 from GameObject.game_object import GameObject
 from GameObject.status import Position, Status
@@ -10,11 +10,11 @@ from Tile.tileAbstractFactory import TileAbstractFactory
 
 class FallingShape(GameObject):
     # to do: try to validate the r, and c without passing tiles_board
-    def __init__(self, number_of_tiles:int, tile_types: list[str], tile_factory:TileAbstractFactory, tiles_board: TilesBoard):
+    def __init__(self, number_of_tiles:int, tile_types: list[str], tile_factory:TileAbstractFactory):
         self.status = Status["FALLING"]
-        positioon = horizontal
+        position = horizontal
         self.number_of_tiles = number_of_tiles
-        self.board = tiles_board
+        # self.board = tiles_board
         self.tile_types = tile_types
         self.tile_factory = tile_factory
         self._instance = []

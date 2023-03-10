@@ -1,11 +1,23 @@
+
 # This is a sample Python script.
 
 # Press ⌃R to execute it or replace it with your code.
 # Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
-from Tile.empty_tile_factory import EmptyTileFactory
-from Tile.tile import Tile
-from Tile.tileAbstractFactory import TileAbstractFactory
-from Tile.tileFactory import TileFactory
+# from engine.Board.tiles_board import TilesBoard
+# from engine.Tile.tile import Tile
+# from engine.Tile.tileAbstractFactory import TileAbstractFactory
+# from engine.Tile.tileFactory import TileFactory
+# from Tile.tile import Tile
+# from Tile.tileAbstractFactory import TileAbstractFactory
+# from Tile.tileFactory import TileFactory
+# from engine.Board.tiles_board import TilesBoard
+
+
+from engine.Tile.empty_tile_factory import EmptyTileFactory
+from engine.Tile import Tile
+from engine.Board.tiles_board import TilesBoard
+from tileAbstractFactory import TileAbstractFactory
+from tileFactory import TileFactory
 
 
 def print_hi(name):
@@ -20,8 +32,8 @@ if __name__ == '__main__':
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
 
 
-from Sprite import sprite
-from Tile import tileFactory
+# from Sprite import sprite
+# from Tile import tileFactory
 # In client code
 
 # create concrete factories
@@ -52,11 +64,11 @@ factory = TileAbstractFactory()
 yellow_factory = TileFactory(YellowVirus, "yellow.png")
 red_factory = TileFactory(RedVirus, "red.png")
 
-factory.register_factory("yellow", yellow_factory)
-factory.register_factory("red", red_factory)
+factory.register_factory("YELLOW", yellow_factory)
+factory.register_factory("RED", red_factory)
 
-yellow_tile = factory.create_tile("yellow")
-red_tile = factory.create_tile("red")
+yellow_tile = factory.create_tile("YELLOW")
+red_tile = factory.create_tile("RED")
 
 
 empty = EmptyTileFactory()
@@ -69,4 +81,8 @@ print(type(red_tile))
 # print(isinstance(red_virus_tile, my_red_virus_factory))
 
 
+
+tile_types = [["EMPTY", "EMPTY", "EMPTY"], ["EMPTY", "RED", "EMPTY"], ["YELLOW", "YELLOW", "YELLOW"]]
+b = TilesBoard(10, factory, )
+b.print_board()
 

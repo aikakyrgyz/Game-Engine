@@ -1,4 +1,6 @@
 import datetime
+
+# from Board.tiles_board import TilesBoard
 # >>> b = datetime.datetime.now()
 # >>> delta = b - a
 # >>> print delta
@@ -10,6 +12,7 @@ class TMGE:
     def __init__(self, FPS, GUI):
         self.game_objects = []
         self.tile_board = None
+        self.tile_board = TilesBoard()
         self.game_pause= False
         self.setFPS(FPS)
         self.GUI = GUI # would update the drawing and the game window itself, such as score and time.
@@ -52,3 +55,4 @@ class TMGE:
 
 
 
+print("IN TMGE>PY")

@@ -1,8 +1,15 @@
-from GameObject.falling_shape import FallingShape
-from GameObject.status import Position
-from Tile.empty_tile_factory import EmptyTileFactory
-from Tile.tile import Tile
-from Tile.tileAbstractFactory import TileAbstractFactory
+# from GameObject.falling_shape import FallingShape
+# from GameObject.status import Position
+# from Tile.empty_tile_factory import EmptyTileFactory
+# from Tile.tile import Tile
+# from Tile.tileAbstractFactory import TileAbstractFactory
+
+
+from engine.GameObject.falling_shape import FallingShape
+from engine.GameObject.status import Position
+from engine.Tile.empty_tile_factory import EmptyTileFactory
+from engine.Tile.tile import Tile
+from engine.Tile.tileAbstractFactory import TileAbstractFactory
 
 
 class TilesBoard:
@@ -13,7 +20,7 @@ class TilesBoard:
 
     def __init__(self, tile_size, tile_factories: TileAbstractFactory, types_board: list[str][str]):
         self.tile_factories = tile_factories
-        self.tile_size = tile_size;
+        self.tile_size = tile_size
         # add the empty tile factory to the tile_factories
         # the client does not have to create an empty factory, it will always have a default image
         self.tile_factories.register_factory("EMPTY", EmptyTileFactory())
@@ -118,6 +125,15 @@ class TilesBoard:
 
 
 
+    # for test
+    def print_board(self):
+        for tile in self.board:
+            if(tile.get_row_index() == len(self.board[0]-1)):
+                print(f'[{tile.get_index()}]')
+                print()
+            else:
+                print(tile.get_index(), end='')
+
 
     def update(self):
         # 1. check if the falling shape will be fine falling farther
@@ -125,6 +141,13 @@ class TilesBoard:
         pass
 
 
+  # for test
+    def print_board(self):
+        for row in self.board:
+            for tile in row:
+                print(f'[{tile.get_index()}-{type(tile)}]', end = '')
+            print()
+        # print(type(self.board[0][0]) == type(self.board[0][1]))
 
 
 
