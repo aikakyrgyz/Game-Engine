@@ -1,10 +1,10 @@
 import pygame
 import pygame_menu
 import apptheme as app_theme
-# import registration as reg
-# from database import game as gamesql
-# from puyopuyo import puyoui as pm
-# from drmario import drmui as dm
+import registration as reg
+from database import game as gamesql
+from puyopuyo import puyoui as pm
+from drmario import drmui as dm
 
 # background image for main menu
 def draw_background():
@@ -16,9 +16,9 @@ def draw_background():
 
 # move or adjust this function
 def get_game_list_menu():
-    # return gamesql.return_game_list()
+    return gamesql.return_game_list()
     # if no database connection, use the below
-    return [("Dr. Mario", 0), ("Puyo Puyo", 1)]
+    # return [("Dr. Mario", 0), ("Puyo Puyo", 1)]
 
 class MainMenu:
     def __init__(self, title, surface_dimensions, theme=app_theme.get_theme()):
@@ -55,7 +55,7 @@ class MainMenu:
             reg.register_player(player2)
 
     def start_selected_game(self):
-        # self.registration()
+        self.registration()
         print("Starting selected game...")
         if self.selected_game_index == 0:
             dm.start_menu()
@@ -95,7 +95,7 @@ class MainMenu:
             align=pygame_menu.locals.ALIGN_LEFT,
             set_margin=(400,400)
         )
-        
+
         self.players[1] = reg_menu.add.text_input('Player 2: ', default="")\
             .set_margin(400, 0).set_alignment(pygame_menu.locals.ALIGN_LEFT,)
         reg_menu.add.button(f'Play {get_game_list_menu()[self.selected_game_index][0]}', self.start_selected_game)
