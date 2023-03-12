@@ -4,7 +4,9 @@ from enum import Enum
 
 class Status(Enum):
     FALLING = "falling"
+    FROZEN = "frozen"
     FALLEN = "fallen"
+    MATCHED = "matched"
 
 
 class Position(Enum):

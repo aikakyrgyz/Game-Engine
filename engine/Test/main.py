@@ -1,10 +1,8 @@
-<<<<<<< HEAD
 from engine.Board.tiles_board import TilesBoard
 from engine.Tile.empty_tile_factory import EmptyTileFactory
 from engine.Tile.tile import Tile
 from engine.Tile.tileAbstractFactory import TileAbstractFactory
 from engine.Tile.tileFactory import TileFactory
-=======
 
 # This is a sample Python script.
 
@@ -25,7 +23,6 @@ from engine.Tile import Tile
 from engine.Board.tiles_board import TilesBoard
 from tileAbstractFactory import TileAbstractFactory
 from tileFactory import TileFactory
->>>>>>> c081d3274b5d8dfa7b0a725a3c44ff2f5f121087
 
 
 def print_hi(name):
@@ -36,6 +33,7 @@ def print_hi(name):
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     print_hi('PyCharm')
+
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
 
@@ -65,8 +63,10 @@ if __name__ == '__main__':
 class YellowVirus(Tile):
     pass
 
+
 class RedVirus(Tile):
     pass
+
 
 factory = TileAbstractFactory()
 yellow_factory = TileFactory(YellowVirus, "yellow.png")
@@ -78,7 +78,6 @@ factory.register_factory("RED", red_factory)
 yellow_tile = factory.create_tile("YELLOW")
 red_tile = factory.create_tile("RED")
 
-
 empty = EmptyTileFactory()
 empty2 = EmptyTileFactory()
 print(type(empty))
@@ -89,12 +88,14 @@ print(type(red_tile))
 # print(isinstance(red_virus_tile, my_red_virus_factory))
 
 
-
 tile_types = [["EMPTY", "EMPTY", "EMPTY"], ["EMPTY", "RED", "EMPTY"], ["YELLOW", "YELLOW", "YELLOW"]]
-<<<<<<< HEAD
-b = TilesBoard(10, factory, tile_types)
-=======
-b = TilesBoard(10, factory, )
->>>>>>> c081d3274b5d8dfa7b0a725a3c44ff2f5f121087
-b.print_board()
+
+
+
+
+
+
+
+
+
 
