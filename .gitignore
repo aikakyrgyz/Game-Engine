@@ -1,1 +1,11 @@
 config.py
+venv
+drmario/myTiles/__pycache__/
+engine/Board/__pycache__/
+engine/Errors/__pycache__/
+engine/GUI/__pycache__/
+engine/GameObject/__pycache__/
+engine/Sprite/__pycache__/
+engine/Tile/__pycache__/
+engine/__pycache__/
+drmario/__pycache__/myTileBoard.cpython-39.pyc
