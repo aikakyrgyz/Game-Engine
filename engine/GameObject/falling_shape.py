@@ -1,24 +1,25 @@
 from abc import abstractmethod
 
-from Board.tiles_board import TilesBoard
-from Errors.errors import InvalidIndexError
-from GameObject.game_object import GameObject
-from GameObject.status import Position, Status
-from Tile.tileAbstractFactory import TileAbstractFactory
+# later: refractor to a shape factory
+from engine.Errors.errors import InvalidIndexOnBoardError
+from engine.GameObject.game_object import GameObject
+from engine.GameObject.status import Status, Position
+from engine.Tile.tileAbstractFactory import TileAbstractFactory
+
 
 # later: refractor to a shape factory
 
 class FallingShape(GameObject):
     # to do: try to validate the r, and c without passing tiles_board
-    def __init__(self, number_of_tiles:int, tile_types: list[str], tile_factory:TileAbstractFactory, tiles_board: TilesBoard):
+    def __init__(self, column, number_of_tiles: int, tile_types: list[str], tile_factories:TileAbstractFactory):
         self.status = Status["FALLING"]
-        positioon = horizontal
+        self.column = column
         self.number_of_tiles = number_of_tiles
-        self.board = tiles_board
         self.tile_types = tile_types
-        self.tile_factory = tile_factory
+        self.factory = tile_factories
         self._instance = []
-        self.last_tile_index_in_shape = number_of_tiles-1 # remains the same, the index in the shape itself not the board
+        self.bottom_tile_row = 0
+        # self.set_tile_status()
         # Capsule, tile_types = ["YELLOW", "RED"]
         # the creation shall be in order as specified by the tile_types
 
@@ -41,23 +42,26 @@ class FallingShape(GameObject):
         # so we want to validate the rows and columns
         # want to create the faller always at the top of the board
         #
-        self.createFallingShape()
-        self.set_tile_status()
+
 
     @abstractmethod
     def create(self):
         pass
 
-    def set_status(self, status: Status):
-        self.status = Status.FALLING
 
-    def get_status(self, status):
+    def set_status(self, status: Status):
+        self.status = status
+
+    def get_status(self, status: Status):
         return self.status
+
+    def get_column(self):
+        return self.column
 
     def get_tile_on_index_in_falling_shape(self, index):
         # index of the tile in the list, not the index in the board
         if index < 0 or index > self.number_of_tiles:
-            raise InvalidIndexError("The index of the faller tile is not valid")
+            raise InvalidIndexOnBoardError("The index of the faller tile is not valid")
         return self._instance[index]
 
     def set_tile_status(self):
@@ -75,6 +79,9 @@ class FallingShape(GameObject):
 
     def rotate(self):
         pass # do we want to rotate
+
+    def get_bottom_tile_row(self):
+        return self.bottom_tile_row
 
     def get_bottom_tile_row_index(self):
         return self._instance[self.last_tile_index_in_shape].get_row_index()

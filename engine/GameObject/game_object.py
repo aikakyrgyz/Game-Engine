@@ -1,9 +1,10 @@
 from abc import ABC, abstractmethod
-from GameObject.direction import Direction
+
+from engine.GameObject.direction import Direction
 
 
 class GameObject(ABC):
-    def __init__(self, x, y, width, height, speed, direction:Direction):
+    def __init__(self, x, y, width, height, speed, direction: Direction):
         self.x = x
         self.y = y
         self.width = width
@@ -13,12 +14,11 @@ class GameObject(ABC):
         self.speed = 0
         self.direction = Direction.UP
 
-
-    @abstractmethod
-    def update(self): ...
-
-    @abstractmethod
-    def draw(self): ...
+    # @abstractmethod
+    # def update(self): ...
+    #
+    # @abstractmethod
+    # def draw(self): ...
 
     # can have different speeds for different directions
     # implement later if needed
@@ -37,7 +37,7 @@ class GameObject(ABC):
     #         self.x += self.direction.get_dx() * self.speed
     #         self.y += self.direction.get_dy() * self.speed
 
-    
+
 
 
 

@@ -1,8 +1,3 @@
-from abc import ABC, abstractmethod
-
-from Sprite import sprite
-from Tile import tileFactory
-
 
 class TileAbstractFactory:
     def __init__(self):
