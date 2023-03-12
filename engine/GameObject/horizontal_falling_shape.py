@@ -15,7 +15,7 @@
 #     def isValidRow(self):
 #         if self.col < 0 or self.col + self.number_of_tiles > len(self.board.get_num_columns()):
 #             raise InvalidIndexError("The tile cannot fit within the board with the specified index")
-#         @overriden
+
 #     def create(self):
 #         for i in range(self.number_of_tiles):
 #             tile = self.tile_factory.create_tile(self.tile_types[i])
@@ -39,6 +39,4 @@
 #                    r = range(1, 3)
 #                     c = constant
 #     faller.location (r+1)
-#
-# def overriden(f):  # this is just for marking the function as a defined abstract function
-#     return f
+
