@@ -46,8 +46,8 @@ class FallingShape(GameObject):
 
     @abstractmethod
     def create(self):
+        """Overridden by our horizontal and vertical shapes, since the creation for both differs"""
         pass
-
 
     def set_status(self, status: Status):
         self.status = status

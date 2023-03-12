@@ -1,6 +1,8 @@
 
 import random
+from abc import ABC, abstractmethod
 
+from engine.Errors.errors import InvalidIndexOnBoardError
 from engine.GameObject.falling_shape import FallingShape
 from engine.GameObject.status import Position
 from engine.GameObject.vertical_falling_shape import VerticalFallingShape
@@ -9,7 +11,7 @@ from engine.Tile.tile import Tile
 from engine.Tile.tileAbstractFactory import TileAbstractFactory
 
 
-class TilesBoard:
+class TilesBoard(ABC):
     def __init__(self, tile_size, tile_factories: TileAbstractFactory, falling_tile_factories: TileAbstractFactory, tile_types, falling_tile_types, min_num_tiles, max_num_tiles):
         self.tile_factories = tile_factories
         self.tile_size = tile_size
@@ -84,20 +86,20 @@ class TilesBoard:
         return self.num_rows
 
     # check if the index is not out of boundaries
-    def is_valid_location(self, r, c)-> bool:
-        if r>=len(self.board) or r<0 or c>len(self.board[0]) or c<0:
+    def is_valid_location(self, r, c) -> bool:
+        if r >= len(self.board) or r < 0 or c > len(self.board[0]) or c<0:
             return False
         return True
 
-    # change the type of the Tile at [r, c], the type must be the exsiting type in the tile factory
+    # change the type of the Tile at [r, c], the type must be the existing type in the tile factory
     def set_tile(self, r: int, c: int, type: str):
         if self.is_valid_location(r, c):
             self.tile_types[r][c] = type
             self.board[r][c] = self.tile_factories.create_tile(type)
 
     def set_empty_tile(self, r:int, c:int):
-        self.tile_types[r][c] = "EMPTY"
-        self.board[r][c] = self.tile_factories.create_tile("EMPTY")
+        self.tile_types[r][c] = "E"
+        self.board[r][c] = self.tile_factories.create_tile("E")
 
     def get_tile_type(self, tile:Tile) -> Tile:
         return type(tile)
@@ -141,16 +143,42 @@ class TilesBoard:
     def update(self):
         # 1. check if the falling shape will be fine falling farther
         # 2. call fallingShape.update of its own
-        pass
+        self.match_all()
+        # the shape is addded in the game loop depending on whether or not a falling shape is already present on the board
 
+    def isValidColumn(self):
+        # if c == null then the default c will be the center
+        if self.col is None:
+            c = self.board.get_num_columns() / 2
+        elif  self.col < 0 or self.col >= len(self.board.get_num_columns()):
+            raise InvalidIndexOnBoardError("The column index for the tile is not within the board")
 
   # for test
     def print_board(self):
+        # just to make sure the types and the rows are set accordingly
         for row in self.board:
             for tile in row:
                 print(f'[{tile.get_index()}-{type(tile)}]', end = '')
             print()
 
+    def horizontal_match(self):
+        """Defines the logic for the horizontal match"""
+        pass
+
+    def vertical_match(self):
+        """Defines the logic for vertical match"""
+        pass
+
+    @abstractmethod
+    def match_all(self):
+        """
+        Overridden in the child class in order to specify the preferred match
+        Can be either:
+        horizontal_match()
+        vertical_match()
+        or both
+        """
+    pass
 
 
 

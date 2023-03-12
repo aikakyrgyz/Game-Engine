@@ -1,7 +1,7 @@
 import sys
 # sys.path.append(r'/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project')
 # if you are having a engine moduleNotFound error, you will have to include the root directory path to sys.path
-
+from drmario.myTileBoard import MyTileBoard
 from engine.Sprite.sprite import Sprite
 from engine.Board.tiles_board import TilesBoard
 from engine.GUI.gui import GUI
@@ -19,20 +19,25 @@ class DrMarioGame(TMGE):
         TMGE.__init__(self, FPS, GUI)
         self.tile_types = [["E", "E", "E"], ["E", "R", "E"], ["Y", "Y", "Y"]]
         self.tile_size = 20
+        # the reason why we want them to be produced from the same factories is for matching purposes.
+        # ex: in DrMario redPill and redVirus should be matchable
         self.falling_tile_types = ["Y", "R"]  # A = yellow pill # B = red pill
 
+    def overriden(f): # this is just for marking the function as a defined abstract function
+        return f
+
+    @overriden
     def set_up_my_game(self):
         self.create_my_tile_board()
 
     def create_my_tile_board(self):
         self.set_up_my_tile_factories()
         self.set_up_my_falling_tile_factories()
-        my_tile_board = TilesBoard(self.tile_size,
+        my_tile_board = MyTileBoard(self.tile_size,
                                         self.factory, self.falling_factory,
                                         self.tile_types, self.falling_tile_types,
                                         2, 2)
         self.set_tile_board(my_tile_board)
-
 
     def set_up_my_tile_factories(self):
         # create the main factory
