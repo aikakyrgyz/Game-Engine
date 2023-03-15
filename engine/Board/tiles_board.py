@@ -1,4 +1,3 @@
-
 import random
 from abc import ABC, abstractmethod
 
@@ -12,7 +11,13 @@ from engine.Tile.tileAbstractFactory import TileAbstractFactory
 
 
 class TilesBoard(ABC):
-    def __init__(self, tile_size, tile_factories: TileAbstractFactory, falling_tile_factories: TileAbstractFactory, tile_types, falling_tile_types, min_num_tiles, max_num_tiles):
+    def __init__(self, tile_size,
+                 tile_factories: TileAbstractFactory,
+                 falling_tile_factories: TileAbstractFactory,
+                 tile_types,
+                 falling_tile_types,
+                 min_num_tiles,
+                 max_num_tiles):
         self.tile_factories = tile_factories
         self.tile_size = tile_size
         self.falling_tile_factories = falling_tile_factories
@@ -87,24 +92,24 @@ class TilesBoard(ABC):
 
     # check if the index is not out of boundaries
     def is_valid_location(self, r, c) -> bool:
-        if r >= len(self.board) or r < 0 or c > len(self.board[0]) or c<0:
+        if r >= len(self.board) or r < 0 or c > len(self.board[0]) or c < 0:
             return False
         return True
 
     # change the type of the Tile at [r, c], the type must be the existing type in the tile factory
-    def set_tile(self, r: int, c: int, type: str):
+    def set_tile(self, r: int, c: int, tile_type: str):
         if self.is_valid_location(r, c):
-            self.tile_types[r][c] = type
-            self.board[r][c] = self.tile_factories.create_tile(type)
+            self.tile_types[r][c] = tile_type
+            self.board[r][c] = self.tile_factories.create_tile(tile_type)
 
-    def set_empty_tile(self, r:int, c:int):
+    def set_empty_tile(self, r: int, c: int):
         self.tile_types[r][c] = "E"
         self.board[r][c] = self.tile_factories.create_tile("E")
 
-    def get_tile_type(self, tile:Tile) -> Tile:
+    def get_tile_type(self, tile: Tile) -> Tile:
         return type(tile)
 
-    def get_tile_type_on_index(self, r:int, c: int) -> str:
+    def get_tile_type_on_index(self, r: int, c: int) -> str:
         return self.tile_types[r][c]
 
     def get_tile_on_index(self, r: int, c: int) -> Tile:
@@ -135,7 +140,7 @@ class TilesBoard(ABC):
         return self.falling_tile_types
 
     def add_vertical_falling_shape(self):
-        column = random.randint(0, self.num_cols-1)
+        column = random.randint(0, self.num_cols - 1)
         num_tiles = random.randint(self.min_num_shape_tiles, self.max_num_shape_tiles)
         shape = VerticalFallingShape(column, num_tiles, self.falling_tile_types, self.falling_tile_factories)
         self.falling_shape = shape.get_falling_shape()
@@ -150,15 +155,15 @@ class TilesBoard(ABC):
         # if c == null then the default c will be the center
         if self.col is None:
             c = self.board.get_num_columns() / 2
-        elif  self.col < 0 or self.col >= len(self.board.get_num_columns()):
+        elif self.col < 0 or self.col >= len(self.board.get_num_columns()):
             raise InvalidIndexOnBoardError("The column index for the tile is not within the board")
 
-  # for test
+    # for test
     def print_board(self):
         # just to make sure the types and the rows are set accordingly
         for row in self.board:
             for tile in row:
-                print(f'[{tile.get_index()}-{type(tile)}]', end = '')
+                print(f'[{tile.get_index()}-{type(tile)}]', end='')
             print()
 
     def horizontal_match(self):
@@ -178,11 +183,38 @@ class TilesBoard(ABC):
         vertical_match()
         or both
         """
+
     pass
 
+    def rotate_shape_on_board(self, shape: FallingShape):
+        """ how do we want to turn? to simplify there can be only 1 button to initiate rotation, so there is only
+            1 way to rotate. here logic is assuming pivoting on the bottom/left tile location, so if the tiles are
+            vertical the top tile will move to be to the right of the bottom tile if the tiles are horizontal,
+            the left tile will move 1 row up and the right tile will move to where the left tile was
+            * exception: if vertical and against another tile or the right wall, the top tile to move to the bottom
+                         tile space, and the bottom tile will move to the cell to the left in the same row.
+                           row 1      |top tile||wall|     =>                        |wall|
+                           row 2      |bot tile||wall|            |bot tile||top tile||wall|
+        """
+        # maybe create a method to check a specified neighboring cell?, maybe should be in tiles board?
+        # i think tiles_board might need to have the rotate method and this one should be in charge of
+        # setting the new x, y coordinates
+        if shape.is_falling():              # other option is to get_status & compare to Status.FALLING
+            if shape.is_vertical():         # other option is to get_position & compare to Position.VERTICAL
+                # check the tile to the right of the bottom tile (col+1),
+                # if empty turn the faller - bottom stays (row, col), top is now right (row-1, col+1)
 
+                # if NOT empty follow the exception, check to the left
+                # if left tile is empty - bottom is now left (row, col-1), top is now right (row-1, col)
 
+                # if left is NOT empty - cannot rotate
+                pass
+            elif not shape.is_vertical():    # other option is to get_position & compare to Position.HORIZONTAL
+                # check title above the left tile
+                # if empty - left becomes top (row+1, col), right tile moves to where left was (row-1, col-1)
 
+                # if NOT empty - does not rotate
+                pass
 
 
 

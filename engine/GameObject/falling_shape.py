@@ -11,7 +11,7 @@ from engine.Tile.tileAbstractFactory import TileAbstractFactory
 
 class FallingShape(GameObject):
     # to do: try to validate the r, and c without passing tiles_board
-    def __init__(self, column, number_of_tiles: int, tile_types: list[str], tile_factories:TileAbstractFactory):
+    def __init__(self, column, number_of_tiles: int, tile_types: list[str], tile_factories: TileAbstractFactory):
         self.status = Status["FALLING"]
         self.column = column
         self.number_of_tiles = number_of_tiles
@@ -43,7 +43,6 @@ class FallingShape(GameObject):
         # want to create the faller always at the top of the board
         #
 
-
     @abstractmethod
     def create(self):
         """Overridden by our horizontal and vertical shapes, since the creation for both differs"""
@@ -52,8 +51,18 @@ class FallingShape(GameObject):
     def set_status(self, status: Status):
         self.status = status
 
-    def get_status(self, status: Status):
+    def get_status(self):
         return self.status
+
+    def is_falling(self):
+        if self.get_status() == Status.FALLING:
+            return True
+        return False
+
+    def is_vertical(self):
+        if self.get_position() == Position.VERTICAL:
+            return True
+        return False
 
     def get_column(self):
         return self.column
@@ -78,7 +87,7 @@ class FallingShape(GameObject):
         self.position = position
 
     def rotate(self):
-        pass # do we want to rotate
+        pass  # do we want to rotate here or in tiles_board?
 
     def get_bottom_tile_row(self):
         return self.bottom_tile_row
@@ -86,3 +95,8 @@ class FallingShape(GameObject):
     def get_bottom_tile_row_index(self):
         return self._instance[self.last_tile_index_in_shape].get_row_index()
 
+    def change_coordinates(self):
+        """
+        must update coordinates of all tiles in the shape
+        """
+        pass
