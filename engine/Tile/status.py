@@ -7,6 +7,8 @@ class Status(Enum):
     FROZEN = "frozen"
     FALLEN = "fallen"
     MATCHED = "matched"
+    STILL = "still"
+
 
 # Dot notation
 # Status.FALLING

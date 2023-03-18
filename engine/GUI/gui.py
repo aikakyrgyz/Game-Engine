@@ -1,6 +1,6 @@
 from engine.Board.tiles_board import TilesBoard
 from engine.Tile.empty_tile import EmptyTile
-from engine.GameObject.status import Status
+from engine.Tile.status import Status
 
 class GUI:
     def __init__(self):
@@ -20,7 +20,7 @@ class GUI:
                     to_print += " " * 3
                 elif status == Status["FALLING"]:
                     to_print += f'[{letter}]'
-                elif status == Status["FROZEN"]:
+                elif status == Status["FALLEN"]:
                     to_print += f'|{letter}|'
                 elif status == Status["MATCHED"]:
                     to_print += f'*{letter}*'

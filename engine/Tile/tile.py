@@ -1,5 +1,5 @@
 
-from engine.GameObject.status import Status
+from engine.Tile.status import Status
 from engine.Sprite.sprite import Sprite
 
 

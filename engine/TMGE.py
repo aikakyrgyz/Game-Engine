@@ -36,19 +36,37 @@ class TMGE(ABC):
     def add_game_object(self, game_object):
         self.game_objects.append(game_object)
 
+    # def run(self):
+    #     self.time_between_updates()
+    #     last_update = time_ns()
+    #     self.set_up_my_game()
+    #     self.GUI.draw_board(self.tile_board)
+    #     pygame.init() # solely for handling key inputs
+    #     while not self.game_over:
+    #         self.handle_key_events()
+    #         while(time_ns() - last_update > self.delta):
+    #             self.update()
+    #             last_update += self.delta;
+    #             break
+    #         self.redraw()
+
+    # run method for testing, otherwise the loop keeps running and I cannot see lol
     def run(self):
         self.time_between_updates()
         last_update = time_ns()
         self.set_up_my_game()
         self.GUI.draw_board(self.tile_board)
+
         pygame.init() # solely for handling key inputs
-        while not self.game_over:
-            self.handle_key_events()
-            while(time_ns() - last_update > self.delta):
-                self.update()
-                last_update += self.delta;
-                break
-            self.redraw()
+
+
+        self.GUI.draw_board(self.tile_board)
+        self.tile_board.add_falling_shape()
+
+        for i in range(5):
+            self.tile_board.update()
+            self.GUI.draw_board(self.tile_board)
+
 
     def redraw(self):
         self.GUI.draw_board(self.tile_board)

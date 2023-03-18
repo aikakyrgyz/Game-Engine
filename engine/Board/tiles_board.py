@@ -9,16 +9,13 @@ from engine.Tile.empty_tile_factory import EmptyTileFactory
 from engine.Tile.tile import Tile
 from engine.Tile.empty_tile import EmptyTile
 from engine.Tile.tileAbstractFactory import TileAbstractFactory
+from engine.GameObject.position import POSITION
+from engine.Tile.status import Status
 
 
 class TilesBoard(ABC):
-    def __init__(self, tile_size,
-                 tile_factories: TileAbstractFactory,
-                 falling_tile_factories: TileAbstractFactory,
-                 tile_types,
-                 falling_tile_types,
-                 min_num_tiles,
-                 max_num_tiles):
+    def __init__(self, tile_size, tile_factories: TileAbstractFactory, falling_tile_factories: TileAbstractFactory,
+                 tile_types, falling_tile_types, min_num_tiles, max_num_tiles):
         self.tile_factories = tile_factories
         self.tile_size = tile_size
         self.falling_tile_factories = falling_tile_factories
@@ -48,7 +45,6 @@ class TilesBoard(ABC):
     # create the full board with the tiles
     def create_board(self):
 
-
         board_rows = []
 
         # add extra invisible rows on top
@@ -70,7 +66,7 @@ class TilesBoard(ABC):
             board_rows.append(board_columns)
         self.board = board_rows
         # set the board size
-        self.num_rows = len(self.board) + self.max_num_shape_tiles
+        self.num_rows = len(self.board)
         self.num_cols = len(self.board[0])
         print("Your board is initialized!")
         self.print_board()
@@ -111,10 +107,13 @@ class TilesBoard(ABC):
         return True
 
     # change the type of the Tile at [r, c], the type must be the existing type in the tile factory
-    def set_tile(self, r: int, c: int, tile_type: str):
-        if self.is_valid_location(r, c):
-            self.tile_types[r][c] = tile_type
-            self.board[r][c] = self.tile_factories.create_tile(tile_type)
+    # def set_tile(self, r: int, c: int, type: str):
+    #     if self.is_valid_location(r, c):
+    #         # self.tile_types[r][c] = type
+    #         self.board[r][c] = self.tile_factories.create_tile(type)
+
+    def change_tile(self, r, c, tile: Tile):
+        self.board[r][c] = tile
 
     def set_empty_tile(self, r: int, c: int):
         self.tile_types[r][c] = "E"
@@ -123,12 +122,12 @@ class TilesBoard(ABC):
     def get_tile_type(self, tile: Tile) -> Tile:
         return type(tile)
 
-
-    def is_empty_cell(self, r, c)-> bool:
-        print(type(self.board[r][c]))
-        return isinstance(self.board[r][c], EmptyTile)
     def get_tile_type_on_index(self, r: int, c: int) -> str:
-        return self.tile_types[r][c]
+        return type(self.board[r][c])
+
+    def is_empty_tile(self, r, c) -> bool:
+        # print(type(self.board[r][c]))
+        return isinstance(self.board[r][c], EmptyTile)
 
     def get_tile_on_index(self, r: int, c: int) -> Tile:
         return self.board[r][c]
@@ -139,7 +138,62 @@ class TilesBoard(ABC):
         return self._falling_shape
 
     def add_falling_shape(self):
+        position = random.choice(POSITION)
+        # if position == "VERTICAL":
         self.add_vertical_falling_shape()
+        # else:
+        # self.add_horizontal_falling_shape()
+
+    def add_vertical_falling_shape(self):
+        column = random.randint(0, self.num_cols - 1)
+        num_tiles = random.randint(self.min_num_shape_tiles, self.max_num_shape_tiles)
+        shape = FallingShape(POSITION[0], column, num_tiles, self.falling_tile_types, self.falling_tile_factories)
+        self.falling_shape = shape.get_falling_shape()
+        if self.is_empty_tile(shape.get_num_tiles() - 1, column):
+            # print("Yes, it is an empty cell")
+            # top faller piece
+            for i in range(self.max_num_shape_tiles):
+                shape_tile = shape.get_tile_on_index(i)
+                shape_tile.set_status(Status.FALLING)
+                self.change_tile(i, column, shape_tile)
+                self.check_floor()
+        else:
+            self.game_over = True
+
+    def check_floor(self):
+        landing_row = self.falling_shape.get_bottom_tile_row() + 1
+        if landing_row >= self.get_num_rows() or (not self.is_empty_tile(landing_row, self.falling_shape.get_column())):
+            print("FELL")
+            self.falling_shape.set_status(Status.FALLEN)
+            print("The status of the faller now is: ", self.falling_shape.get_status())
+            for i in range(self.falling_shape.get_bottom_tile_row(),
+                           self.falling_shape.get_bottom_tile_row() - self.max_num_shape_tiles, -1):
+                print('the tile', i)
+                self.get_tile_on_index(i, self.falling_shape.get_column()).set_status(Status.STILL)
+        # print("TOP", self.falling_shape.get_tile_on_index(0).get_status())
+
+    def keep_falling(self):
+        if self.falling_shape.get_status() != Status.FALLEN:
+            if self.falling_shape.get_bottom_tile_row() >= self.get_num_rows():
+                return
+            landing_row = self.falling_shape.get_bottom_tile_row() + 1
+            print("Landing row ", landing_row)
+            above_row = landing_row - self.max_num_shape_tiles
+            print("Above row ", above_row)
+            if self.is_empty_tile(landing_row, self.falling_shape.get_column()):
+                # keep falling
+                print("IN KEEP FALLING")
+                s = 1
+                for i in range(landing_row, landing_row - self.max_num_shape_tiles, -1):
+                    faller_tile = self.falling_shape.get_tile_on_index(self.max_num_shape_tiles - s)
+                    print(faller_tile.get_status())
+                    print(faller_tile.get_letter())
+                    self.change_tile(i, self.falling_shape.get_column(), faller_tile)
+                    s += 1
+                self.change_tile(above_row, self.falling_shape.get_column(), self.tile_factories.create_tile("E"))
+                self.falling_shape.fall()
+                print("NOW THE FALLER ROW IS ", self.falling_shape.get_bottom_tile_row())
+                self.check_floor()
 
     # def add_vertical_falling_shape(self, falling_shape:FallingShape):
     #     bottom_tile_row_index = falling_shape.get_bottom_tile_row_index()
@@ -157,19 +211,13 @@ class TilesBoard(ABC):
     def get_falling_tile_types(self):
         return self.falling_tile_types
 
-    def add_vertical_falling_shape(self):
-        column = random.randint(0, self.num_cols - 1)
-        num_tiles = random.randint(self.min_num_shape_tiles, self.max_num_shape_tiles)
-        shape = VerticalFallingShape(column, num_tiles, self.falling_tile_types, self.falling_tile_factories)
-        self.falling_shape = shape.get_falling_shape()
-        if self.is_empty_cell(0, column):
-            print("Yes, it is an empty cell")
-
     def update(self):
         # 1. check if the falling shape will be fine falling farther
         # 2. call fallingShape.update of its own
-        self.match_all()
+        # self.match_all()
         # the shape is addded in the game loop depending on whether or not a falling shape is already present on the board
+        print("calling keep falling")
+        self.keep_falling()
 
     def isValidColumn(self):
         # if c == null then the default c will be the center
