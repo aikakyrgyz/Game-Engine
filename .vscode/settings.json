@@ -2,6 +2,7 @@
     "python.analysis.extraPaths": [
         "./drmario",
         "./interface",
-        "./puyopuyo"
+        "./puyopuyo",
+        "./engine/Tile"
     ]
 }
