@@ -6,7 +6,6 @@ from engine.Sprite.sprite import Sprite
 class Tile:
     def __init__(self, sprite:Sprite, letter):
         self.sprite = sprite
-        self.matchable = True
         self.letter = letter
         self.status = None
 

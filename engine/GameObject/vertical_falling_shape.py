@@ -32,10 +32,9 @@ class VerticalFallingShape(FallingShape):
         print("The faller has been created")
         print([tile.get_letter() for tile in self._instance])
 
-    def _require_valid_factories(self):
-            for type in self.tile_types:
-                if self.factory.get(type) == None:
-                    raise TileFactoryDoesNotExist(f"The tile factory for type {type} does not exist")
-
+    @overriden
+    def update(self):
+        """Update the falling shape accordingly, set the tiles statuses and shape's status"""
+        pass
 
 

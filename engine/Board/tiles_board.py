@@ -4,10 +4,11 @@ from abc import ABC, abstractmethod
 
 from engine.Errors.errors import InvalidIndexOnBoardError
 from engine.GameObject.falling_shape import FallingShape
-from engine.GameObject.status import Position
+# from engine.GameObject.status import Position
 from engine.GameObject.vertical_falling_shape import VerticalFallingShape
 from engine.Tile.empty_tile_factory import EmptyTileFactory
 from engine.Tile.tile import Tile
+from engine.Tile.empty_tile import EmptyTile
 from engine.Tile.tileAbstractFactory import TileAbstractFactory
 
 
@@ -41,17 +42,30 @@ class TilesBoard(ABC):
 
     # create the full board with the tiles
     def create_board(self):
+
+
         board_rows = []
+
+        # add extra invisible rows on top
+        for i in range(self.max_num_shape_tiles):
+            board_columns = []
+            for j in range(len(self.tile_types[0])):
+                tile = self.tile_factories.create_tile("E")
+                tile.set_index(i, j)
+                board_columns.append(tile)
+            board_rows.append(board_columns)
+
+        # create the actual tile board
         for i in range(len(self.tile_types)):
             board_columns = []
             for j in range(len(self.tile_types[0])):
                 tile = self.tile_factories.create_tile(self.tile_types[i][j])
-                tile.set_index(i, j)
+                tile.set_index(i + self.max_num_shape_tiles, j)
                 board_columns.append(tile)
             board_rows.append(board_columns)
         self.board = board_rows
         # set the board size
-        self.num_rows = len(self.board)
+        self.num_rows = len(self.board) + self.max_num_shape_tiles
         self.num_cols = len(self.board[0])
         print("Your board is initialized!")
         self.print_board()
@@ -105,7 +119,11 @@ class TilesBoard(ABC):
         return type(tile)
 
     def get_tile_type_on_index(self, r:int, c: int) -> str:
-        return self.tile_types[r][c]
+        return type(self.board[r][c])
+
+    def is_empty_cell(self, r, c)-> bool:
+        print(type(self.board[r][c]))
+        return isinstance(self.board[r][c], EmptyTile)
 
     def get_tile_on_index(self, r: int, c: int) -> Tile:
         return self.board[r][c]
@@ -139,6 +157,8 @@ class TilesBoard(ABC):
         num_tiles = random.randint(self.min_num_shape_tiles, self.max_num_shape_tiles)
         shape = VerticalFallingShape(column, num_tiles, self.falling_tile_types, self.falling_tile_factories)
         self.falling_shape = shape.get_falling_shape()
+        if self.is_empty_cell(0, column):
+            print("Yes, it is an empty cell")
 
     def update(self):
         # 1. check if the falling shape will be fine falling farther

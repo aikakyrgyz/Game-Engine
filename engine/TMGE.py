@@ -47,6 +47,7 @@ class TMGE(ABC):
             while(time_ns() - last_update > self.delta):
                 self.update()
                 last_update += self.delta;
+                break
             self.redraw()
 
     def redraw(self):

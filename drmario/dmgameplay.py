@@ -1,4 +1,4 @@
-import sys
+# import sys
 # sys.path.append(r'/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project')
 # if you are having a engine moduleNotFound error, you will have to include the root directory path to sys.path
 from drmario.myTileBoard import MyTileBoard
@@ -17,7 +17,7 @@ class DrMarioGame(TMGE):
 
     def __init__(self, FPS, GUI):
         TMGE.__init__(self, FPS, GUI)
-        self.tile_types = [["E", "E", "E"], ["E", "R", "E"], ["Y", "Y", "Y"]]
+        self.tile_types = [["E", "E", "E"],["E", "E", "E"],["E", "E", "E"], ["E", "R", "E"], ["Y", "Y", "Y"]]
         self.tile_size = 20
         # the reason why we want them to be produced from the same factories is for matching purposes.
         # ex: in DrMario redPill and redVirus should be matchable

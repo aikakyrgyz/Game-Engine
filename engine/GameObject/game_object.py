@@ -4,19 +4,21 @@ from engine.GameObject.direction import Direction
 
 
 class GameObject(ABC):
-    def __init__(self, x, y, width, height, speed, direction: Direction):
+    def __init__(self, x, y, width, height, speed):
         self.x = x
         self.y = y
         self.width = width
         self.height = height
         # can be any object, ex: mario throwing the capsules who is outside the board
         # speed will have to be a whole integer, since we want to move by tile
-        self.speed = 0
-        self.direction = Direction.UP
+        self.speed = speed
+        self.direction = Direction.DOWN
 
-    # @abstractmethod
-    # def update(self): ...
-    #
+
+    @abstractmethod
+    def update(self):
+        pass
+
     # @abstractmethod
     # def draw(self): ...
 

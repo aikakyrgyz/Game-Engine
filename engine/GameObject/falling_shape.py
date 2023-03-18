@@ -1,9 +1,9 @@
 from abc import abstractmethod
-
+import random
 # later: refractor to a shape factory
-from engine.Errors.errors import InvalidIndexOnBoardError
+from engine.Errors.errors import InvalidIndexOnBoardError, TileFactoryDoesNotExist
 from engine.GameObject.game_object import GameObject
-from engine.GameObject.status import Status, Position
+from engine.GameObject.status import Status
 from engine.Tile.tileAbstractFactory import TileAbstractFactory
 
 
@@ -18,7 +18,7 @@ class FallingShape(GameObject):
         self.tile_types = tile_types
         self.factory = tile_factories
         self._instance = []
-        self.bottom_tile_row = 0
+        self.bottom_tile_row = 2
         # self.set_tile_status()
         # Capsule, tile_types = ["YELLOW", "RED"]
         # the creation shall be in order as specified by the tile_types
@@ -49,6 +49,11 @@ class FallingShape(GameObject):
         """Overridden by our horizontal and vertical shapes, since the creation for both differs"""
         pass
 
+    @abstractmethod
+    def update(self):
+        """Override how each faller updates"""
+        pass
+
     def set_status(self, status: Status):
         self.status = status
 
@@ -71,11 +76,7 @@ class FallingShape(GameObject):
     def get_falling_shape(self):
         return self._instance
 
-    def get_position(self) -> Position:
-        return self.position
 
-    def set_position(self, position: Position):
-        self.position = position
 
     def rotate(self):
         pass # do we want to rotate
@@ -85,4 +86,11 @@ class FallingShape(GameObject):
 
     def get_bottom_tile_row_index(self):
         return self._instance[self.last_tile_index_in_shape].get_row_index()
+
+    def _require_valid_factories(self):
+            for type in self.tile_types:
+                if self.factory.get(type) == None:
+                    raise TileFactoryDoesNotExist(f"The tile factory for type {type} does not exist")
+
+
 

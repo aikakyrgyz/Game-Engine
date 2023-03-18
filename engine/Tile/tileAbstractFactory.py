@@ -1,3 +1,5 @@
+from engine.Tile.tile import Tile
+
 
 class TileAbstractFactory:
     def __init__(self):
@@ -6,7 +8,7 @@ class TileAbstractFactory:
     def register_factory(self, key, factory):
         self._concreteFactories[key] = factory
 
-    def create_tile(self, key):
+    def create_tile(self, key) -> Tile:
         factory = self._concreteFactories.get(key)
         if not factory: # there is no factory with such a name
             raise ValueError(key)
