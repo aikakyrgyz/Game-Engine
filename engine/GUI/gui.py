@@ -11,7 +11,7 @@ class GUI:
     def draw_board(self, tile_board:TilesBoard):
         for row in range(0, tile_board.get_num_rows()):
             to_print = ''
-            print('|', end='')
+            print(f'{row}|', end='')
             for col in range(tile_board.get_num_columns()):
                 tile = tile_board.get_tile_on_index(row, col)
                 status = tile.get_status()

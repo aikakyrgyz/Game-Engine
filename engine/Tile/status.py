@@ -8,6 +8,7 @@ class Status(Enum):
     FALLEN = "fallen"
     MATCHED = "matched"
     STILL = "still"
+    
 
 
 # Dot notation
