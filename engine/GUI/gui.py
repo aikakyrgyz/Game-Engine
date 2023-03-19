@@ -5,13 +5,15 @@ from engine.Tile.status import Status
 
 class GUI:
     def __init__(self):
+        pygame.font.init() # text added for testing
+        self.text_font = pygame.font.SysFont('Arial', 15, False, False) # text added for testing
         self.screen_width = 1200
         self.screen_height = 800
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
         pygame.display.set_caption('Tile Matching Game Environment')
 
     def draw_board(self, tile_board:TilesBoard):
-        self.tile_size = tile_board.get_tile_size()
+        self.tile_size = tile_board.get_tile_size() * 3 # multipled for now to increase tile size for visuals
         
         screen_center_x = self.screen_width // 2
         screen_center_y = self.screen_height // 2
@@ -35,12 +37,18 @@ class GUI:
                 elif status == Status["FALLING"]:
                     to_print += f'[{letter}]'
                     pygame.draw.rect(self.screen, (255, 255, 0), (x, y, self.tile_size, self.tile_size))
+                    tile_text = self.text_font.render(letter, True, (0, 0, 0)) # text added for testing
+                    self.screen.blit(tile_text, (x, y))
                 elif status == Status["FALLEN"]:
                     to_print += f'|{letter}|'
                     pygame.draw.rect(self.screen, (255, 255, 0), (x, y, self.tile_size, self.tile_size))
+                    tile_text = self.text_font.render(letter, True, (0, 0, 0)) # text added for testing
+                    self.screen.blit(tile_text, (x, y))
                 elif status == Status["MATCHED"]:
                     to_print += f'*{letter}*'
                     pygame.draw.rect(self.screen, (255, 0, 255), (x, y, self.tile_size, self.tile_size))
+                    tile_text = self.text_font.render(letter, True, (0, 0, 0)) # text added for testing
+                    self.screen.blit(tile_text, (x, y))
                 else:
                     to_print += " "+ letter + " "
             print(to_print + '|')
