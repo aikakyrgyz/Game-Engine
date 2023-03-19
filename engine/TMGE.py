@@ -50,36 +50,33 @@ class TMGE(ABC):
     #             break
     #         self.redraw()
 
-    # run method for testing, otherwise the loop keeps running and I cannot see lol
+
+    # run method for testing, otherwise the loop keeps running and I cannot see
     def run(self):
         self.time_between_updates()
         last_update = time_ns()
         self.set_up_my_game()
+        
         self.GUI.draw_board(self.tile_board)
-
+        
         pygame.init() # solely for handling key inputs
-
-        # self.GUI.draw_board(self.tile_board)
-        # self.tile_board.add_falling_shape()
-
-        # for i in range(5):
-        #     self.tile_board.update()
-        #     self.GUI.draw_board(self.tile_board)
-
-        #*** for Richard - GUI Testing - same code, but made it commented so that I can access it faster ***#
-        while True:
-            for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        pygame.quit()
-                        return
-
+        
+        self.GUI.draw_board(self.tile_board)
+        # the initial set of tiles given might already have matches, so need to get rid of them before
+        # placing a new falling object
+        self.tile_board.match_all()
+        # printing just to see if it was matched
+        self.GUI.draw_board(self.tile_board)
+        # clear the matches
+        self.tile_board.clear_out_matches()
+        # fill in the holes, if any
+        self.tile_board.fill_holes()
+        self.GUI.draw_board(self.tile_board)
+        
+        for i in range(5):
+            # updating the tile board for now... for for testing, eventually call the update() function defined for all updates
+            self.tile_board.update()
             self.GUI.draw_board(self.tile_board)
-            self.tile_board.add_falling_shape()
-
-            for i in range(5):
-                self.tile_board.update()
-                self.GUI.draw_board(self.tile_board)
-        #***************************************************************************************************#
 
 
     def redraw(self):
@@ -95,8 +92,9 @@ class TMGE(ABC):
         # self.update_dashboard()
         # self.gui.update()
             # a dashboard has a game object that belongs to it
-            # game_object.update() # each game object should have their own defintion of update
-            # maybe we just add mario just standing moving the hand or smth
+            # game_object.update() # each game object should have their own definition of update
+            # falling shape would not really have its own update() function, since the tile board controls it. 
+            # maybe we just add mario just standing moving the hand... 
             # so update would animate it
 
     def handle_key_events(self) -> None:

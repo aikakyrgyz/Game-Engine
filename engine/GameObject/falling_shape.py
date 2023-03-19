@@ -18,8 +18,8 @@ class FallingShape(GameObject):
         self.factory = tile_factories
         self._instance = []
         self.bottom_tile_row = number_of_tiles-1
-        self.create()
         self.position = position
+        self.create()
         # self.set_tile_status()
         # Capsule, tile_types = ["YELLOW", "RED"]
         # the creation shall be in order as specified by the tile_types

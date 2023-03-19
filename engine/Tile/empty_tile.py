@@ -6,5 +6,5 @@ from engine.Tile.tile import Tile
 class EmptyTile(Tile):
     def __init__(self):
         self.sprite = Sprite("empty-default-tile.png");
-        Tile.__init__(self, self.sprite, ' ')
+        Tile.__init__(self, self.sprite, ' ', False)
 

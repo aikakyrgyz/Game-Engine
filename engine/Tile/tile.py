@@ -3,11 +3,13 @@ from engine.Tile.status import Status
 from engine.Sprite.sprite import Sprite
 
 
+
 class Tile:
-    def __init__(self, sprite:Sprite, letter):
+    def __init__(self, sprite:Sprite, letter:str, stationary:bool):
         self.sprite = sprite
         self.letter = letter
         self.status = None
+        self.stationary = stationary
 
     def get_sprite(self):
         return self.sprite
@@ -38,10 +40,13 @@ class Tile:
 
     def get_col_index(self):
         return self.col
-
+    
+    def get_stationary(self):
+        return self.stationary
+    
     def set_status(self, status: Status):
         self.status = status
 
-    def set_matchable(self, m: bool):
-        self.matchable = m
+    def matchable(self, tile):
+        return type(self) is type(tile)
 
