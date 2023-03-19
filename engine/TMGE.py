@@ -59,13 +59,27 @@ class TMGE(ABC):
 
         pygame.init() # solely for handling key inputs
 
+        # self.GUI.draw_board(self.tile_board)
+        # self.tile_board.add_falling_shape()
 
-        self.GUI.draw_board(self.tile_board)
-        self.tile_board.add_falling_shape()
+        # for i in range(5):
+        #     self.tile_board.update()
+        #     self.GUI.draw_board(self.tile_board)
 
-        for i in range(5):
-            self.tile_board.update()
+        #*** for Richard - GUI Testing - same code, but made it commented so that I can access it faster ***#
+        while True:
+            for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        return
+
             self.GUI.draw_board(self.tile_board)
+            self.tile_board.add_falling_shape()
+
+            for i in range(5):
+                self.tile_board.update()
+                self.GUI.draw_board(self.tile_board)
+        #***************************************************************************************************#
 
 
     def redraw(self):
