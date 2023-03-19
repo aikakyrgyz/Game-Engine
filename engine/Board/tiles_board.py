@@ -88,6 +88,10 @@ class TilesBoard(ABC):
     # after the board has been initialized, we do not use this variable anymore
     def get_types_board(self):
         return self.tile_types
+    
+    # added a get_tile_size for GUI
+    def get_tile_size(self):
+        return self.tile_size
 
     # change the tile factory in order to produce different tiles at the same indexes
     def set_tile_factories(self, tile_factories: TileAbstractFactory):
