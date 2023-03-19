@@ -61,31 +61,12 @@ class TMGE(ABC):
         
         pygame.init() # solely for handling key inputs
         
-<<<<<<< HEAD
-        self.GUI.draw_board(self.tile_board)
-        # the initial set of tiles given might already have matches, so need to get rid of them before
-        # placing a new falling object
-        self.tile_board.match_all()
-        # printing just to see if it was matched
-        self.GUI.draw_board(self.tile_board)
-        # clear the matches
-        self.tile_board.clear_out_matches()
-        # fill in the holes, if any
-        self.tile_board.fill_holes()
-        self.GUI.draw_board(self.tile_board)
-        
-        for i in range(20):
-            # updating the tile board for now... for for testing, eventually call the update() function defined for all updates
-            self.tile_board.update()
-            self.GUI.draw_board(self.tile_board)
-=======
         # GUI testing for Richard, comment the loop to go back out of Richard's testing environment and uncomment the same code below
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     return
->>>>>>> 7c6b239b500ccc2b50e2561b073d59700c9b51c5
 
             self.GUI.draw_board(self.tile_board)
             # the initial set of tiles given might already have matches, so need to get rid of them before
