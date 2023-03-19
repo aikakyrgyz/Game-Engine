@@ -12,6 +12,6 @@ class MyTileBoard(TilesBoard):
     @overriden
     def match_all(self):
         # for DR mario we want both matches
-        # self.horizontal_match()
+        self.horizontal_match()
         self.vertical_match()
 

@@ -73,7 +73,7 @@ class TMGE(ABC):
         self.tile_board.fill_holes()
         self.GUI.draw_board(self.tile_board)
         
-        for i in range(5):
+        for i in range(20):
             # updating the tile board for now... for for testing, eventually call the update() function defined for all updates
             self.tile_board.update()
             self.GUI.draw_board(self.tile_board)

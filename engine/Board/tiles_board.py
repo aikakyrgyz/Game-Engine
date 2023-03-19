@@ -82,6 +82,7 @@ class TilesBoard(ABC):
         self.num_rows = len(self.board)
         self.num_cols = len(self.board[0])
         print("Your board is initialized!")
+        # print(self.get_tile_on_index(7, 2))
         # self.print_board() - shows the index and types of each cell in the board
 
     # types_board contains all the initial tile types corresponding to each index 
@@ -288,29 +289,32 @@ class TilesBoard(ABC):
 
     def horizontal_match(self):
         """Defines the logic for the horizontal match"""
-        print("HORIZONTAL >>>>>>>>>>")
         matched_tiles = []
         for row in range(self.num_rows-1, -1, -1):
             for col in range(self.num_cols):
                 tile = self.get_tile_on_index(row, col)
-                if len(matched_tiles)==0:
-                    last_matched_index = col
+                if len(matched_tiles) == 0:
                     matched_tiles.append(tile)
+                    last_matched_index = col
                 else:
-                    if matched_tiles[-1].matchable(tile) and (
-                            col - last_matched_index == 1 or len(matched_tiles) >= self.min_match_num):
+                    if matched_tiles[-1].matchable(tile) and col - last_matched_index == 1:
                         # match consecutive tiles only: difference == 1
                         matched_tiles.append(tile)
                         last_matched_index += 1
                         # print(matched_tiles[-1].get_letter(), " is matched with ", tile.get_letter())
-                    if len(matched_tiles) >=self.min_match_num:
-                        for tile in matched_tiles:
+                    # the column might end as soon as the match reached 3, so it will never come back
+                    # need to make sure it is >=
+                    if len(matched_tiles) >= self.min_match_num:
+                        for t in matched_tiles:
                             # update the score somewhere here?
                             # tile now has a matched status
-                            tile.set_status(Status.MATCHED)
+                            t.set_status(Status.MATCHED)
                         # all have been set to matched
-                        # clear out the matched list 
+                        # clear out the matched list
+                    if not matched_tiles[-1].matchable(tile):
                         matched_tiles = []
+                        matched_tiles.append(tile)
+                        last_matched_index += 1
             matched_tiles = []
 
     def clear_out_matches(self):
@@ -336,16 +340,10 @@ class TilesBoard(ABC):
 
     def vertical_match(self):
         """Defines the logic for vertical match"""
-        print("VERTICAL >>>>>>>>>>")
-
-        print(self.num_rows)
-        print(self.num_cols)
         matched_tiles = []
         for col in range(self.num_cols):
             for row in range(self.num_rows-1, -1, -1):
                 tile = self.get_tile_on_index(row, col)
-                print("Tile on ", row, " " , col )
-
                 if len(matched_tiles) == 0 :
                     matched_tiles.append(tile)
                     last_matched_index = row 
@@ -354,21 +352,16 @@ class TilesBoard(ABC):
                         # match consecutive tiles only: difference == 1
                         matched_tiles.append(tile)
                         last_matched_index -=1
-                        # print(matched_tiles[-1].get_letter(), " is matched with ", tile.get_letter())
-                    else:
-                        matched_tiles.pop(-1)
-                        matched_tiles.append(tile) 
-                        last_matched_index -=1
 
-                    if row == 0 and len(matched_tiles) >= self.min_match_num:
-                        for tile in matched_tiles:
+                    if len(matched_tiles) >= self.min_match_num:
+                        for t in matched_tiles:
                             # update the score ?
-                            tile.set_status(Status.MATCHED)
+                            t.set_status(Status.MATCHED)
                         # all have been set to matched
-                        # last_one = matched_tiles[-1]
-                        print([tile.get_letter() for tile in matched_tiles])
+                    if not matched_tiles[-1].matchable(tile):
                         matched_tiles = []
-            print("ROW END", [tile.get_letter() for tile in matched_tiles])
+                        matched_tiles.append(tile)
+                        last_matched_index -= 1
             matched_tiles = []
 
 
