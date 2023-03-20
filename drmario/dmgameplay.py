@@ -1,8 +1,9 @@
 import sys
 sys.path.append(r'/Users/okdrahcir/documents/github/Inf-122-Final-Project')
+
 # sys.path.append(r'/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project')
 # if you are having a engine moduleNotFound error, you will have to include the root directory path to sys.path
-from drmario.myTileBoard import MyTileBoard
+from dmTileBoard import DMTileBoard
 from engine.Sprite.sprite import Sprite
 from engine.Board.tiles_board import TilesBoard
 from engine.GUI.gui import GUI
@@ -18,8 +19,12 @@ class DrMarioGame(TMGE):
 
     def __init__(self, FPS, GUI):
         TMGE.__init__(self, FPS, GUI)
+
+        #testing
         # self.tile_types = [["E", "E", "E"],["E", "E", "E"],["E", "E", "E"], ["E", "R", "E"], ["Y", "Y", "Y"]]
         # self.tile_types = [["E", "E", "E"],["E", "E", "Y"],["E", "E", "Y"], ["E", "Y", "R"], ["Y", "Y", "Y"]]
+
+        #vertical matching
         # self.tile_types = [["E", "E", "E"],["E", "E", "Y"], ["E", "E", "Y"], ["E", "E", "Y"], ["E", "E", "R"],["E", "E", "Y"], ["E", "R", "Y"], ["Y", "R", "Y"]] #vertical matching
         # self.tile_types = [["E", "E", "E"],["E", "E", "Y"], ["E", "E", "Y"], ["E", "E", "Y"], ["E", "E", "Y"],["E", "E", "Y"], ["E", "R", "Y"], ["Y", "R", "R"]] #vertical matching case 1
         # self.tile_types = [["E", "E", "E"],["E", "E", "E"], ["E", "E", "E"], ["E", "E", "E"], ["E", "R", "E"],["E", "R", "E"], ["E", "R", "E"], ["Y", "Y", "E"]] #vertical matching case 1
@@ -28,10 +33,16 @@ class DrMarioGame(TMGE):
         # self.tile_types = [["E", "E", "E"],["E", "E", "E"], ["E", "E", "E"], ["E", "E", "E"], ["E", "R", "Y"],["E", "Y", "Y"], ["E", "R", "Y"], ["Y", "R", "Y"]] #vertical matching case 4
         # self.tile_types = [["E", "E", "E"],["E", "E", "Y"], ["E", "E", "Y"], ["E", "E", "Y"], ["E", "R", "R"],["E", "Y", "Y"], ["E", "R", "Y"], ["Y", "R", "Y"]] #vertical matching case 5
         # self.tile_types = [["E", "E", "E"],["E", "E", "Y"], ["E", "E", "Y"], ["E", "E", "Y"], ["E", "R", "Y"],["E", "Y", "Y"], ["E", "R", "Y"], ["Y", "R", "R"]] #vertical matching case 5
+        
+        #horizontal matching
         self.tile_types = [["E", "E", "E", "E"],["E", "E", "E", "Y"],["E", "E", "E", "Y"], ["E", "E", "R", "R"], ["R", "Y", "Y", "Y"]] #horizontal matching test 1
         # self.tile_types = [["E", "E", "E", "E"], ["E", "E", "E", "E"],["E", "E", "E", "Y"],["E", "E", "E", "Y"], ["E", "E", "Y", "Y"], ["Y", "Y", "Y", "Y"]] #horizontal matching test 2
         # self.tile_types = [ ["Y", "Y", "Y", "Y", "R", "Y", "Y", "Y" ], ["Y", "Y", "Y", "Y", "R", "R", "Y", "R"]] #horizontal matching test 3
+        
+
         self.tile_size = 20
+
+        
         # the reason why we want them to be produced from the same factories is for matching purposes.
         # ex: in DrMario redPill and redVirus should be matchable
         self.falling_tile_types = ["Y", "R"]  # A = yellow pill # B = red pill
@@ -46,12 +57,13 @@ class DrMarioGame(TMGE):
     def create_my_tile_board(self):
         self.set_up_my_tile_factories()
         self.set_up_my_falling_tile_factories()
-        my_tile_board = MyTileBoard(self.tile_size,
-                                        self.factory, self.falling_factory,
-                                        self.tile_types, self.falling_tile_types,
-                                        2, 2, 3)
+        my_tile_board = DMTileBoard(self.tile_size,
+                                    self.factory, self.falling_factory,
+                                    self.tile_types, self.falling_tile_types,
+                                    2, 2, 3)
         self.set_tile_board(my_tile_board)
 
+    #pre-setup of the tile factory
     def set_up_my_tile_factories(self):
         # create the main factory
         factory = TileAbstractFactory()
@@ -87,7 +99,7 @@ class DrMarioGame(TMGE):
 
 
 myGUI = GUI()
-myDrMarioGame = DrMarioGame(60, myGUI)
+myDrMarioGame = DrMarioGame(0.2, myGUI)
 myDrMarioGame.run()
 
 

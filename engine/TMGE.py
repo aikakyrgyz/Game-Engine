@@ -1,4 +1,5 @@
 from time import time_ns
+import time
 from math import pow
 from abc import ABC, abstractmethod
 import pygame
@@ -31,7 +32,7 @@ class TMGE(ABC):
 
     def time_between_updates(self):
         # 1s = 1000 ms
-        self.delta = pow(10, 9)/self.FPS
+        self.delta = 1/self.FPS
 
     def add_game_object(self, game_object):
         self.game_objects.append(game_object)
@@ -79,6 +80,8 @@ class TMGE(ABC):
             # fill in the holes, if any
             self.tile_board.fill_holes()
             self.GUI.draw_board(self.tile_board)
+            
+            time.sleep(self.delta)
         
             for i in range(5):
                 # updating the tile board for now... for for testing, eventually call the update() function defined for all updates
