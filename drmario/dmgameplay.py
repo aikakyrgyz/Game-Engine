@@ -19,8 +19,12 @@ class DrMarioGame(TMGE):
 
     def __init__(self, FPS, GUI):
         TMGE.__init__(self, FPS, GUI)
+
+        #testing
         # self.tile_types = [["E", "E", "E"],["E", "E", "E"],["E", "E", "E"], ["E", "R", "E"], ["Y", "Y", "Y"]]
         # self.tile_types = [["E", "E", "E"],["E", "E", "Y"],["E", "E", "Y"], ["E", "Y", "R"], ["Y", "Y", "Y"]]
+
+        #vertical matching
         # self.tile_types = [["E", "E", "E"],["E", "E", "Y"], ["E", "E", "Y"], ["E", "E", "Y"], ["E", "E", "R"],["E", "E", "Y"], ["E", "R", "Y"], ["Y", "R", "Y"]] #vertical matching
         # self.tile_types = [["E", "E", "E"],["E", "E", "Y"], ["E", "E", "Y"], ["E", "E", "Y"], ["E", "E", "Y"],["E", "E", "Y"], ["E", "R", "Y"], ["Y", "R", "R"]] #vertical matching case 1
         # self.tile_types = [["E", "E", "E"],["E", "E", "E"], ["E", "E", "E"], ["E", "E", "E"], ["E", "R", "E"],["E", "R", "E"], ["E", "R", "E"], ["Y", "Y", "E"]] #vertical matching case 1
@@ -29,11 +33,13 @@ class DrMarioGame(TMGE):
         # self.tile_types = [["E", "E", "E"],["E", "E", "E"], ["E", "E", "E"], ["E", "E", "E"], ["E", "R", "Y"],["E", "Y", "Y"], ["E", "R", "Y"], ["Y", "R", "Y"]] #vertical matching case 4
         # self.tile_types = [["E", "E", "E"],["E", "E", "Y"], ["E", "E", "Y"], ["E", "E", "Y"], ["E", "R", "R"],["E", "Y", "Y"], ["E", "R", "Y"], ["Y", "R", "Y"]] #vertical matching case 5
         # self.tile_types = [["E", "E", "E"],["E", "E", "Y"], ["E", "E", "Y"], ["E", "E", "Y"], ["E", "R", "Y"],["E", "Y", "Y"], ["E", "R", "Y"], ["Y", "R", "R"]] #vertical matching case 5
+        
+        #horizontal matching
         self.tile_types = [["E", "E", "E", "E"],["E", "E", "E", "Y"],["E", "E", "E", "Y"], ["E", "E", "R", "R"], ["R", "Y", "Y", "Y"]] #horizontal matching test 1
         # self.tile_types = [["E", "E", "E", "E"], ["E", "E", "E", "E"],["E", "E", "E", "Y"],["E", "E", "E", "Y"], ["E", "E", "Y", "Y"], ["Y", "Y", "Y", "Y"]] #horizontal matching test 2
         # self.tile_types = [ ["Y", "Y", "Y", "Y", "R", "Y", "Y", "Y" ], ["Y", "Y", "Y", "Y", "R", "R", "Y", "R"]] #horizontal matching test 3
         
-        
+
         self.tile_size = 20
 
         
@@ -93,7 +99,7 @@ class DrMarioGame(TMGE):
 
 
 myGUI = GUI()
-myDrMarioGame = DrMarioGame(60, myGUI)
+myDrMarioGame = DrMarioGame(0.2, myGUI)
 myDrMarioGame.run()
 
 
