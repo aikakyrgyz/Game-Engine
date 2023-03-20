@@ -8,7 +8,7 @@ from engine.Tile.empty_tile_factory import EmptyTileFactory
 from engine.Tile.tile import Tile
 from engine.Tile.empty_tile import EmptyTile
 from engine.Tile.tileAbstractFactory import TileAbstractFactory
-from engine.GameObject.position import POSITION
+from engine.GameObject.orientation import POSITION
 from engine.Tile.status import Status
 
 
@@ -41,6 +41,7 @@ class TilesBoard(ABC):
 
         # initially there is no falling shape on the board
         self.falling_shape = None
+        self.pivot_tile = None
 
         # the board will be responsible for issuing game over signal
         self.game_over = False
@@ -146,7 +147,7 @@ class TilesBoard(ABC):
     # falling logic 
     
     def get_falling_shape(self) -> FallingShape:
-        return self._falling_shape
+        return self.falling_shape
     
     # decides what position should the next added falling shape have (uncomment when the logic for horizontal shape is done)
     def add_falling_shape(self):
@@ -385,35 +386,105 @@ class TilesBoard(ABC):
 
     pass
 
-    def rotate_shape_on_board(self, shape: FallingShape):
-        """ how do we want to turn? to simplify there can be only 1 button to initiate rotation, so there is only
-            1 way to rotate. here logic is assuming pivoting on the bottom/left tile location, so if the tiles are
-            vertical the top tile will move to be to the right of the bottom tile if the tiles are horizontal,
-            the left tile will move 1 row up and the right tile will move to where the left tile was
-            * exception: if vertical and against another tile or the right wall, the top tile to move to the bottom
-                         tile space, and the bottom tile will move to the cell to the left in the same row.
-                           row 1      |top tile||wall|     =>                        |wall|
-                           row 2      |bot tile||wall|            |bot tile||top tile||wall|
+    def set_pivot_tile(self, r, c):
+        self.pivot_tile = r, c
+
+    def get_pivot_tile(self):
+        return self.pivot_tile
+
+    def place_shape_on_board(self, r, c):
         """
-        # maybe create a method to check a specified neighboring cell?, maybe should be in tiles board?
-        # i think tiles_board might need to have the rotate method and this one should be in charge of
-        # setting the new x, y coordinates
-        if shape.is_falling():              # other option is to get_status & compare to Status.FALLING
-            if shape.is_vertical():         # other option is to get_position & compare to Position.VERTICAL
-                # check the tile to the right of the bottom tile (col+1),
-                # if empty turn the faller - bottom stays (row, col), top is now right (row-1, col+1)
+        stores the shape at the given coordinates
+        """
+        # can be used by rotate_shape_on_board & move_falling_shape
 
-                # if NOT empty follow the exception, check to the left
-                # if left tile is empty - bottom is now left (row, col-1), top is now right (row-1, col)
+        pass
 
-                # if left is NOT empty - cannot rotate
-                pass
-            elif not shape.is_vertical():    # other option is to get_position & compare to Position.HORIZONTAL
-                # check title above the left tile
-                # if empty - left becomes top (row+1, col), right tile moves to where left was (row-1, col-1)
+    def remove_falling_shape(self):
+        """
+        empty the current tiles of the shape position
+        """
+        pass
 
-                # if NOT empty - does not rotate
-                pass
+    def move_falling_shape(self, direction):
+        """
+        moves the shape in the direction given, first removes, then places & sets new pivot_tile
+        """
 
+        self.remove_falling_shape()
+        if direction == "LEFT":
+            self.place_shape_on_board(self.pivot_tile[0], self.pivot_tile[1] - 1)
+        elif direction == "RIGHT":
+            self.place_shape_on_board(self.pivot_tile[0], self.pivot_tile[1] + 1)
+        elif direction == "DOWN":
+            self.place_shape_on_board(self.pivot_tile[0] + 1, self.pivot_tile[1])
 
+    # @abstractmethod
+    def can_rotate(self) -> bool:
+        """
+        checks tiles to see if a shape can rotate
+        :param pivot_tile:
+        :return: true if the object is able to rotate
+        """
+        pivot_tile = self.pivot_tile[0], self.pivot_tile[1]
+        above = pivot_tile[0] - 1, pivot_tile[1]
+        right = pivot_tile[0], pivot_tile[1] + 1
+        left = pivot_tile[0], pivot_tile[1] - 1
+        # below = pivot_tile[0] + 1, pivot_tile[1]      # if we enable rotating down
 
+        # check the tile to the right of the pivot_tile is empty
+        if self.falling_shape.is_vertical():
+            if self.is_empty_tile(right[0], right[1]):
+                return True
+            elif self.is_empty_tile(left[0], left[1]):
+                # change pivot_tile to left
+                self.set_pivot_tile(left[0], left[1])
+                return True
+        else:  # not self.falling_shape.is_vertical():
+            if self.is_empty_tile(above[0], above[1]):
+                return True
+            # # to shift down to rotate?
+            # elif self.is_empty_tile(below[0], below[1]):
+            #     self.set_pivot_tile(below[0], below[1])
+            #     return True
+
+        # # or instead are we considering other shapes that are not two tiles?
+        # # check the needed tiles are empty
+        # # needed?
+        # if self.falling_shape.is_vertical():
+        #     # check horizontal space (length of the shape - number of rows in shape)
+        #     # num rows - len of shape
+        #     # check vertical space (length of the longest row in the shape - max number of columns in shape)
+        #     for row in self.falling_shape:
+        #         # check col in board above pivot_tile row can fit len of row excluding empty
+        #         pass
+        # else:
+        #     # check vertical space
+        #     pass
+
+        return False
+
+    def rotate_shape_on_board(self):
+        """
+        uses falling shape rotate, then updates the tiles on the board
+        logic is assuming pivoting on pivot_tile - the bottom left tile location, so if the tiles are
+        vertical the top tile will move to be to the right of the bottom tile if the tiles are horizontal,
+        the left tile will move 1 row up and the right tile will move to where the left tile was
+        * exception: if vertical and against another tile or the right wall, the top tile to move to the bottom
+                    tile space, and the bottom tile will move to the cell to the left in the same row.
+                    row 1      |top tile||wall|     =>                         |wall|
+                    row 2      |bot tile||wall|            |bot tile||top tile||wall|
+        """
+
+        # alternatively, we could remove this if stmt and allow the game developer to determine this
+        if self.falling_shape.is_falling() and self.is_valid_location(self.get_pivot_tile()[0], self.get_pivot_tile()[1]):
+            # check the needed tiles are empty
+            if self.can_rotate():
+                # set current tiles of the shape position on the board to empty
+                self.remove_falling_shape()
+                # rotate the shape
+                self.falling_shape.rotate()
+                # update the board
+                self.place_shape_on_board(self.pivot_tile[0], self.pivot_tile[1])
+            else:
+                print("rotate blocked")

@@ -3,6 +3,7 @@ import random
 # later: refractor to a shape factory
 from engine.Errors.errors import InvalidIndexOnBoardError, TileFactoryDoesNotExist
 from engine.GameObject.game_object import GameObject
+from engine.GameObject.orientation import Orientation
 from engine.Tile.tileAbstractFactory import TileAbstractFactory
 from engine.Tile.status import Status
 
@@ -10,7 +11,7 @@ from engine.Tile.status import Status
 
 class FallingShape(GameObject):
     # to do: try to validate the r, and c without passing tiles_board
-    def __init__(self, position, column, number_of_tiles: int, tile_types: list[str], tile_factories:TileAbstractFactory):
+    def __init__(self, orientation, column, number_of_tiles: int, tile_types: list[str], tile_factories:TileAbstractFactory):
         self.status = Status["FALLING"]
         self.column = column
         self.number_of_tiles = number_of_tiles
@@ -18,20 +19,20 @@ class FallingShape(GameObject):
         self.factory = tile_factories
         self._instance = []
         self.bottom_tile_row = number_of_tiles-1
-        self.position = position
+        self.orientation = orientation
         self.create()
         # self.set_tile_status()
         # Capsule, tile_types = ["YELLOW", "RED"]
         # the creation shall be in order as specified by the tile_types
 
-        # faller -> |YELLOW|RED| if horizontal
+        # faller -> |YELLOW|RED| if horizontal  ->  [[yellow, red]]
 
         # rotate -> will change the adjacent tiles
 
         # faller ->  ______
         #           |YElLOW|
         #            -------
-        #           |  RED |   if vertical
+        #           |  RED |   if vertical      ->  [[yellow][red]]
         #            -------
 
         # tile_factory should contain the factories for building the yellow and red tile
@@ -89,9 +90,6 @@ class FallingShape(GameObject):
     def get_falling_shape(self):
         return self
 
-    def rotate(self):
-        pass # do we want to rotate
-
     def fall(self):
         self.bottom_tile_row+=1
 
@@ -106,9 +104,31 @@ class FallingShape(GameObject):
                 if self.factory.get(type) == None:
                     raise TileFactoryDoesNotExist(f"The tile factory for type {type} does not exist")
 
+    def set_orientation(self, orientation: Orientation):
+        self.orientation = orientation
 
+    def get_orientation(self):
+        return self.orientation
 
-    def change_coordinates(self):
+    def is_vertical(self):
+        if self.get_orientation() == Orientation.VERTICAL:
+            return True
+        return False
+
+    # @abstractmethod
+    def rotate(self):
+        self.update_shape()
+        if self.get_orientation() == Orientation["VERTICAL"]:
+            # for a shape with two tiles that are different would need to swap the order of tiles in the _instance
+            # but this doesn't need to happen in every game
+            # also if the shape is larger or an odd shape it would need to happen at every rotation
+            self.set_orientation(Orientation["HORIZONTAL"])
+        elif self.get_orientation() == Orientation["HORIZONTAL"]:
+            # self.update_shape()
+            self.set_orientation(Orientation["VERTICAL"])
+
+    # @abstractmethod
+    def update_shape(self):
         """
         must update coordinates of all tiles in the shape
         """
