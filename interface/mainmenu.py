@@ -3,7 +3,7 @@ import pygame_menu
 import apptheme as app_theme
 import registration as reg
 from database import game as gamesql
-from puyopuyo import puyoUI as pm
+from puyopuyo import puyoui as pm
 from drmario import dmUI as dm
 
 # background image for main menu
