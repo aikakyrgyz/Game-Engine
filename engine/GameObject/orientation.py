@@ -6,4 +6,4 @@ class Orientation(Enum):
     VERTICAL = "vertical"
 
 
-POSITION = ["VERTICAL", "HORIZONTAL"]
+ORIENTATION = ["VERTICAL", "HORIZONTAL"]
