@@ -59,7 +59,7 @@ class GUI:
         print(f" {3 * tile_board.get_num_columns() * '-' + ' '}")
         pygame.display.update()
 
-    def falling_obj_movement(keys_pressed, obj, velocity):
+    def falling_obj_movement(self, keys_pressed, obj, velocity):
         """
         Handle the input from the player
         :param keys_pressed: keyboard input from pygame (i.e. keys_pressed = pygame.key.get_pressed())
