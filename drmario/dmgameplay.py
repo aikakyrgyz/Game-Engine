@@ -66,8 +66,8 @@ class DrMarioGame(TMGE):
         # create the main factory
         factory = TileAbstractFactory()
         # initialize each inidividual factory
-        yellow_factory = TileFactory(Yellow, Sprite("yellow-virus.png"), "Y", False)
-        red_factory = TileFactory(Red, Sprite("red-virus.png"), "R", False)
+        yellow_factory = TileFactory(Yellow, Sprite("images/yellow-tile.png"), "Y", False)
+        red_factory = TileFactory(Red, Sprite("images/red-tile.png"), "R", False)
         # register individual factories within the main factory
         factory.register_factory("Y", yellow_factory)
         factory.register_factory("R", red_factory)
@@ -77,8 +77,8 @@ class DrMarioGame(TMGE):
         falling_factory = TileAbstractFactory()
         # we can take advantage of the sprite, it is still yellow tile
         # but this time it is yellow pill not the virus and since these are different factories there is not conflict between the two
-        yellow_factory = TileFactory(Yellow, Sprite("yellow-pill.png"), "A", False)
-        red_factory = TileFactory(Red, Sprite("red-pill.png"), "B", False)
+        yellow_factory = TileFactory(Yellow, Sprite("images/yellow-pill.png"), "A", False)
+        red_factory = TileFactory(Red, Sprite("images/red-pill.png"), "B", False)
         falling_factory.register_factory("Y", yellow_factory)
         falling_factory.register_factory("R", red_factory)
         self.set_falling_factory(falling_factory)

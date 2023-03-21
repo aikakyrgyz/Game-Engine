@@ -29,7 +29,7 @@ class TilesBoard(ABC):
         # depending on how the user wants, the number of tiles will be randomly selected within the given range for each shape
         self.max_num_shape_tiles = max_num_tiles
         self.min_num_shape_tiles = min_num_tiles
-        
+
         # the minimum number of tiles for successful matching
         self.min_match_num = min_match_num
 
@@ -47,10 +47,9 @@ class TilesBoard(ABC):
 
         # the board will be responsible for issuing game over signal
         self.game_over = False
-        
+
         # this variable is used to control the matching vs. falling shape addition
         self.just_matched = False
-
 
     # create the full board with the tiles
     def create_board(self):
@@ -63,7 +62,7 @@ class TilesBoard(ABC):
         # for that reason we will create extra (equal to the number of max_num_tiles in the shape) 
         # empty rows on the top of the board. There is another way to do it, we just keep track of the 
         # yet invisible tiles of the falling shape, however it is harder. 
-        for i in range(self.max_num_shape_tiles-1):
+        for i in range(self.max_num_shape_tiles - 1):
             board_columns = []
             for j in range(len(self.tile_types[0])):
                 tile = self.tile_factories.create_tile("E")
@@ -92,7 +91,7 @@ class TilesBoard(ABC):
     # after the board has been initialized, we do not use this variable anymore
     def get_types_board(self):
         return self.tile_types
-    
+
     # added a get_tile_size for GUI
     def get_tile_size(self):
         return self.tile_size
@@ -139,7 +138,7 @@ class TilesBoard(ABC):
 
     def get_tile_type_on_index(self, r: int, c: int) -> str:
         return type(self.board[r][c])
-    
+
     def is_empty_tile(self, r, c) -> bool:
         return isinstance(self.board[r][c], EmptyTile)
 
@@ -147,10 +146,10 @@ class TilesBoard(ABC):
         return self.board[r][c]
 
     # falling logic 
-    
+
     def get_falling_shape(self) -> FallingShape:
         return self.falling_shape
-    
+
     # decides what position should the next added falling shape have (uncomment when the logic for horizontal shape is done)
     def add_falling_shape(self):
         position = random.choice(POSITION)
@@ -191,20 +190,20 @@ class TilesBoard(ABC):
         if landing_row >= self.get_num_rows() or (not self.is_empty_tile(landing_row, self.falling_shape.get_column())):
             # indicate that the falling shape just landed
             self.falling_shape.set_status(Status.FALLEN)
-            
+
             # set all of the tiles of the board to which the falling shape's tile belong to 
             # have the status of already fallen tiles (not falling, not still YET)
-            
+
             # Note: we are setting the tile on BOARD that BELONG to the falling shape
             # We are not changing the faller's tiles' statuses since it is redundant. We can just keep track of the board tiles.
             for i in range(self.falling_shape.get_bottom_tile_row(),
                            self.falling_shape.get_bottom_tile_row() - self.max_num_shape_tiles, -1):
                 self.get_tile_on_index(i, self.falling_shape.get_column()).set_status(Status.FALLEN)
-    
+
     def keep_falling(self):
         # increments the faller to fall down
         if self.falling_shape.get_bottom_tile_row() >= self.get_num_rows():
-                self.check_floor()
+            self.check_floor()
         landing_row = self.falling_shape.get_bottom_tile_row() + 1
         above_row = landing_row - self.max_num_shape_tiles
         if self.is_empty_tile(landing_row, self.falling_shape.get_column()):
@@ -221,20 +220,38 @@ class TilesBoard(ABC):
             self.falling_shape.fall()
             self.check_floor()
 
-    def clear_falling_shape(self):
+    def remove_falling_shape(self):
         """
-        empty the current tiles of the shape position
+        empty the current tiles of the shape position (pivot_tile)
         """
         # can be used to keep_falling, rotate_shape_on_board, & move_falling_shape based on input (right, left, down)
-        pass
+        for i in range(self.falling_shape.get_num_tiles()):
+            # determine row, column based on if the shape is vertical or horizontal
+            if self.falling_shape.is_vertical():
+                row, column = self.pivot_tile[0] - i, self.pivot_tile[1]
+            else:
+                row, column = self.pivot_tile[0], self.pivot_tile[1] + i
+
+            # set the coordinate to empty
+            self.set_empty_tile(row, column)
 
     def place_shape_on_board(self, r, c):
         """
         stores the shape at the given coordinates
+        if the shape
+        - is vertical, place tiles from bottom up,
+        - is horizontal, places tiles from left to right
         """
         # can be used by add_falling_shape, rotate_shape_on_board, & move_falling_shape
+        for i in range(self.falling_shape.get_num_tiles()):
+            # determine row, column based on if the shape is vertical or horizontal
+            if self.falling_shape.is_vertical():
+                row, column = r - i, c
+            else:
+                row, column = r, c + i
 
-        pass
+            # set the tiles to the shape tiles
+            self.change_tile(row, column, tile=self.falling_shape.get_tile_on_index(i))
 
     # def add_vertical_falling_shape(self, falling_shape:FallingShape):
     #     bottom_tile_row_index = falling_shape.get_bottom_tile_row_index()
@@ -276,15 +293,13 @@ class TilesBoard(ABC):
             # We want to match before the faller starts falling so alternate match and addition of faller
             self.just_matched = True
 
-        
         if self.falling_shape is not None and self.falling_shape.get_status() == Status.FALLEN:
             self.just_landed()
             self.match_all()
 
-
         if self.falling_shape is not None:
             self.keep_falling()
-            
+
         # if there is no faller on the board, add a new one
         elif self.falling_shape is None and self.just_matched:
             self.add_falling_shape()
@@ -298,60 +313,78 @@ class TilesBoard(ABC):
 
     def move_falling_shape(self, direction):
         """
-        moves the shape in the direction given by the player;
+        moves the shape in the direction input given;
         first removes the shape, then sets new pivot_tile & places the shape
-
+        :param direction: the direction the shape should move on the board
+        :return:
         """
+        pivot = self.get_pivot_tile()[0], self.get_pivot_tile()[1]
 
-        self.clear_falling_shape()
         if direction == "LEFT":
-            self.place_shape_on_board(self.pivot_tile[0], self.pivot_tile[1] - 1)
+            pivot = self.pivot_tile[0], self.pivot_tile[1] - 1
         elif direction == "RIGHT":
-            self.place_shape_on_board(self.pivot_tile[0], self.pivot_tile[1] + 1)
+            pivot = self.pivot_tile[0], self.pivot_tile[1] + 1
         elif direction == "DOWN":
-            self.place_shape_on_board(self.pivot_tile[0] + 1, self.pivot_tile[1])
+            pivot = self.pivot_tile[0] + 1, self.pivot_tile[1]
+
+        # check that the shape can fit
+        if self.can_shift_shape_to(pivot[0], pivot[1]):
+            # remove shape from current position
+            self.remove_falling_shape()
+            # set new pivot_tile
+            self.set_pivot_tile(pivot[0], pivot[1])
+            # place in new position
+            self.place_shape_on_board(pivot[0], pivot[1])
+
+    def can_shift_shape_to(self, r, c) -> bool:
+        available = True
+        for i in range(self.falling_shape.get_num_tiles()):
+            # determine row, column based on if the shape is vertical or horizontal
+            if self.falling_shape.is_vertical():
+                row, column = r - i, c
+            else:
+                row, column = r, c + i
+
+            # check if the coordinate is empty
+            if not self.is_empty_tile(row, column):
+                available = False
+        # space is available & the shape can shift to the new position
+        return available
 
     # @abstractmethod
-    def can_rotate(self) -> bool:
+    def can_rotate_shape(self) -> bool:
         """
-        checks tiles to see if a shape can rotate
+        checks tiles to see if a shape can rotate,
+        if the shape is blocked will check the neighboring cells if there is not enough space
+        in this case, the position tile will be updated to accommodate the new position
         :return: true if the object is able to rotate
         """
-        pivot_tile = self.pivot_tile[0], self.pivot_tile[1]
-        above = pivot_tile[0] - 1, pivot_tile[1]
-        right = pivot_tile[0], pivot_tile[1] + 1
-        left = pivot_tile[0], pivot_tile[1] - 1
-        # below = pivot_tile[0] + 1, pivot_tile[1]      # if we enable rotating down
+        def helper_new_pivot(pivot_shift):
+            # helper method used to set the new pivot_tile if needed
+            if self.falling_shape.is_vertical():
+                self.set_pivot_tile(self.pivot_tile[0] + pivot_shift, self.pivot_tile[1])
+            else:
+                self.set_pivot_tile(self.pivot_tile[0], self.pivot_tile[1] - shift)
 
-        # check the tile to the right of the pivot_tile is empty
-        if self.falling_shape.is_vertical():
-            if self.is_empty_tile(right[0], right[1]):
-                return True
-            elif self.is_empty_tile(left[0], left[1]):
-                # change pivot_tile to left
-                self.set_pivot_tile(left[0], left[1])
-                return True
-        else:  # not self.falling_shape.is_vertical():
-            if self.is_empty_tile(above[0], above[1]):
-                return True
-            # # to shift down to rotate?
-            # elif self.is_empty_tile(below[0], below[1]):
-            #     self.set_pivot_tile(below[0], below[1])
-            #     return True
+        for shift in range(self.falling_shape.get_num_tiles()):
+            blocked = False
+            for i in range(self.falling_shape.get_num_tiles() - 1):
+                # determine row, column based on if the shape is vertical or horizontal
+                if self.falling_shape.is_vertical():
+                    # need to check horizontal
+                    row, column = self.get_pivot_tile()[0], self.get_pivot_tile()[1] + i - shift
+                else:
+                    # need to check vertical
+                    row, column = self.pivot_tile[0] - i + shift, self.pivot_tile[1]
 
-        # # or instead are we considering other shapes that are not two tiles?
-        # # check the needed tiles are empty
-        # # needed?
-        # if self.falling_shape.is_vertical():
-        #     # check horizontal space (length of the shape - number of rows in shape)
-        #     # num rows - len of shape
-        #     # check vertical space (length of the longest row in the shape - max number of columns in shape)
-        #     for row in self.falling_shape:
-        #         # check col in board above pivot_tile row can fit len of row excluding empty
-        #         pass
-        # else:
-        #     # check vertical space
-        #     pass
+                # check if the coordinate is not empty, skipping the pivot_tile
+                if not self.is_empty_tile(row, column) and i != 0:
+                    blocked = True
+            # space is available & the shape can rotate
+            if not blocked:
+                if shift > 0:
+                    helper_new_pivot(shift)
+                return True
 
         return False
 
@@ -368,11 +401,12 @@ class TilesBoard(ABC):
         """
 
         # alternatively, we could remove this if stmt and allow the game developer to determine this
-        if self.falling_shape.is_falling() and self.is_valid_location(self.get_pivot_tile()[0], self.get_pivot_tile()[1]):
+        if self.falling_shape.is_falling() and \
+                self.is_valid_location(self.get_pivot_tile()[0], self.get_pivot_tile()[1]):
             # check the needed tiles are empty
-            if self.can_rotate():
+            if self.can_rotate_shape():
                 # set current tiles of the shape position on the board to empty
-                self.clear_falling_shape()
+                self.remove_falling_shape()
                 # rotate the shape
                 self.falling_shape.rotate()
                 # update the board
@@ -400,7 +434,7 @@ class TilesBoard(ABC):
     def horizontal_match(self):
         """Defines the logic for the horizontal match"""
         matched_tiles = []
-        for row in range(self.num_rows-1, -1, -1):
+        for row in range(self.num_rows - 1, -1, -1):
             for col in range(self.num_cols):
                 tile = self.get_tile_on_index(row, col)
                 if len(matched_tiles) == 0:
@@ -438,30 +472,31 @@ class TilesBoard(ABC):
         # after the match, the non-empty "hanging" tiles need to fall down
         # have to go through each row twice since need to move all to the most bottom possible
         for r in range(self.num_rows):
-            for row in range(self.num_rows-1):
+            for row in range(self.num_rows - 1):
                 for col in range(self.num_cols):
                     # make sure that the tile is not stationary (need to keep it as is)
-                    if not self.is_empty_tile(row, col) and not self.is_stationary_tile(row, col) and self.is_empty_tile(row+1, col):
+                    if not self.is_empty_tile(row, col) and not self.is_stationary_tile(row,
+                                                                                        col) and self.is_empty_tile(
+                            row + 1, col):
                         # set the bottom tile to this tile
-                        self.change_tile(row+1, col, self.get_tile_on_index(row, col))
+                        self.change_tile(row + 1, col, self.get_tile_on_index(row, col))
                         # clear out the current tile
                         self.set_empty_tile(row, col)
-
 
     def vertical_match(self):
         """Defines the logic for vertical match"""
         matched_tiles = []
         for col in range(self.num_cols):
-            for row in range(self.num_rows-1, -1, -1):
+            for row in range(self.num_rows - 1, -1, -1):
                 tile = self.get_tile_on_index(row, col)
-                if len(matched_tiles) == 0 :
+                if len(matched_tiles) == 0:
                     matched_tiles.append(tile)
-                    last_matched_index = row 
+                    last_matched_index = row
                 else:
                     if matched_tiles[-1].matchable(tile) and last_matched_index - row == 1:
                         # match consecutive tiles only: difference == 1
                         matched_tiles.append(tile)
-                        last_matched_index -=1
+                        last_matched_index -= 1
 
                     if len(matched_tiles) >= self.min_match_num:
                         for t in matched_tiles:
@@ -473,7 +508,6 @@ class TilesBoard(ABC):
                         matched_tiles.append(tile)
                         last_matched_index -= 1
             matched_tiles = []
-
 
     def is_stationary_tile(self, row, col):
         # for example, the virus in Dr.Mario is stationary and it will not fall down even though there is empty space below
