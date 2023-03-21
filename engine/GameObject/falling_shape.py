@@ -25,14 +25,14 @@ class FallingShape(GameObject):
         # Capsule, tile_types = ["YELLOW", "RED"]
         # the creation shall be in order as specified by the tile_types
 
-        # faller -> |YELLOW|RED| if horizontal  ->  [[yellow, red]]
+        # faller -> |YELLOW|RED| if horizontal
 
         # rotate -> will change the adjacent tiles
 
         # faller ->  ______
         #           |YElLOW|
         #            -------
-        #           |  RED |   if vertical      ->  [[yellow][red]]
+        #           |  RED |   if vertical
         #            -------
 
         # tile_factory should contain the factories for building the yellow and red tile
@@ -117,14 +117,15 @@ class FallingShape(GameObject):
 
     # @abstractmethod
     def rotate(self):
-        self.update_shape()
+        # update orientation
+        # for a shape with two tiles that are different would need to swap the order of tiles in the _instance
+        # but this doesn't need to happen in every game
+        # also if the shape is larger or an odd shape it would need to happen at every rotation
         if self.get_orientation() == Orientation["VERTICAL"]:
-            # for a shape with two tiles that are different would need to swap the order of tiles in the _instance
-            # but this doesn't need to happen in every game
-            # also if the shape is larger or an odd shape it would need to happen at every rotation
             self.set_orientation(Orientation["HORIZONTAL"])
+
         elif self.get_orientation() == Orientation["HORIZONTAL"]:
-            # self.update_shape()
+            self.update_shape()
             self.set_orientation(Orientation["VERTICAL"])
 
     # @abstractmethod
@@ -132,4 +133,6 @@ class FallingShape(GameObject):
         """
         must update coordinates of all tiles in the shape
         """
-        pass
+        # since we are only considering line shapes,
+        # shape will only need to update when going from horizontal to vertical
+        self.tile_types = reversed(self.tile_types)
