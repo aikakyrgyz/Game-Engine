@@ -6,18 +6,24 @@ from database import game as gamesql
 from puyopuyo import puyoui as pm
 from drmario import dmUI as dm
 
+# COMMENT OUT THE TWO LINES BELOW IF THEY DON'T WORK BECAUSE IMAGES AREN'T WORKING FOR ME WITHOUT THEM - TENZO
+import os
+os.chdir('../')
+
 # background image for main menu
 def draw_background():
     background_image = pygame_menu.BaseImage(
         image_path="images/bg_image.jpg"
-    )        
+    )
     background_image.draw(menu.surface)
+
 
 # move or adjust this function
 def get_game_list_menu():
     return gamesql.return_game_list()
     # if no database connection, use the below
     # return [("Dr. Mario", 0), ("Puyo Puyo", 1)]
+
 
 class MainMenu:
     def __init__(self, title, surface_dimensions, theme=app_theme.get_theme()):
@@ -79,24 +85,24 @@ class MainMenu:
             title='Register Players'
         )
 
-        self.players[0] = reg_menu.add.text_input('Player 1: ', input_underline_hmargin=5)\
-            .set_margin(400, 0).set_alignment(pygame_menu.locals.ALIGN_LEFT,)
-        
+        self.players[0] = reg_menu.add.text_input('Player 1: ', input_underline_hmargin=5) \
+            .set_margin(400, 0).set_alignment(pygame_menu.locals.ALIGN_LEFT, )
+
         # game image example. needs a lot of work
-        if (self.selected_game_index == 0):
-            game_image="images/mario_image.jpg"
+        if self.selected_game_index == 0:
+            game_image = "images/mario_image.jpg"
         else:
-            game_image="images/puyopuyo_image.jpg"
+            game_image = "images/puyopuyo_image.jpg"
         self.image_widget = reg_menu.add.image(
             image_path=game_image,
             padding=(25, 0, 0, 0),  # top, right, bottom, left
             scale=(0.15, 0.15),
             align=pygame_menu.locals.ALIGN_LEFT,
-            set_margin=(400,400)
+            set_margin=(400, 400)
         )
 
-        self.players[1] = reg_menu.add.text_input('Player 2: ', default="")\
-            .set_margin(400, 0).set_alignment(pygame_menu.locals.ALIGN_LEFT,)
+        self.players[1] = reg_menu.add.text_input('Player 2: ', default="") \
+            .set_margin(400, 0).set_alignment(pygame_menu.locals.ALIGN_LEFT, )
         reg_menu.add.button(f'Play {get_game_list_menu()[self.selected_game_index][0]}', self.start_selected_game)
         reg_menu.add.button('Back', pygame_menu.events.BACK)
         reg_menu.add.button('Quit', pygame_menu.events.EXIT)
@@ -107,7 +113,7 @@ class MainMenu:
                                          theme=self.custom_theme,
                                          title='Main Menu'
                                          )
-    
+
         # self.display_mainmenu_items(infont)
         self.app_menu.add.selector(title='Select Game ',
                                    items=get_game_list_menu(),
@@ -116,6 +122,7 @@ class MainMenu:
                                    )
         self.app_menu.add.button('Play', reg_menu)
         self.app_menu.add.button('Quit', pygame_menu.events.EXIT)
+
 
 if __name__ == '__main__':
     menu = MainMenu(app_theme.APP_TITLE, (app_theme.SURFACE_HEIGHT, app_theme.SURFACE_WIDTH), app_theme.get_theme())
