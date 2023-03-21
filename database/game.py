@@ -7,7 +7,7 @@ def insert_game_into_game_table(name):
         connection = mysql.connector.connect(host='localhost',
                                              database='games',
                                              user='root',
-                                             password=config.mysql_pass)
+                                             password='wit122')
 
         cursor = connection.cursor()
         mysql_insert_query = """INSERT INTO Games (Gamename)
@@ -32,7 +32,7 @@ def return_game_list():
         connection = mysql.connector.connect(host='localhost',
                                              database='games',
                                              user='root',
-                                             password=config.mysql_pass)
+                                             password='wit122')
 
         cursor = connection.cursor()
         mysql_id_query = """SELECT Gamename FROM games"""
