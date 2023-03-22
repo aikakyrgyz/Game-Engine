@@ -13,4 +13,8 @@ class PuyoTileBoard(TilesBoard):
     def match_all(self):
         # for Puyopuyo we want group matches
         self.group_match()
+        
+        # to test
+        # self.vertical_match()
+        # self.horizontal_match()
 
