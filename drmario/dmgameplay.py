@@ -1,6 +1,6 @@
 import sys
 
-# sys.path.append(r'/Users/okdrahcir/documents/github/Inf-122-Final-Project')
+sys.path.append(r'/Users/okdrahcir/documents/github/Inf-122-Final-Project')
 
 # if you are having a engine moduleNotFound error, you will have to include the root directory path to sys.path
 sys.path.append(r'/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project')
