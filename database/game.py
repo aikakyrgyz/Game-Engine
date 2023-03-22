@@ -1,4 +1,3 @@
-import config
 import mysql.connector
 
 
@@ -27,6 +26,7 @@ def insert_game_into_game_table(name):
             print("MySQL connection has been closed.")
 
 
+# needs fixing
 def return_game_list():
     try:
         connection = mysql.connector.connect(host='localhost',
