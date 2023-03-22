@@ -156,7 +156,7 @@ class TilesBoard(ABC):
         # if position == "VERTICAL":
         self.add_vertical_falling_shape()
         # else:
-        # self.add_horizontal_falling_shape(position)
+        #     self.add_horizontal_falling_shape()
 
     def add_vertical_falling_shape(self):
         # randomly select a row to put the falling shape in
@@ -195,11 +195,12 @@ class TilesBoard(ABC):
         # set pivot_tile initially r=0 - to track the location of the shape
         self.set_pivot_tile(0, column)
 
+        print("HORIZONTAL SHAPE CREATED")
         # check if the shape can be placed on the board - place and check floor
         if self.can_place_shape(self.pivot_tile[0], self.pivot_tile[1]):
-            # self.place_shape_on_board(self.pivot_tile[0], self.pivot_tile[1], new_shape=True)
-            self.keep_falling()
-            # self.check_floor()
+            self.place_shape_on_board(self.pivot_tile[0], self.pivot_tile[1], new_shape=True)
+            # self.keep_falling()
+            self.check_floor()
 
         else:
             self.game_over = True
@@ -271,13 +272,13 @@ class TilesBoard(ABC):
             else:
                 row, column = r, c + i
 
+            shape_tile = self.falling_shape.get_tile_on_index(i)
             # if the shape is new set the status of tile to falling
             if new_shape:
-                shape_tile = self.falling_shape.get_tile_on_index(i)
                 shape_tile.set_status(Status.FALLING)
 
             # set the tiles to the shape tiles
-            self.change_tile(row, column, tile=self.falling_shape.get_tile_on_index(i))
+            self.change_tile(row, column, tile=shape_tile)
 
         self.check_floor()
 
