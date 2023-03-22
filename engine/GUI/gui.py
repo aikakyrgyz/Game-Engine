@@ -5,13 +5,17 @@ from engine.Tile.status import Status
 from engine.Sprite.sprite import Sprite
 from engine.Tile.tile import Tile
 
+
 class GUI:
     def __init__(self):
+        pygame.init()
+        # pygame.display.init()
         pygame.font.init() # text added for testing
         self.text_font = pygame.font.SysFont('Arial', 15, False, False) # text added for testing
         self.screen_width = 1200
         self.screen_height = 800
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
+        print("Initialuzed pygamedisplay")
         pygame.display.set_caption('Tile Matching Game Environment')
 
     def draw_board(self, tile_board:TilesBoard):
@@ -47,11 +51,14 @@ class GUI:
                 elif status == Status["FALLING"]:
                     to_print += f'[{letter}]'
                     self.draw_tile(tile, x, y, self.tile_size)
+                    self.draw_tile(tile, x, y, self.tile_size)
                 elif status == Status["FALLEN"]:
                     to_print += f'|{letter}|'
                     self.draw_tile(tile, x, y, self.tile_size)
+                    self.draw_tile(tile, x, y, self.tile_size)
                 elif status == Status["MATCHED"]:
                     to_print += f'*{letter}*'
+                    self.draw_tile(tile, x, y, self.tile_size)
                     self.draw_tile(tile, x, y, self.tile_size)
                 else:
                     to_print += " "+ letter + " "
