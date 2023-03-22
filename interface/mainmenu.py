@@ -7,7 +7,7 @@ import profile
 import scoreboard as score
 from database import player
 from database import game as gamesql
-from puyopuyo import puyoui as pm
+from puyopuyo import puyoUI as pm
 from drmario import dmUI as dm
 
 PROJ_DIR_IMG = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'images')

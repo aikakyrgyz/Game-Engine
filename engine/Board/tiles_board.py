@@ -577,10 +577,15 @@ class TilesBoard(ABC):
     def match_all(self):
         """
         Overridden in the child class in order to specify the preferred match
-        Can be either:
-        horizontal_match()
-        vertical_match()
-        or both
+        Can be either: horizontal_match(), vertical_match(), group_match()
+        or mix of these choices
         """
+        pass
 
-    pass
+    @abstractmethod
+    def ending_condition(self) -> bool:
+        """
+        Overridden in the child class to define and return true if game over 
+        condition is met.
+        """
+        pass

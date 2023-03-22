@@ -65,26 +65,38 @@ class TMGE(ABC):
         # GUI testing for Richard, comment the loop to go back out of 
         # Richard's testing environment and uncomment the same code below
         while True:
+            # checks the board if the condition(tiles passing a specific line) 
+            # to end game is true
+            if (self.tile_board.ending_condition()):
+                return
+            
+            # checks for any key inputs from the player and updates board accordingly
             self.handle_key_events()
 
             self.GUI.draw_board(self.tile_board)
-            # the initial set of tiles given might already have matches, so need to get rid of them before
-            # placing a new falling object
+            # the initial set of tiles given might already have matches, 
+            # so need to get rid of them before placing a new falling object
             self.tile_board.match_all()
+
             # printing just to see if it was matched
             self.GUI.draw_board(self.tile_board)
+
             # clear the matches
             self.tile_board.clear_out_matches()
+
             # fill in the holes, if any
             self.tile_board.fill_holes()
             self.GUI.draw_board(self.tile_board)
             
             time.sleep(self.delta)
+            print(self.delta)
         
-            for i in range(5):
+            for i in range(10):
                 # updating the tile board for now... for for testing, eventually call the update() function defined for all updates
                 self.tile_board.update()
                 self.GUI.draw_board(self.tile_board)
+                time.sleep(self.delta)
+                print(self.delta)
 
         # self.GUI.draw_board(self.tile_board)
         # # the initial set of tiles given might already have matches, so need to get rid of them before
@@ -127,7 +139,7 @@ class TMGE(ABC):
         Pressing space, right arrow and left arrow triggers a sound
         """
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT or pygame.K_ESCAPE:
                     pygame.quit()
                     return
             
@@ -141,4 +153,3 @@ class TMGE(ABC):
                 self.tile_board.move_falling_shape("DOWN")
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.tile_board.rotate_shape_on_board()
-

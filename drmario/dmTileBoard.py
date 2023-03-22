@@ -15,3 +15,14 @@ class DMTileBoard(TilesBoard):
         self.horizontal_match()
         self.vertical_match()
 
+    @overriden
+    def ending_condition(self) -> bool:
+        # for now the ending condition of the game is when there is at least one tile 
+        # filed at the top row of the board
+        topRowOfBoard = self.board[0]
+
+        for tile in topRowOfBoard:
+            if tile.get_letter() != "E":
+                return False
+        
+        return True
