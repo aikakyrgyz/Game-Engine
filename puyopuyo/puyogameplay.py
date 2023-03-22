@@ -1,4 +1,5 @@
-# import sys
+import sys
+sys.path.append(r'/Users/okdrahcir/documents/github/Inf-122-Final-Project')
 # sys.path.append(r'/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project')
 # if you are having a engine moduleNotFound error, you will have to include the root directory path to sys.path
 from puyoTileBoard import PuyoTileBoard
@@ -46,18 +47,18 @@ class PuyoGame(TMGE):
         # create the main factory
         factory = TileAbstractFactory()
         # initialize each inidividual factory
-        yellow_factory = TileFactory(Green, Sprite("green-puyo.png"), "G", False)
-        red_factory = TileFactory(Blue, Sprite("blue-puyo.png"), "B", False)
+        green_factory = TileFactory(Green, Sprite("images/green-puyo.png"), "G", False)
+        blue_factory = TileFactory(Blue, Sprite("images/blue-puyo.png"), "B", False)
         # register individual factories within the main factory
-        factory.register_factory("G", yellow_factory)
-        factory.register_factory("B", red_factory)
+        factory.register_factory("G", green_factory)
+        factory.register_factory("B", blue_factory)
         self.set_factory(factory)
 
     def set_up_my_falling_tile_factories(self):
         falling_factory = TileAbstractFactory()
         
-        green_factory = TileFactory(Green, Sprite("Green-pill.png"), "A", False)
-        blue_factory = TileFactory(Blue, Sprite("Blue-pill.png"), "B", False)
+        green_factory = TileFactory(Green, Sprite("images/green-pill.png"), "A", False)
+        blue_factory = TileFactory(Blue, Sprite("images/blue-pill.png"), "B", False)
 
         falling_factory.register_factory("G", green_factory)
         falling_factory.register_factory("B", blue_factory)

@@ -98,5 +98,5 @@ class DrMarioGame(TMGE):
 
 
 myGUI = GUI()
-myDrMarioGame = DrMarioGame(0.2, myGUI)
+myDrMarioGame = DrMarioGame(60, myGUI)
 myDrMarioGame.run()

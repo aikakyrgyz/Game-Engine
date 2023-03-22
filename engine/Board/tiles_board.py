@@ -539,6 +539,34 @@ class TilesBoard(ABC):
                         last_matched_index -= 1
             matched_tiles = []
 
+    def group_match(self):
+        """Defines the logic for group match"""
+        # keeps track of cells visited per function call
+        visited = set() 
+        for col in range(self.num_cols):
+            for row in range(self.num_rows -1, -1, -1):
+                matched_tiles = []
+                self.groupMatch_dfs(row, col, visited, matched_tiles)
+                if len(matched_tiles) >= self.min_match_num:
+                    for t in matched_tiles:
+                        t.set_status(Status.MATCHED)
+
+    def groupMatch_dfs(self, row, col, visited, matched_tiles):
+        """helper function to perform recursive call around grid"""
+        tile = self.get_tile_on_index(row, col)
+        visited.add((row, col))
+        matched_tiles.append(tile)
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        for direction in directions:
+            direction_row = direction[0];
+            direction_col = direction[1];
+            new_row = row + direction_row;
+            new_col = col + direction_col;
+            if (0 <= new_row < self.num_rows and 0 <= new_col < self.num_cols and (new_row, new_col) not in visited):
+                next_tile = self.get_tile_on_index(new_row, new_col)
+                if next_tile.status != Status.MATCHED and tile.matchable(next_tile):
+                    self.groupMatch_dfs(new_row, new_col, visited, matched_tiles)
+
     def is_stationary_tile(self, row, col):
         # for example, the virus in Dr.Mario is stationary and it will not fall down even though there is empty space below
         self.get_tile_on_index(row, col).get_stationary()
