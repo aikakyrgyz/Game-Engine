@@ -168,8 +168,6 @@ class TilesBoard(ABC):
         shape = FallingShape(Orientation.VERTICAL, column, num_tiles, self.falling_tile_types, self.falling_tile_factories)
         # retrieve the created falling shape
         self.falling_shape = shape.get_falling_shape()
-        print(self.falling_shape.get_orientation())
-        print(self.falling_shape.is_vertical())
         # depends on the number of tiles, we always want to start from the same row, even if the max min differ
         self.falling_shape.set_bottom_tile_row(self.max_num_shape_tiles - 1 )
         # set the pivot tile
@@ -331,9 +329,9 @@ class TilesBoard(ABC):
             else:
                 row, column = r, c + i
 
+            shape_tile = self.falling_shape.get_tile_on_index(i)
             # if the shape is new set the status of tile to falling
             if new_shape:
-                shape_tile = self.falling_shape.get_tile_on_index(i)
                 shape_tile.set_status(Status.FALLING)
 
             # set the tiles to the shape tiles
@@ -655,10 +653,15 @@ class TilesBoard(ABC):
     def match_all(self):
         """
         Overridden in the child class in order to specify the preferred match
-        Can be either:
-        horizontal_match()
-        vertical_match()
-        or both
+        Can be either: horizontal_match(), vertical_match(), group_match()
+        or mix of these choices
         """
+        pass
 
-    pass
+    @abstractmethod
+    def ending_condition(self) -> bool:
+        """
+        Overridden in the child class to define and return true if game over 
+        condition is met.
+        """
+        pass

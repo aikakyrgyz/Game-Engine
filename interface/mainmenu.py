@@ -1,13 +1,14 @@
 import os
-
 import pygame
 import pygame_menu
 import apptheme as app_theme
 import registration as reg
+import profile
+import scoreboard as score
+from database import player
 from database import game as gamesql
-from puyopuyo import puyoui as pm
+from puyopuyo import puyoUI as pm
 from drmario import dmUI as dm
-import images
 
 PROJ_DIR_IMG = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'images')
 
@@ -23,15 +24,18 @@ def draw_background():
 
 # move or adjust this function
 def get_game_list_menu():
-    return gamesql.return_game_list()
+    # return gamesql.return_game_list()
     # if no database connection, use the below
-    # return [("Dr. Mario", 0, 'mario_image.jpg'), ("Puyo Puyo", 1, 'puyopuyo_image.jpg')]
+    return [("Dr. Mario", 0, 'mario_image.jpg'), ("Puyo Puyo", 1, 'puyopuyo_image.jpg')]
+
 
 
 class MainMenu:
     def __init__(self, title, surface_dimensions, theme=app_theme.get_theme()):
+        self.image_widget = None
         self.selected_game = get_game_list_menu()[0][0]
         self.players = [pygame_menu.widgets.widget.textinput.TextInput, pygame_menu.widgets.widget.textinput.TextInput]
+        self.username = [pygame_menu.widgets.widget.textinput.TextInput, pygame_menu.widgets.widget.textinput.TextInput]
         self.custom_theme = theme
         self.title = title
         self.surface_height, self.surface_width = surface_dimensions
@@ -71,6 +75,7 @@ class MainMenu:
             print(f"Registered Player 2: {player2}")
             reg.register_player(player2)
 
+
     def start_selected_game(self):
         """
         register players and start the selected game
@@ -84,7 +89,7 @@ class MainMenu:
         elif self.selected_game_index == 1:
             pm.start_menu()
         else:
-            print("Mo game selected!")
+            print("No game selected!")
 
     def update_game_from_selection(self):
         """
@@ -103,7 +108,7 @@ class MainMenu:
             print(f"Selected Game: {self.selected_game}")
             self.update_game_from_selection()
 
-        #
+        # Registration Menu
         reg_menu = pygame_menu.Menu(
             height=self.menu_height,
             width=self.menu_width,
@@ -111,19 +116,8 @@ class MainMenu:
             title='Register Players'
         )
 
-
-        # # game image example. needs a lot of work
-        # if self.selected_game_index == 0:
-        #     # game_image = "images/mario_image.jpg"
-        #     game_image = os.path.join(PROJ_DIR_IMG, 'mario_image.jpg')
-        #     # print(os.path.join(PROJ_DIR_IMG, 'mario_image.jpg'))
-        # else:
-        #     game_image = "images/puyopuyo_image.jpg"
-        #     game_image = os.path.join(PROJ_DIR_IMG, 'puyopuyo_image.jpg')
-
         self.players[0] = reg_menu.add.text_input('Player 1: ', input_underline_hmargin=5) \
             .set_margin(400, 0).set_alignment(pygame_menu.locals.ALIGN_LEFT, )
-
         self.players[1] = reg_menu.add.text_input('Player 2: ', default="") \
             .set_margin(400, 0).set_alignment(pygame_menu.locals.ALIGN_LEFT, )
 
@@ -135,7 +129,45 @@ class MainMenu:
             set_margin=(400, 400)
         )
 
+        # Profile Menu
+        profile_menu = pygame_menu.Menu(
+            height=self.menu_height,
+            width=self.menu_width,
+            theme=self.custom_theme,
+            title='Personal Profile'
+        )
+
+        self.username = profile_menu.add.text_input('Username: ').set_alignment(pygame_menu.locals.ALIGN_CENTER, )
+        profile_back_btn = profile_menu.add.button('Back', pygame_menu.events.BACK)
+        profile_quit_btn = profile_menu.add.button('Quit', pygame_menu.events.EXIT)
+        profile_username = self.username.get_value()
+        if player.check_if_player_exists(profile_username):
+            pass
+        else:
+            pass
+
+        # profile.change_username(profile_username)
+
+        # Confirmation Profile Menu
+        conf_profile_menu = pygame_menu.Menu(
+            height=self.menu_height,
+            width=self.menu_width,
+            theme=self.custom_theme,
+            title='Personal Profile'
+        )
+
+
+        # Scoreboard Menu if there is time
+        # scoreboard_menu = pygame_menu.Menu(
+        #     height=self.menu_height,
+        #     width=self.menu_width,
+        #     theme=self.custom_theme,
+        #     title='Scoreboard'
+        # )
+
         self.play_button = reg_menu.add.button(f'Play', self.start_selected_game)
+        reg_menu.add.button('Profile', profile_menu)
+        # reg_menu.add.button('Scoreboard', scoreboard_menu)
         # self.play1 = reg_menu.add.button(f'Play {get_game_list_menu()[1][0]}', self.start_selected_game)
 
         back_btn = reg_menu.add.button('Back', pygame_menu.events.BACK)
@@ -149,7 +181,8 @@ class MainMenu:
         self.play_button.translate(0, -80)
         back_btn.translate(-75, -70)
         quit_btn.translate(75, -146)
-
+        profile_back_btn.translate(-75, -70)
+        profile_quit_btn.translate(75, -146)
 
         pygame.display.set_caption(self.title)
         self.app_menu = pygame_menu.Menu(height=self.menu_height,
