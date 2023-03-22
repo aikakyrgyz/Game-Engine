@@ -197,8 +197,9 @@ class TilesBoard(ABC):
 
         # check if the shape can be placed on the board - place and check floor
         if self.can_place_shape(self.pivot_tile[0], self.pivot_tile[1]):
-            self.place_shape_on_board(self.pivot_tile[0], self.pivot_tile[1], new_shape=True)
-            self.check_floor()
+            # self.place_shape_on_board(self.pivot_tile[0], self.pivot_tile[1], new_shape=True)
+            self.keep_falling()
+            # self.check_floor()
 
         else:
             self.game_over = True
@@ -361,8 +362,8 @@ class TilesBoard(ABC):
             # set new pivot_tile
             self.set_pivot_tile(pivot[0], pivot[1])
             # place in new position
-            self.place_shape_on_board(pivot[0], pivot[1])
-
+            # self.place_shape_on_board(pivot[0], pivot[1])
+            self.keep_falling()
         else:
             self.game_over = True
 
@@ -440,7 +441,8 @@ class TilesBoard(ABC):
                 # rotate the shape
                 self.falling_shape.rotate()
                 # update the board
-                self.place_shape_on_board(self.pivot_tile[0], self.pivot_tile[1])
+                # self.place_shape_on_board(self.pivot_tile[0], self.pivot_tile[1])
+                self.keep_falling()
             else:
                 print("rotate blocked")
 
