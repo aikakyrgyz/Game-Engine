@@ -2,6 +2,8 @@ import pygame
 import pygame_menu
 import apptheme as app_theme
 import registration as reg
+import profile
+import scoreboard as score
 from database import game as gamesql
 from puyopuyo import puyoui as pm
 from drmario import dmUI as dm
@@ -9,6 +11,7 @@ from drmario import dmUI as dm
 # COMMENT OUT THE TWO LINES BELOW IF THEY DON'T WORK BECAUSE IMAGES AREN'T WORKING FOR ME WITHOUT THEM - TENZO
 import os
 os.chdir('../')
+
 
 # background image for main menu
 def draw_background():
@@ -27,6 +30,7 @@ def get_game_list_menu():
 
 class MainMenu:
     def __init__(self, title, surface_dimensions, theme=app_theme.get_theme()):
+        self.image_widget = None
         self.selected_game = get_game_list_menu()[0][0]
         self.players = [pygame_menu.widgets.widget.textinput.TextInput, pygame_menu.widgets.widget.textinput.TextInput]
         self.custom_theme = theme
@@ -67,7 +71,7 @@ class MainMenu:
         elif self.selected_game_index == 1:
             pm.start_menu()
         else:
-            print("Mo game selected!")
+            print("No game selected!")
 
     def start_menu(self):
 
@@ -77,12 +81,28 @@ class MainMenu:
             self.selected_game = get_game_list_menu()[self.selected_game_index][0]
             print(f"Selected Game: {self.selected_game}")
 
-        #
+        # All associated menus
         reg_menu = pygame_menu.Menu(
             height=self.menu_height,
             width=self.menu_width,
             theme=self.custom_theme,
             title='Register Players'
+        )
+
+        # change username, displays personal scores
+        profile_menu = pygame_menu.Menu(
+            height=self.menu_height,
+            width=self.menu_width,
+            theme=self.custom_theme,
+            title='Personal Profile'
+        )
+
+        # display all players, scores for each game, combined scores
+        scoreboard_menu = pygame_menu.Menu(
+            height=self.menu_height,
+            width=self.menu_width,
+            theme=self.custom_theme,
+            title='Scoreboard'
         )
 
         self.players[0] = reg_menu.add.text_input('Player 1: ', input_underline_hmargin=5) \
@@ -104,6 +124,8 @@ class MainMenu:
         self.players[1] = reg_menu.add.text_input('Player 2: ', default="") \
             .set_margin(400, 0).set_alignment(pygame_menu.locals.ALIGN_LEFT, )
         reg_menu.add.button(f'Play {get_game_list_menu()[self.selected_game_index][0]}', self.start_selected_game)
+        reg_menu.add.button('Profile', profile_menu)
+        reg_menu.add.button('Scoreboard', scoreboard_menu)
         reg_menu.add.button('Back', pygame_menu.events.BACK)
         reg_menu.add.button('Quit', pygame_menu.events.EXIT)
 

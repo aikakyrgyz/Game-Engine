@@ -16,7 +16,7 @@ def insert_username_into_player_table(name):
         connection = mysql.connector.connect(host='localhost',
                                              database='players',
                                              user='root',
-                                             password=config.mysql_pass)
+                                             password='wit122')
 
         cursor = connection.cursor()
         mysql_insert_query = """INSERT INTO Players (Score)
