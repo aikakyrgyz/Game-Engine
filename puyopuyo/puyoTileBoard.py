@@ -25,7 +25,7 @@ class PuyoTileBoard(TilesBoard):
         topRowOfBoard = self.board[0]
 
         for tile in topRowOfBoard:
-            if tile.get_letter() != "E":
+            if tile.get_letter() != "E" or not(tile.status.falling) or not(tile.status.landing):
                 return False
         
         return True
