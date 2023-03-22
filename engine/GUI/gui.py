@@ -38,12 +38,12 @@ class GUI:
                 if isinstance(tile, EmptyTile):
                     to_print += " " * 3
                     self.draw_tile(tile, x, y, self.tile_size)
-                elif letter == "R":
-                    to_print += f'[{letter}]'
-                    self.draw_tile(tile, x, y, self.tile_size)
-                elif letter == "Y":
-                    to_print += f'[{letter}]'
-                    self.draw_tile(tile, x, y, self.tile_size)
+                # elif letter == "R":
+                #     to_print += f'[{letter}]'
+                #     self.draw_tile(tile, x, y, self.tile_size)
+                # elif letter == "Y":
+                #     to_print += f'[{letter}]'
+                #     self.draw_tile(tile, x, y, self.tile_size)
                 elif status == Status["FALLING"]:
                     to_print += f'[{letter}]'
                     self.draw_tile(tile, x, y, self.tile_size)

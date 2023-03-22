@@ -8,7 +8,7 @@ from engine.Tile.empty_tile_factory import EmptyTileFactory
 from engine.Tile.tile import Tile
 from engine.Tile.empty_tile import EmptyTile
 from engine.Tile.tileAbstractFactory import TileAbstractFactory
-from engine.GameObject.orientation import ORIENTATION
+from engine.GameObject.orientation import Orientation
 from engine.Tile.status import Status
 
 
@@ -152,11 +152,11 @@ class TilesBoard(ABC):
 
     # decides what position should the next added falling shape have (uncomment when the logic for horizontal shape is done)
     def add_falling_shape(self):
-        position = random.choice(ORIENTATION)
-        # if position == "VERTICAL":
-        self.add_vertical_falling_shape()
-        # else:
-        # self.add_horizontal_falling_shape(position)
+        position = random.choice([Orientation.VERTICAL, Orientation.HORIZONTAL])
+        if position == Orientation.VERTICAL:
+            self.add_vertical_falling_shape()
+        else:
+            self.add_horizontal_falling_shape()
 
     def add_vertical_falling_shape(self):
         # randomly select a row to put the falling shape in
@@ -165,9 +165,15 @@ class TilesBoard(ABC):
         num_tiles = random.randint(self.min_num_shape_tiles, self.max_num_shape_tiles)
         # create the FallingShape object
         # Note: the most important part we are keeping track in the Falling Shape is the index of its bottom tile on the board.
-        shape = FallingShape(ORIENTATION[0], column, num_tiles, self.falling_tile_types, self.falling_tile_factories)
-        # retrieve the created falling shape 
+        shape = FallingShape(Orientation.VERTICAL, column, num_tiles, self.falling_tile_types, self.falling_tile_factories)
+        # retrieve the created falling shape
         self.falling_shape = shape.get_falling_shape()
+        print(self.falling_shape.get_orientation())
+        print(self.falling_shape.is_vertical())
+        # depends on the number of tiles, we always want to start from the same row, even if the max min differ
+        self.falling_shape.set_bottom_tile_row(self.max_num_shape_tiles - 1 )
+        # set the pivot tile
+        self.set_pivot_tile(self.falling_shape.get_bottom_tile_row(), column)
         # if the tile on the bottom of the falling shape's bottom tile is empty then the shape can be placed on the board
         if self.is_empty_tile(shape.get_num_tiles() - 1, column):
             # this loop sets all the tiles on the board on which the falling shape is currently put to that shape's tiles
@@ -187,19 +193,22 @@ class TilesBoard(ABC):
         # determine number of tiles in the shape
         num_tiles = random.randint(self.min_num_shape_tiles, self.max_num_shape_tiles)
         # determine the column
-        column = random.randint(0, self.num_cols-num_tiles)
+        column = random.randint(0, self.num_cols-num_tiles-1)
 
         # create shape
-        new_shape = FallingShape(ORIENTATION[1], column, num_tiles, self.falling_tile_types, self.falling_tile_factories)
+        new_shape = FallingShape(Orientation.HORIZONTAL, column, num_tiles, self.falling_tile_types, self.falling_tile_factories)
         self.falling_shape = new_shape.get_falling_shape()
+        self.falling_shape.set_bottom_tile_row(self.max_num_shape_tiles-1)
         # set pivot_tile initially r=0 - to track the location of the shape
-        self.set_pivot_tile(0, column)
 
+        # will start placing from max_num_tiles-1 = row
+        self.set_pivot_tile(self.max_num_shape_tiles-1, column)
+        print("pivot tile is: ", self.get_pivot_tile())
         # check if the shape can be placed on the board - place and check floor
         if self.can_place_shape(self.pivot_tile[0], self.pivot_tile[1]):
-            # self.place_shape_on_board(self.pivot_tile[0], self.pivot_tile[1], new_shape=True)
-            self.keep_falling()
-            # self.check_floor()
+            self.place_shape_on_board(self.pivot_tile[0], self.pivot_tile[1], new_shape=True)
+            # self.keep_falling()
+            self.check_floor()
 
         else:
             self.game_over = True
@@ -207,39 +216,90 @@ class TilesBoard(ABC):
     def check_floor(self):
         # checks if the tile below the falling shape is occupied or it is the bottom most tile of the board
         # if it is occupied by another non-empty tile then the falling shape has to land
+        if self.falling_shape.is_vertical():
+            self.check_floor_vertical_helper()
+        else:
+            self.check_floor_horizontal_helper()
+
+    def check_floor_vertical_helper(self):
         landing_row = self.falling_shape.get_bottom_tile_row() + 1
         if landing_row >= self.get_num_rows() or (not self.is_empty_tile(landing_row, self.falling_shape.get_column())):
             # indicate that the falling shape just landed
             self.falling_shape.set_status(Status.FALLEN)
 
-            # set all of the tiles of the board to which the falling shape's tile belong to 
+            # set all of the tiles of the board to which the falling shape's tile belong to
             # have the status of already fallen tiles (not falling, not still YET)
 
             # Note: we are setting the tile on BOARD that BELONG to the falling shape
             # We are not changing the faller's tiles' statuses since it is redundant. We can just keep track of the board tiles.
             for i in range(self.falling_shape.get_bottom_tile_row(),
-                           self.falling_shape.get_bottom_tile_row() - self.max_num_shape_tiles, -1):
+                           self.falling_shape.get_bottom_tile_row() - self.falling_shape.get_num_tiles(), -1):
                 self.get_tile_on_index(i, self.falling_shape.get_column()).set_status(Status.FALLEN)
+
+    def check_floor_horizontal_helper(self):
+        landing_row = self.falling_shape.get_bottom_tile_row() + 1
+        if landing_row >= self.get_num_rows() or not self.can_place_shape(landing_row, self.falling_shape.get_column()):
+            self.falling_shape.set_status(Status.FALLEN)
+        # now set the tiles accordingly for horizontal shape
+            for i in range(self.falling_shape.get_num_tiles()):
+                self.get_tile_on_index(self.falling_shape.get_bottom_tile_row(), self.get_pivot_tile()[1]+i).set_status(Status.FALLEN)
 
     def keep_falling(self):
         # increments the faller to fall down
+        # if self.falling_shape.is_vertical():
+        #     self.keep_falling_vertical_helper()
+        # else:
+        #     self.keep_falling_horizontal_helper()
+
+        # if self.falling_shape.get_bottom_tile_row() >= self.get_num_rows():
+        #     self.check_floor()
+        # landing_row = self.falling_shape.get_bottom_tile_row() + 1
+        # above_row = landing_row - self.falling_shape.get_num_tiles()
+        # if self.is_empty_tile(landing_row, self.falling_shape.get_column()):
+        #     # s is used to retrieve the faller's tiles from bottom -> top
+        #     s = 1
+        #     # increments all of the faller's tiles by one down
+        #     for i in range(landing_row, landing_row - self.max_num_shape_tiles, -1):
+        #         faller_tile = self.falling_shape.get_tile_on_index(self.max_num_shape_tiles - s)
+        #         self.change_tile(i, self.falling_shape.get_column(), faller_tile)
+        #         s += 1
+        #     # since we have incremented all the tiles down, the previous top tile must become empty
+        #     self.change_tile(above_row, self.falling_shape.get_column(), self.tile_factories.create_tile("E"))
+        #     # update the shape's bottom row
+        #     self.falling_shape.fall()
+        #     self.check_floor()
         if self.falling_shape.get_bottom_tile_row() >= self.get_num_rows():
             self.check_floor()
         landing_row = self.falling_shape.get_bottom_tile_row() + 1
-        above_row = landing_row - self.max_num_shape_tiles
-        if self.is_empty_tile(landing_row, self.falling_shape.get_column()):
-            # s is used to retrieve the faller's tiles from bottom -> top
-            s = 1
-            # increments all of the faller's tiles by one down
-            for i in range(landing_row, landing_row - self.max_num_shape_tiles, -1):
-                faller_tile = self.falling_shape.get_tile_on_index(self.max_num_shape_tiles - s)
-                self.change_tile(i, self.falling_shape.get_column(), faller_tile)
-                s += 1
-            # since we have incremented all the tiles down, the previous top tile must become empty
-            self.change_tile(above_row, self.falling_shape.get_column(), self.tile_factories.create_tile("E"))
-            # update the shape's bottom row
+        above_row = self.falling_shape.get_bottom_tile_row()
+        if self.falling_shape.is_vertical():
+            above_row = landing_row - self.falling_shape.get_num_tiles()
+        if self.can_fall_down(landing_row, self.falling_shape.get_column()):
+            self.place_shape_on_board(landing_row, self.falling_shape.get_column(), True)
+            self.clear_out_tiles_after_fall(above_row)
             self.falling_shape.fall()
+            self.set_pivot_tile(landing_row, self.falling_shape.get_column())
             self.check_floor()
+
+    def can_fall_down(self, r, c):
+        if self.falling_shape.is_vertical():
+            # if the row below is empty
+            # we should only check the row below, it is different when we want to move left or right
+            return self.is_empty_tile(r, c)
+        else:
+            # if the shape is horizontal then we
+            # for i in range(self.falling_shape.get_num_tiles()):
+            #     row, column = r, c + i
+            #     if not self.is_empty_tile(row, column):
+            #         return False
+            return self.can_place_shape(r, c)
+
+    def clear_out_tiles_after_fall(self, row):
+        if self.falling_shape.is_vertical():
+            self.change_tile(row, self.falling_shape.get_column(), self.tile_factories.create_tile("E"))
+        else:
+            for i in range(self.falling_shape.get_num_tiles()):
+                self.change_tile(row, self.falling_shape.get_column()+i, self.tile_factories.create_tile("E"))
 
     def remove_falling_shape(self):
         """
@@ -278,8 +338,7 @@ class TilesBoard(ABC):
 
             # set the tiles to the shape tiles
             self.change_tile(row, column, tile=self.falling_shape.get_tile_on_index(i))
-
-        self.check_floor()
+        # self.check_floor()
 
     # def add_vertical_falling_shape(self, falling_shape:FallingShape):
     #     bottom_tile_row_index = falling_shape.get_bottom_tile_row_index()
@@ -293,11 +352,19 @@ class TilesBoard(ABC):
 
     def just_landed(self):
         # after the shape just has landed, we can start matching, but first we need to set them as still tiles
-        for i in range(self.falling_shape.get_bottom_tile_row(),
-                       self.falling_shape.get_bottom_tile_row() - self.max_num_shape_tiles, -1):
-            self.get_tile_on_index(i, self.falling_shape.get_column()).set_status(Status.STILL)
-        # the faller decomposed to tiles 
+        for i in range(self.falling_shape.get_num_tiles()):
+            if self.falling_shape.is_vertical():
+                self.get_tile_on_index(self.falling_shape.get_bottom_tile_row() - i, self.falling_shape.get_column()).set_status(Status.STILL)
+            else:
+                self.get_tile_on_index(self.falling_shape.get_bottom_tile_row(), self.falling_shape.get_column()+i).set_status(Status.STILL)
+        # the faller decomposed to tiles
         self.faller_disappeared()
+
+        # for i in range(self.falling_shape.get_bottom_tile_row(),
+        #                self.falling_shape.get_bottom_tile_row() - self.max_num_shape_tiles, -1):
+        #     self.get_tile_on_index(i, self.falling_shape.get_column()).set_status(Status.STILL)
+        # the faller decomposed to tiles 
+        # self.faller_disappeared()
         # still need to check if we need to call match all here
         # self.match_all()
 
@@ -314,6 +381,13 @@ class TilesBoard(ABC):
         # match only when there is not falling object on the board
         # alternation of shape addition and matching: use just_matched variable
         # this function needs to be made simpler ... match_all should be only called once
+
+        if self.falling_shape is not None and self.falling_shape.get_status() == Status.FALLEN:
+            self.just_landed()
+
+        self.clear_out_matches()
+        self.fill_holes()
+
         if self.falling_shape is None and not self.just_matched:
             self.clear_out_matches()
             self.fill_holes()
@@ -321,15 +395,16 @@ class TilesBoard(ABC):
             # We want to match before the faller starts falling so alternate match and addition of faller
             self.just_matched = True
 
-        if self.falling_shape is not None and self.falling_shape.get_status() == Status.FALLEN:
-            self.just_landed()
-            self.match_all()
+        # if self.falling_shape is not None and self.falling_shape.get_status() == Status.FALLEN:
+        #     self.just_landed()
+        #     self.match_all()
 
         if self.falling_shape is not None:
             self.keep_falling()
 
         # if there is no faller on the board, add a new one
         elif self.falling_shape is None and self.just_matched:
+            self.fill_holes()
             self.add_falling_shape()
             self.just_matched = False
 
@@ -509,11 +584,14 @@ class TilesBoard(ABC):
                     # make sure that the tile is not stationary (need to keep it as is)
                     if not self.is_empty_tile(row, col) and not self.is_stationary_tile(row,
                                                                                         col) and self.is_empty_tile(
-                            row + 1, col):
+                            row + 1, col) and not self.is_falling_status(row, col):
                         # set the bottom tile to this tile
                         self.change_tile(row + 1, col, self.get_tile_on_index(row, col))
                         # clear out the current tile
                         self.set_empty_tile(row, col)
+
+    def is_falling_status(self, r, c):
+        return self.board[r][c].get_status() is Status.FALLING
 
     def vertical_match(self):
         """Defines the logic for vertical match"""

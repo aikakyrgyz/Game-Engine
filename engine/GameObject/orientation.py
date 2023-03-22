@@ -2,8 +2,8 @@ from enum import Enum
 
 
 class Orientation(Enum):
-    HORIZONTAL = "horizontal"
     VERTICAL = "vertical"
+    HORIZONTAL = "horizontal"
 
 
-ORIENTATION = ["VERTICAL", "HORIZONTAL"]
+

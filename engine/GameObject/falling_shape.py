@@ -18,7 +18,7 @@ class FallingShape(GameObject):
         self.tile_types = tile_types
         self.factory = tile_factories
         self._instance = []
-        self.bottom_tile_row = number_of_tiles-1
+        self.bottom_tile_row = number_of_tiles-1 # might vary depending on the max number of tiles
         self.orientation = orientation
         self.create()
         # self.set_tile_status()
@@ -91,10 +91,13 @@ class FallingShape(GameObject):
         return self
 
     def fall(self):
-        self.bottom_tile_row+=1
+        self.bottom_tile_row += 1
 
     def get_bottom_tile_row(self):
         return self.bottom_tile_row
+
+    def set_bottom_tile_row(self, row):
+        self.bottom_tile_row = row
 
     def get_bottom_tile_row_index(self):
         return self._instance[self.last_tile_index_in_shape].get_row_index()
@@ -114,6 +117,9 @@ class FallingShape(GameObject):
         if self.get_orientation() == Orientation.VERTICAL:
             return True
         return False
+
+    def is_horizontal(self):
+        return self.get_orientation() == Orientation.HORIZONTAL
 
     # @abstractmethod
     def rotate(self):
