@@ -62,12 +62,10 @@ class TMGE(ABC):
         
         pygame.init() # solely for handling key inputs
         
-        # GUI testing for Richard, comment the loop to go back out of Richard's testing environment and uncomment the same code below
+        # GUI testing for Richard, comment the loop to go back out of 
+        # Richard's testing environment and uncomment the same code below
         while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    return
+            self.handle_key_events()
 
             self.GUI.draw_board(self.tile_board)
             # the initial set of tiles given might already have matches, so need to get rid of them before
@@ -129,13 +127,18 @@ class TMGE(ABC):
         Pressing space, right arrow and left arrow triggers a sound
         """
         for event in pygame.event.get():
-            # if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            #     self._state.rotate_faller()
-            #     self._play_sound('move')
+            if event.type == pygame.QUIT:
+                    pygame.quit()
+                    return
+            
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-                self.tile_board.move_left()
+                self.tile_board.move_falling_shape("LEFT")
                 # self._play_sound('move')
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
-                self.tile_board.move_right()
+                self.tile_board.move_falling_shape("RIGHT")
                 # self._play_sound('move')
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
+                self.tile_board.move_falling_shape("DOWN")
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                self.tile_board.rotate_shape_on_board()
 

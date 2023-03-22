@@ -96,7 +96,7 @@ class DrMarioGame(TMGE):
     def get_falling_tile_types(self):
         return self.falling_tile_types
 
-
+#delete these since just for testing purpose only
 myGUI = GUI()
-myDrMarioGame = DrMarioGame(60, myGUI)
+myDrMarioGame = DrMarioGame(0.08, myGUI)
 myDrMarioGame.run()
