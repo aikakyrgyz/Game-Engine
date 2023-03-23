@@ -25,7 +25,7 @@ def draw_background():
 def get_game_list_menu():
     # return gamesql.return_game_list()
     # if no database connection, use the below
-    return [("Dr. Mario", 0, 'mario_image.jpg'), ("Puyo Puyo", 1, 'puyopuyo_image.jpg')]
+    return [("Dr. Mario", 0, 'mario_image.jpg'), ("Puyo Puyo", 1, 'puyo_image.png')]
 
 
 class MainMenu:

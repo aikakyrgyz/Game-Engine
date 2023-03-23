@@ -41,6 +41,7 @@ def check_if_player_exists(name):
             print("Player confirmed.")
             return True
         else:
+            print("Player does not exist in database. Please try again.")
             return False
 
     except mysql.connector.Error as error:
