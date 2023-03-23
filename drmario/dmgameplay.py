@@ -4,7 +4,7 @@ import pygame
 
 # if you are having a engine moduleNotFound error, you will have to include the root directory path to sys.path
 
-sys.path.append(r'/Users/okdrahcir/documents/github/Inf-122-Final-Project')
+# sys.path.append(r'/Users/okdrahcir/documents/github/Inf-122-Final-Project')
 # sys.path.append(r'/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project')
 
 from drmario.dmTileBoard import DMTileBoard
@@ -35,13 +35,14 @@ class DrMarioGame(TMGE):
         # self.tile_types = [["E", "E", "E"],["E", "E", "E"], ["E", "E", "E"], ["E", "E", "E"], ["E", "R", "E"],["E", "R", "E"], ["E", "R", "E"], ["Y", "Y", "E"]] #vertical matching case 1
         # self.tile_types = [["E", "E", "E"],["E", "E", "E"], ["E", "E", "E"], ["E", "E", "E"], ["E", "R", "E"],["E", "R", "E"], ["E", "R", "E"], ["Y", "R", "E"]] #vertical matching case 2
         # self.tile_types = [["E", "E", "E"],["E", "E", "E"], ["E", "E", "E"], ["E", "E", "E"], ["E", "R", "E"],["E", "Y", "E"], ["E", "R", "E"], ["Y", "R", "E"]] #vertical matching case 3
-        self.tile_types = [["E", "E", "E"],["E", "E", "E"], ["E", "E", "E"], ["E", "E", "E"], ["E", "R", "Y"],["E", "Y", "Y"], ["E", "R", "Y"], ["Y", "R", "Y"]] #vertical matching case 4
+        # self.tile_types = [["E", "E", "E"],["E", "E", "E"], ["E", "E", "E"], ["E", "E", "E"], ["E", "R", "Y"],["E", "Y", "Y"], ["E", "R", "Y"], ["Y", "R", "Y"]] #vertical matching case 4
         # self.tile_types = [["E", "E", "E"],["E", "E", "Y"], ["E", "E", "Y"], ["E", "E", "Y"], ["E", "R", "R"],["E", "Y", "Y"], ["E", "R", "Y"], ["Y", "R", "Y"]] #vertical matching case 5
         # self.tile_types = [["E", "E", "E"],["E", "E", "Y"], ["E", "E", "Y"], ["E", "E", "Y"], ["E", "R", "Y"],["E", "Y", "Y"], ["E", "R", "Y"], ["Y", "R", "R"]] #vertical matching case 5
+        # self.tile_types = [ ["E", "R", "Y"],["E", "Y", "Y"], ["E", "R", "Y"], ["Y", "R", "Y"]] #vertical matching case 4
 
         # horizontal matching
-        # self.tile_types = [["E", "E", "E", "E"], ["E", "E", "E", "Y"], ["E", "E", "E", "Y"], ["E", "E", "R", "R"],
-        #                    ["R", "Y", "Y", "Y"],  ["E", "E", "E", "E"],["E", "E", "E", "E"], ["E", "E", "E", "E" ]]  # horizontal matching test 1
+        self.tile_types = [["E", "E", "E", "E"], ["E", "E", "E", "Y"], ["E", "E", "E", "Y"], ["E", "E", "R", "R"],
+                           ["R", "Y", "Y", "Y"],  ["E", "E", "E", "E"],["E", "E", "E", "E"], ["E", "E", "E", "E" ]]  # horizontal matching test 1
         # self.tile_types = [["E", "E", "E", "E"], ["E", "E", "E", "E"],["E", "E", "E", "Y"],["E", "E", "E", "Y"], ["E", "E", "Y", "Y"], ["Y", "Y", "Y", "Y"]] #horizontal matching test 2
         # self.tile_types = [ ["Y", "Y", "Y", "Y", "R", "Y", "Y", "Y" ], ["Y", "Y", "Y", "Y", "R", "R", "Y", "R"]] #horizontal matching test 3
 
@@ -117,5 +118,6 @@ if __name__ == '__main__':
     myGUI = GUI()
     myDrMarioGame = DrMarioGame(60, myGUI)
     score = myDrMarioGame.run()
+    print("SCORE IN DR MARIO", score)
     
 

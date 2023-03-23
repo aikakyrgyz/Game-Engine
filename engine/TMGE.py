@@ -60,16 +60,17 @@ class TMGE(ABC):
                 self.redraw()
                 self.tile_board.get_score()
                 # constantly check if the game is over
-                if self.tile_board.ending_condition():
+                # the second condition happens when there is no place to place the shape on
+                # but the top row in no way can be occupied
+
+                if self.tile_board.ending_condition() or self.tile_board.get_game_over():
                     self.game_over = True
                     # return score here
                     return self.get_current_score()
             time.sleep(1)
-
-
-
             self.handle_key_events()
 
+        return self.get_current_score()
 
     # def run(self):
     #     self.time_between_updates()
@@ -157,7 +158,7 @@ class TMGE(ABC):
         # draw other parts of the screen
 
     def get_current_score(self):
-        self.tile_board.get_score()
+        return self.tile_board.get_score()
 
     def set_tile_board(self, board):
         self.tile_board = board

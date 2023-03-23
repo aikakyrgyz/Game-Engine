@@ -59,6 +59,10 @@ class TilesBoard(ABC):
         self.min_score = min_score
         self.max_score = max_score
 
+        # for ending condition
+        # prevent from placing the faller int he column that will lead to game over condition
+        self.next_column = []
+        self.next_position = None
         self.score  = 0
 
     def create_board(self):
@@ -173,6 +177,9 @@ class TilesBoard(ABC):
     def add_falling_shape(self):
         """ Decides what position should the next added falling shape have """
         position = random.choice([Orientation.VERTICAL, Orientation.HORIZONTAL])
+        if self.next_position != None:
+            position = self.next_position
+
         if position == Orientation.VERTICAL:
             self.add_vertical_falling_shape()
         else:
@@ -186,7 +193,10 @@ class TilesBoard(ABC):
             end the game (not user's fault), then the creation will be skipped and return in the next loop.
         """
         # randomly select a row to put the falling shape in
-        column = random.randint(0, self.num_cols - 1)
+        # column = random.choice([i for i in range(0, self.num_cols) if (self.next_column != None and i != self.next_column)])
+
+        # column = random.randint(0, self.num_cols - 1)
+        column = random.choice([i for i in range(0, self.num_cols) if i not in self.next_column])
         # randomly select the number of tiles this falling shape have
         num_tiles = random.randint(self.min_num_shape_tiles, self.max_num_shape_tiles)
         # create the FallingShape object
@@ -199,7 +209,8 @@ class TilesBoard(ABC):
         # set the pivot tile
         self.set_pivot_tile(self.falling_shape.get_bottom_tile_row(), column)
         # if the tile on the bottom of the falling shape's bottom tile is empty then the shape can be placed on the board
-        if self.is_empty_tile(shape.get_num_tiles() - 1, column):
+        # if self.is_empty_tile(shape.get_num_tiles() - 1, column):
+        if self.can_place_shape(shape.get_num_tiles() - 1, column):
             # this loop sets all the tiles on the board on which the falling shape is currently put to that shape's tiles
             for i in range(self.max_num_shape_tiles):
                 # retrieve the tile of the shape from top -> down 
@@ -208,10 +219,22 @@ class TilesBoard(ABC):
                 shape_tile.set_status(Status.FALLING)
                 # set the board's tile to the shape's tile
                 self.change_tile(i, column, shape_tile)
+
+                self.next_position = None
             self.check_floor()
         else:
             # set the falling_shape to None since we were not able to place it
             self.falling_shape = None
+            self.next_column.append(column)
+            if len(self.next_column) == self.num_cols:
+                if self.next_position != None:
+                    self.game_over = True
+                else:
+                    self.next_column = []
+
+                    self.next_position = Orientation.VERTICAL
+
+
 
     def add_horizontal_falling_shape(self):
         """
@@ -223,7 +246,13 @@ class TilesBoard(ABC):
         # determine number of tiles in the shape
         num_tiles = random.randint(self.min_num_shape_tiles, self.max_num_shape_tiles)
         # determine the column
-        column = random.randint(0, self.num_cols-num_tiles-1)
+        # column = random.randint(0, self.num_cols-num_tiles-1)
+        # if self.next_column!= [] and column == self.next_column:
+            # column = random.randint(0, self.num_cols - num_tiles - 1)
+        column = random.choice([i for i in range(0, self.num_cols) if i not in self.next_column])
+
+
+
         # create shape
         new_shape = FallingShape(Orientation.HORIZONTAL, column, num_tiles, self.falling_tile_types, self.falling_tile_factories)
         self.falling_shape = new_shape.get_falling_shape()
@@ -236,9 +265,19 @@ class TilesBoard(ABC):
             self.place_shape_on_board(self.pivot_tile[0], self.pivot_tile[1], new_shape=True)
             # self.keep_falling()
             self.check_floor()
+
+            self.next_position = None
+
         else:
             # set the falling_shape to None since we were not able to place it
             self.falling_shape = None
+            self.next_column.append(column)
+            if len(self.next_column) == self.num_cols:
+                if self.next_position != None:
+                    self.game_over = True
+                else:
+                    self.next_column = []
+                    self.next_position = Orientation.HORIZONTAL
 
     def check_floor(self):
         """ Checks if the falling shape is about to fall depending on the orientation of the shape"""
@@ -345,8 +384,7 @@ class TilesBoard(ABC):
         # if self.falling_shape.is_horizontal() and direction is not Direction.DOWN:
         #     return self.is_empty_tile(r, c)
         # for all other cases loop
-
-        if direction == Direction.DOWN and r+1 == self.max_num_shape_tiles and not self.is_empty_tile(r + 1, c):
+        if self.falling_shape.is_vertical() and direction == Direction.DOWN and r+1 == self.max_num_shape_tiles and not self.is_empty_tile(r + 1, c):
             return False
 
         ################ HORIZONTAL #################
@@ -499,8 +537,8 @@ class TilesBoard(ABC):
             # place in new position
             self.place_shape_on_board(pivot[0], pivot[1])
             # self.keep_falling()
-        else:
-            self.game_over = True
+        # else:
+        #     self.game_over = True
 
     # @abstractmethod
     def can_rotate_shape(self) -> bool:
@@ -611,12 +649,13 @@ class TilesBoard(ABC):
                                 new_match = len(matched_tiles)
                                 if new_match > max_match:
                                     max_match = new_match
+                        if not self.empty_tile(matched_tiles[0]):
+                            self.next_column = []
                         # all have been set to matched
                         # clear out the matched list
 
                     if not matched_tiles[-1].matchable(tile):
                         if max_match >= self.min_match_num:
-                            print("match in horizontal")
                             self.update_score(max_match)
                             max_match = 0
                         matched_tiles = []
@@ -670,6 +709,9 @@ class TilesBoard(ABC):
                         for t in matched_tiles:
                             # update the score ?
                             t.set_status(Status.MATCHED)
+                        if not self.empty_tile(matched_tiles[0]):
+                            self.next_column = []
+
                         # all have been set to matched
 
                         # check score
@@ -687,6 +729,7 @@ class TilesBoard(ABC):
                         matched_tiles.append(tile)
                         last_matched_index -= 1
             matched_tiles = []
+
 
     def update_score(self, max_match):
         # print("Points for min: ", self.min_match_num * self.min_score)
@@ -740,6 +783,9 @@ class TilesBoard(ABC):
         print("current score is: ", self.score)
         return self.score
 
+    def get_game_over(self):
+        return self.game_over
+
     @abstractmethod
     def match_all(self):
         """
@@ -756,3 +802,4 @@ class TilesBoard(ABC):
         condition is met.
         """
         pass
+
