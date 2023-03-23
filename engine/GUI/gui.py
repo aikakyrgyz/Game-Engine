@@ -14,6 +14,7 @@ class GUI:
     def __init__(self, theme=apptheme):
         # pygame.init()
         # pygame.display.init()
+        self.game_outcome = ''
         self._menu = None
         self._start = False
         self.dash = None
@@ -164,6 +165,26 @@ class GUI:
     def start_game(self):
         self._start = True
         # self.draw_board(self.tile_board)
+
+    def game_end(self):
+        if self.game_outcome == 'win':
+            pass
+        else:
+            # 1P, just display score
+            pass
+
+    def player_wins(self, winner):
+        # to display the winner of the game
+        player_won = pygame_menu.Menu(
+            height=self.screen_height,
+            width=self.screen_width,
+            theme=self.theme.get_theme(),
+            title='You win!'
+        )
+        player_won.add.label(
+            f'Player {winner}',
+            font_name=apptheme.FONT,
+            font_size=50)
 
 
 if __name__ == '__main__':
