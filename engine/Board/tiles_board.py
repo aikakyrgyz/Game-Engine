@@ -204,7 +204,8 @@ class TilesBoard(ABC):
             self.check_floor()
         else:
             # need to work on ending
-            self.game_over = True
+            # self.game_over = True
+            self.falling_shape = None
 
     def add_horizontal_falling_shape(self):
         # determine number of tiles in the shape
@@ -224,10 +225,11 @@ class TilesBoard(ABC):
         if self.can_place_shape(self.pivot_tile[0], self.pivot_tile[1], Direction.DOWN):
             self.place_shape_on_board(self.pivot_tile[0], self.pivot_tile[1], new_shape=True)
             # self.keep_falling()
+            # self.check_floor() - put this out
             self.check_floor()
-
         else:
-            self.game_over = True
+        #     self.game_over = True
+            self.falling_shape = None
 
     def check_floor(self):
         # checks if the tile below the falling shape is occupied or it is the bottom most tile of the board
@@ -297,12 +299,16 @@ class TilesBoard(ABC):
             self.clear_out_tiles_after_fall(above_row)
             self.falling_shape.fall()
             self.set_pivot_tile(landing_row, self.falling_shape.get_column())
-            self.check_floor()
+            self.check_floor() #- take this out
+        # what happens if it cannot fall
+        # else:
+        #     self.falling_shape = None
 
     def can_fall_down(self, r, c):
         if self.falling_shape.is_vertical():
             # if the row below is empty
             # we should only check the row below, it is different when we want to move left or right
+            # return all([self.is_empty_tile(r+i, self.falling_shape.get_column()) for i in range(self.falling_shape.get_num_tiles())])
             return self.is_empty_tile(r, c)
         else:
             # if the shape is horizontal then we
@@ -333,7 +339,7 @@ class TilesBoard(ABC):
             # set the coordinate to empty
             self.set_empty_tile(row, column)
 
-    def can_place_shape(self, r, c, direction: Direction = "DOWN") -> bool:
+    def can_place_shape(self, r, c, direction = Direction.DOWN) -> bool:
         """
         the result differs not only for the orientation of the shape but also for the type of movement of the shape
         if the shape.direction = down and orientation = horizontal check all the bottom columns
@@ -344,6 +350,10 @@ class TilesBoard(ABC):
         # if self.falling_shape.is_horizontal() and direction is not Direction.DOWN:
         #     return self.is_empty_tile(r, c)
         # for all other cases loop
+
+        if direction == Direction.DOWN and r+1 == self.max_num_shape_tiles and not self.is_empty_tile(r + 1, c):
+            return False
+
         ################ HORIZONTAL #################
         # the for this particular case works completely different, do not change
         if self.falling_shape.is_horizontal() and (direction == Direction.RIGHT or direction == Direction.LEFT):
@@ -448,8 +458,9 @@ class TilesBoard(ABC):
 
         # if there is no faller on the board, add a new one
         elif self.falling_shape is None and self.just_matched:
-            self.add_falling_shape()
             self.fill_holes()
+            self.add_falling_shape()
+            # self.fill_holes()
             self.just_matched = False
 
     def set_pivot_tile(self, r, c):
