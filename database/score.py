@@ -59,6 +59,7 @@ def insert_puyo_score(puyoscore):
             connection.close()
             print("MySQL connection has been closed.")
 
+
 def return_dm_score(name):
     try:
         connection = mysql.connector.connect(host='localhost',
@@ -81,6 +82,7 @@ def return_dm_score(name):
             cursor.close()
             connection.close()
             print("MySQL connection has been closed.")
+
 
 def return_puyo_score(name):
     try:
@@ -109,7 +111,7 @@ def return_puyo_score(name):
 def return_combined_score(name):
     try:
         connection = mysql.connector.connect(host='localhost',
-                                             database='games',
+                                             database='players',
                                              user='root',
                                              password='wit122')
 
@@ -122,6 +124,30 @@ def return_combined_score(name):
 
     except mysql.connector.Error as error:
         print("Failed to fetch combined score.\n{}".format(error) + ".")
+
+    finally:
+        if connection.is_connected():
+            cursor.close()
+            connection.close()
+            print("MySQL connection has been closed.")
+
+
+def return_top_five():
+    try:
+        connection = mysql.connector.connect(host='localhost',
+                                             database='players',
+                                             user='root',
+                                             password='wit122')
+
+        cursor = connection.cursor()
+        cursor.execute("""SELECT Username, Dmscore, Puyoscore, (Dmscore + Puyoscore) as Totalscore FROM Players 
+                                ORDER by Totalscore DESC LIMIT 5;""")
+
+        result = cursor.fetchall()
+        return result
+
+    except mysql.connector.Error as error:
+        print("Failed to fetch top five scores.\n{}".format(error) + ".")
 
     finally:
         if connection.is_connected():

@@ -80,16 +80,15 @@ def change_username(old, new):
 def display_player_score(name):
     try:
         connection = mysql.connector.connect(host='localhost',
-                                             database='player',
+                                             database='players',
                                              user='root',
                                              password='wit122')
 
         cursor = connection.cursor()
-        cursor.execute("""SELECT Dmscore, Puyscore, (Dmscore + Puyoscore) as Totalscore FROM Players 
+        cursor.execute("""SELECT Dmscore, Puyoscore, (Dmscore + Puyoscore) as Totalscore FROM Players 
                                 WHERE Username = %s""", (name,))
 
         results = cursor.fetchall()
-
         return results
 
     except mysql.connector.Error as error:
