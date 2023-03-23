@@ -63,8 +63,8 @@ def change_username(old, new):
 
         cursor = connection.cursor()
         mysql_query = """UPDATE players SET Username =%s WHERE Username =%s"""
-        cursor.execute(mysql_query, (new, old))
 
+        cursor.execute(mysql_query, (new, old))
         connection.commit()
         print(f"{old} has been changed to {new}!")
 
