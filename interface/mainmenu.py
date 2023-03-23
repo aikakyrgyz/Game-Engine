@@ -16,7 +16,7 @@ PROJ_DIR_IMG = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'images'
 # background image for main menu
 def draw_background():
     background_image = pygame_menu.BaseImage(
-        # image_path="images/bg_image.jpg"
+        # image_path="images_/bg_image.jpg"
         image_path=os.path.join(PROJ_DIR_IMG, 'bg_image.jpg')
     )
     background_image.draw(menu.surface)
@@ -31,6 +31,8 @@ def get_game_list_menu():
 
 class MainMenu:
     def __init__(self, title, surface_dimensions, theme=app_theme.get_theme()):
+        # self.conf_profile_menu = None
+        self.play_button = None
         self.image_widget = None
         self.selected_game = get_game_list_menu()[0][0]
         self.players = [pygame_menu.widgets.widget.textinput.TextInput, pygame_menu.widgets.widget.textinput.TextInput]
@@ -42,6 +44,7 @@ class MainMenu:
         self.menu_width = surface_dimensions[1] * 0.75
         self.app_menu = None
         self.selected_game_index = 0
+        self.sub_menu = None
 
         self.game_modes = {}
         for i in range(len(get_game_list_menu())):
@@ -89,6 +92,12 @@ class MainMenu:
         else:
             print("No game selected!")
 
+    def display_sub_menu(self):
+        if self.sub_menu == 'register':
+            self.reg_menu()
+        elif self.sub_menu == 'profile':
+            self.profile_menu()
+
     def update_game_from_selection(self):
         """
         changes image & play button based on user selection
@@ -106,7 +115,75 @@ class MainMenu:
             print(f"Selected Game: {self.selected_game}")
             self.update_game_from_selection()
 
-        # Registration Menu
+        # initiate profile menu
+        profile_menu = self.profile_menu()
+        # initiate registration menu
+        reg_menu = self.reg_menu()
+
+        # Main Menu ----------------------------------------------------------
+        pygame.display.set_caption(self.title)
+        self.app_menu = pygame_menu.Menu(height=self.menu_height,
+                                         width=self.menu_width,
+                                         theme=self.custom_theme,
+                                         title='Main Menu'
+                                         )
+
+        # self.display_mainmenu_items(infont)
+        self.app_menu.add.selector(title='Select Game ',
+                                   items=get_game_list_menu(),
+                                   onchange=set_game,
+                                   selector_id='select_game'
+                                   )
+        self.app_menu.add.button('Play', reg_menu)
+        # self.app_menu.add.horizontal_margin(self.menu_height/2)
+
+        self.app_menu.add.button('Profile', profile_menu)
+        # self.app_menu.add.vertical_margin(self.menu_width/2)
+
+        self.app_menu.add.button('Scoreboard')
+        # self.app_menu.add.horizontal_margin(self.menu_height/2)
+        # self.play1 = reg_menu.add.button(f'Play {get_game_list_menu()[1][0]}', self.start_selected_game)
+        self.app_menu.add.button('Quit', pygame_menu.events.EXIT)
+
+    def scoreboard(self):
+        # Scoreboard Menu if there is time
+        # scoreboard_menu = pygame_menu.Menu(
+        #     height=self.menu_height,
+        #     width=self.menu_width,
+        #     theme=self.custom_theme,
+        #     title='Scoreboard'
+        # )
+        pass
+
+    def profile_menu(self):
+        # Profile Menu
+        profile_menu = pygame_menu.Menu(
+            height=self.menu_height,
+            width=self.menu_width,
+            theme=self.custom_theme,
+            title='Personal Profile'
+        )
+
+        def check_sql(profile_username):
+
+            def get_input(input):
+                player.change_username(profile_username, input)
+
+            if player.check_if_player_exists(profile_username):
+                input = profile_menu.add.text_input('New Name: ', maxchar=20, onreturn=get_input)
+
+        self.username = profile_menu.add.text_input('Username: ', maxchar=20, onreturn=check_sql).set_alignment(
+            pygame_menu.locals.ALIGN_CENTER, )
+        profile_back_btn = profile_menu.add.button('Back', pygame_menu.events.BACK)
+        profile_quit_btn = profile_menu.add.button('Quit', pygame_menu.events.EXIT)
+
+        profile_back_btn.translate(-210, 190)
+        profile_quit_btn.translate(210, 110)
+
+        return profile_menu
+
+    def reg_menu(self):
+        # Registration menu
         reg_menu = pygame_menu.Menu(
             height=self.menu_height,
             width=self.menu_width,
@@ -135,18 +212,6 @@ class MainMenu:
             title='Personal Profile'
         )
 
-        def check_sql(profile_username):
-
-            def get_input(input):
-                player.change_username(profile_username, input)
-
-            if player.check_if_player_exists(profile_username):
-                input = profile_menu.add.text_input('New Name: ', maxchar=20, onreturn=get_input)
-
-        self.username = profile_menu.add.text_input('Username: ', maxchar=20, onreturn=check_sql).set_alignment(
-            pygame_menu.locals.ALIGN_CENTER, )
-        profile_back_btn = profile_menu.add.button('Back', pygame_menu.events.BACK)
-        profile_quit_btn = profile_menu.add.button('Quit', pygame_menu.events.EXIT)
 
         # Scoreboard Menu if there is time
         # scoreboard_menu = pygame_menu.Menu(
@@ -157,9 +222,6 @@ class MainMenu:
         # )
 
         self.play_button = reg_menu.add.button(f'Play', self.start_selected_game)
-        reg_menu.add.button('Profile', profile_menu)
-        # reg_menu.add.button('Scoreboard', scoreboard_menu)
-        # self.play1 = reg_menu.add.button(f'Play {get_game_list_menu()[1][0]}', self.start_selected_game)
 
         back_btn = reg_menu.add.button('Back', pygame_menu.events.BACK)
         quit_btn = reg_menu.add.button('Quit', pygame_menu.events.EXIT)
@@ -172,25 +234,14 @@ class MainMenu:
         self.play_button.translate(0, -80)
         back_btn.translate(-75, -70)
         quit_btn.translate(75, -146)
-        profile_back_btn.translate(-210, 190)
-        profile_quit_btn.translate(210, 110)
+        return reg_menu
 
-        pygame.display.set_caption(self.title)
-        self.app_menu = pygame_menu.Menu(height=self.menu_height,
-                                         width=self.menu_width,
-                                         theme=self.custom_theme,
-                                         title='Main Menu'
-                                         )
-
-        # self.display_mainmenu_items(infont)
-        self.app_menu.add.selector(title='Select Game ',
-                                   items=get_game_list_menu(),
-                                   onchange=set_game,
-                                   selector_id='select_game'
-                                   )
-        self.app_menu.add.button('Play', reg_menu)
-        self.app_menu.add.button('Quit', pygame_menu.events.EXIT)
-
+    # def add_back_quit(self, menu):
+    #
+    #     back_btn = menu.add.button('Back', pygame_menu.events.BACK)
+    #     quit_btn = menu.add.button('Quit', pygame_menu.events.EXIT)
+    #
+    #     return back_btn, quit_btn
 
 if __name__ == '__main__':
     menu = MainMenu(app_theme.APP_TITLE, (app_theme.SURFACE_HEIGHT, app_theme.SURFACE_WIDTH), app_theme.get_theme())
