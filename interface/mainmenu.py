@@ -155,13 +155,13 @@ class MainMenu:
         self.app_menu.add.button('Profile', profile_menu)
         # self.app_menu.add.vertical_margin(self.menu_width/2)
 
-        # comment out if no SQL database
+        # comment out line 159 if no SQL database
         self.app_menu.add.button('Scoreboard', score_menu)
         # self.app_menu.add.horizontal_margin(self.menu_height/2)
         # self.play1 = reg_menu.add.button(f'Play {get_game_list_menu()[1][0]}', self.start_selected_game)
         self.app_menu.add.button('Quit', pygame_menu.events.EXIT)
 
-    # comment out if no SQL database
+    # comment out below function if no SQL database
     def score_menu(self):
         # Scoreboard Menu
         score_menu = pygame_menu.Menu(
