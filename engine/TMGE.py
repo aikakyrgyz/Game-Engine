@@ -3,6 +3,7 @@ import time
 from math import pow
 from abc import ABC, abstractmethod
 import pygame
+import engine.GameObject.direction as Direction
 
 # from Board.tiles_board import TilesBoard
 # >>> b = datetime.datetime.now()
@@ -165,17 +166,16 @@ class TMGE(ABC):
             #         pygame.quit()
             #         return
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-                self.tile_board.move_falling_shape("LEFT")
+                self.tile_board.move_falling_shape(Direction.LEFT)
                 print("left was pressed")
                 # self._play_sound('move')
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
                 print("right was pressed")
-                self.tile_board.move_falling_shape("RIGHT")
+                self.tile_board.move_falling_shape(Direction.RIGHT)
                 # self._play_sound('move')
             if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
                 print("down was pressed")
-                self.tile_board.move_falling_shape("DOWN")
+                self.tile_board.move_falling_shape(Direction.DOWN)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 print("space was pressed")
                 self.tile_board.rotate_shape_on_board()
-            print(event)
