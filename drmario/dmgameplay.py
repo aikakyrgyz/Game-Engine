@@ -33,13 +33,13 @@ class DrMarioGame(TMGE):
         # self.tile_types = [["E", "E", "E"],["E", "E", "E"], ["E", "E", "E"], ["E", "E", "E"], ["E", "R", "E"],["E", "R", "E"], ["E", "R", "E"], ["Y", "Y", "E"]] #vertical matching case 1
         # self.tile_types = [["E", "E", "E"],["E", "E", "E"], ["E", "E", "E"], ["E", "E", "E"], ["E", "R", "E"],["E", "R", "E"], ["E", "R", "E"], ["Y", "R", "E"]] #vertical matching case 2
         # self.tile_types = [["E", "E", "E"],["E", "E", "E"], ["E", "E", "E"], ["E", "E", "E"], ["E", "R", "E"],["E", "Y", "E"], ["E", "R", "E"], ["Y", "R", "E"]] #vertical matching case 3
-        # self.tile_types = [["E", "E", "E"],["E", "E", "E"], ["E", "E", "E"], ["E", "E", "E"], ["E", "R", "Y"],["E", "Y", "Y"], ["E", "R", "Y"], ["Y", "R", "Y"]] #vertical matching case 4
+        self.tile_types = [["E", "E", "E"],["E", "E", "E"], ["E", "E", "E"], ["E", "E", "E"], ["E", "R", "Y"],["E", "Y", "Y"], ["E", "R", "Y"], ["Y", "R", "Y"]] #vertical matching case 4
         # self.tile_types = [["E", "E", "E"],["E", "E", "Y"], ["E", "E", "Y"], ["E", "E", "Y"], ["E", "R", "R"],["E", "Y", "Y"], ["E", "R", "Y"], ["Y", "R", "Y"]] #vertical matching case 5
         # self.tile_types = [["E", "E", "E"],["E", "E", "Y"], ["E", "E", "Y"], ["E", "E", "Y"], ["E", "R", "Y"],["E", "Y", "Y"], ["E", "R", "Y"], ["Y", "R", "R"]] #vertical matching case 5
 
         # horizontal matching
-        self.tile_types = [["E", "E", "E", "E"], ["E", "E", "E", "Y"], ["E", "E", "E", "Y"], ["E", "E", "R", "R"],
-                           ["R", "Y", "Y", "Y"],  ["E", "E", "E", "E"],["E", "E", "E", "E"], ["E", "E", "E", "E" ]]  # horizontal matching test 1
+        # self.tile_types = [["E", "E", "E", "E"], ["E", "E", "E", "Y"], ["E", "E", "E", "Y"], ["E", "E", "R", "R"],
+        #                    ["R", "Y", "Y", "Y"],  ["E", "E", "E", "E"],["E", "E", "E", "E"], ["E", "E", "E", "E" ]]  # horizontal matching test 1
         # self.tile_types = [["E", "E", "E", "E"], ["E", "E", "E", "E"],["E", "E", "E", "Y"],["E", "E", "E", "Y"], ["E", "E", "Y", "Y"], ["Y", "Y", "Y", "Y"]] #horizontal matching test 2
         # self.tile_types = [ ["Y", "Y", "Y", "Y", "R", "Y", "Y", "Y" ], ["Y", "Y", "Y", "Y", "R", "R", "Y", "R"]] #horizontal matching test 3
 
@@ -48,7 +48,7 @@ class DrMarioGame(TMGE):
         # self.tile_types = [ ["Y", "Y", "Y", "Y", "R", "Y", "Y", "Y" ], ["Y", "Y", "Y", "Y", "R", "R", "Y", "R"]] #horizontal matching test 3
 
         # test stationary tiles
-        self.tile_types = [["E", "E", "E", "E"],["E", "E", "E", "E"], ["E", "E", "E", "E"], ["E", "E", "R", "E"], ["Y", "E", "R", "E"], ["E", "E", "E", "E"]]
+        # self.tile_types = [["E", "E", "E", "E"],["E", "E", "E", "E"], ["E", "E", "E", "E"], ["E", "E", "R", "E"], ["Y", "E", "R", "E"], ["E", "E", "E", "E"]]
 
         self.tile_size = 20
 
@@ -69,7 +69,7 @@ class DrMarioGame(TMGE):
         my_tile_board = DMTileBoard(self.tile_size,
                                     self.factory, self.falling_factory,
                                     self.tile_types, self.falling_tile_types,
-                                    2, 2, 3)
+                                    2, 2, 3, min_score=1, max_score = 2)
         self.set_tile_board(my_tile_board)
 
     # pre-setup of the tile factory
@@ -78,12 +78,8 @@ class DrMarioGame(TMGE):
         factory = TileAbstractFactory()
         # initialize each inidividual factory
 
-        # yellow_factory = TileFactory(Yellow, Sprite("images/yellow-tile.png"), "Y", False)
-        # red_factory = TileFactory(Red, Sprite("images/red-tile.png"), "R", False)
         yellow_virus_factory = TileFactory(Yellow, Sprite("yellow-virus.png"), "Y", True)
         red_virus_factory = TileFactory(Red, Sprite("red-virus.png"), "R", True)
-        # yellow_factory = TileFactory(Yellow, Sprite("/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project/images/yellow-tile.png"), "Y", False)
-        # red_factory = TileFactory(Red, Sprite("/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project/images/red-tile.png"), "R", False)
 
         # register individual factories within the main factory
         factory.register_factory("Y", yellow_virus_factory)
@@ -93,10 +89,8 @@ class DrMarioGame(TMGE):
     def set_up_my_falling_tile_factories(self):
         falling_factory = TileAbstractFactory()
         # we can take advantage of the sprite, it is still yellow tile
-        # but this time it is yellow pill not the virus and since these are different factories there is not conflict between the two
-        # yellow_factory = TileFactory(Yellow, Sprite("/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project/images/yellow-pill.png"), "A", False)
-        # red_factory = TileFactory(Red, Sprite("/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project/images/red-pill.png"), "B", False)
-
+        # but this time it is yellow pill not the virus and since these are different factories there is
+        # not conflict between the two
         yellow_factory = TileFactory(Yellow, Sprite("yellow-tile.png"), "A", False)
         red_factory = TileFactory(Red, Sprite("red-tile.png"), "B", False)
 
