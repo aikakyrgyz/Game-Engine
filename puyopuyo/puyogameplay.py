@@ -1,8 +1,9 @@
+import os
 import sys
 sys.path.append(r'/Users/okdrahcir/documents/github/Inf-122-Final-Project')
 # sys.path.append(r'/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project')
 # if you are having a engine moduleNotFound error, you will have to include the root directory path to sys.path
-from puyoTileBoard import PuyoTileBoard
+from puyopuyo.puyoTileBoard import PuyoTileBoard
 from engine.Sprite.sprite import Sprite
 from engine.Board.tiles_board import TilesBoard
 from engine.GUI.gui import GUI
@@ -47,8 +48,10 @@ class PuyoGame(TMGE):
         # create the main factory
         factory = TileAbstractFactory()
         # initialize each inidividual factory
-        green_factory = TileFactory(Green, Sprite("images/green-puyo.png"), "G", False)
-        blue_factory = TileFactory(Blue, Sprite("images/blue-puyo.png"), "B", False)
+        # green_factory = TileFactory(Green, Sprite("images/green-puyo.png"), "G", False)
+        # blue_factory = TileFactory(Blue, Sprite("images/blue-puyo.png"), "B", False)
+        green_factory = TileFactory(Green, Sprite("green-puyo.png"), "G", False)
+        blue_factory = TileFactory(Blue, Sprite("blue-puyo.png"), "B", False)
         # register individual factories within the main factory
         factory.register_factory("G", green_factory)
         factory.register_factory("B", blue_factory)
@@ -57,8 +60,10 @@ class PuyoGame(TMGE):
     def set_up_my_falling_tile_factories(self):
         falling_factory = TileAbstractFactory()
         
-        green_factory = TileFactory(Green, Sprite("images/green-pill.png"), "A", False)
-        blue_factory = TileFactory(Blue, Sprite("images/blue-pill.png"), "B", False)
+        # green_factory = TileFactory(Green, Sprite("images/green-pill.png"), "A", False)
+        # blue_factory = TileFactory(Blue, Sprite("images/blue-pill.png"), "B", False)
+        green_factory = TileFactory(Green, Sprite("green-pill.png"), "A", False)
+        blue_factory = TileFactory(Blue, Sprite("blue-pill.png"), "B", False)
 
         falling_factory.register_factory("G", green_factory)
         falling_factory.register_factory("B", blue_factory)
@@ -78,8 +83,9 @@ class PuyoGame(TMGE):
         return self.falling_tile_types
 
 
-myGUI = GUI()
-myPuyoGame = PuyoGame(60, myGUI)
-myPuyoGame.run()
+if __name__ == '__main__':
+    myGUI = GUI()
+    myPuyoGame = PuyoGame(60, myGUI)
+    myPuyoGame.run()
 
 
