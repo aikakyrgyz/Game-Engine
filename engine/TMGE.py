@@ -49,6 +49,12 @@ class TMGE(ABC):
         # pygame.init() # just initialize in the GUI class
         while not self.paused:
             update_count = 0
+
+            # checks the board if the condition(tiles passing a specific line)
+            # if true then end the game
+            if (self.tile_board.ending_condition()):
+                return
+            
             while (time_ns() - self.last_update > self.delta and update_count < self.MAX_UPDATES):
                 self.update()
                 self.last_update += self.delta

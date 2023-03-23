@@ -1,5 +1,6 @@
 from engine.Board.tiles_board import TilesBoard
 from engine.Tile.tileAbstractFactory import TileAbstractFactory
+from engine.Tile.status import Status
 
 
 class DMTileBoard(TilesBoard):
@@ -22,8 +23,10 @@ class DMTileBoard(TilesBoard):
         topRowOfBoard = self.board[0]
 
         for tile in topRowOfBoard:
-            if tile.get_letter() != "E" or not(tile.status.falling) or not(tile.status.landing):
+            #use below to test the result of the if statement
+            #print(tile.get_letter() != " ", tile.status != Status.FALLING, tile.status != Status.FALLEN)
+            if tile.get_letter() != " " and tile.status != Status.FALLING and tile.status != Status.FALLEN:
                 print("game over")
-                return False
+                return True
         
-        return True
+        return False

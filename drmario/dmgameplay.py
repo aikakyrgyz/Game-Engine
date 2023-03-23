@@ -5,7 +5,7 @@ import sys
 #sys.path.append(r'/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project')
 
 
-from dmTileBoard import DMTileBoard
+from drmario.dmTileBoard import DMTileBoard
 from engine.Sprite.sprite import Sprite
 from engine.GUI.gui import GUI
 from engine.TMGE import TMGE
