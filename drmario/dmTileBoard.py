@@ -25,7 +25,7 @@ class DMTileBoard(TilesBoard):
         # for DR mario we want both matches
         self.horizontal_match()
         self.vertical_match()
-        self.group_match()
+        #self.group_match()
 
 
     @overriden

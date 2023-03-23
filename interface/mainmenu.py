@@ -127,7 +127,7 @@ class MainMenu:
         # initiate registration menu
         reg_menu = self.reg_menu()
         # initiate scoreboard menu
-        score_menu = self.score_menu()
+        # score_menu = self.score_menu()
 
         # Main Menu ----------------------------------------------------------
         pygame.display.set_caption(self.title)
@@ -149,36 +149,36 @@ class MainMenu:
         self.app_menu.add.button('Profile', profile_menu)
         # self.app_menu.add.vertical_margin(self.menu_width/2)
 
-        # comment out line 159 if no SQL database
-        self.app_menu.add.button('Scoreboard', score_menu)
+        # comment out if no SQL database
+        #self.app_menu.add.button('Scoreboard', score_menu)
         # self.app_menu.add.horizontal_margin(self.menu_height/2)
         # self.play1 = reg_menu.add.button(f'Play {get_game_list_menu()[1][0]}', self.start_selected_game)
         self.app_menu.add.button('Quit', pygame_menu.events.EXIT)
 
-    # comment out below function if no SQL database
-    def score_menu(self):
-        # Scoreboard Menu
-        score_menu = pygame_menu.Menu(
-            height=self.menu_height,
-            width=self.menu_width,
-            theme=self.custom_theme,
-            title='Scoreboard'
-        )
-        text = score.display_top_five()
-        score_menu.add.button('Top Five Players').set_alignment(
-            pygame_menu.locals.ALIGN_CENTER, )
-        score_menu.add.button(text[0]).set_alignment(
-            pygame_menu.locals.ALIGN_CENTER, )
-        score_menu.add.button(text[1]).set_alignment(
-            pygame_menu.locals.ALIGN_CENTER, )
-        score_menu.add.button(text[2]).set_alignment(
-            pygame_menu.locals.ALIGN_CENTER, )
-        score_menu.add.button(text[3]).set_alignment(
-            pygame_menu.locals.ALIGN_CENTER, )
-        score_menu.add.button(text[4]).set_alignment(
-            pygame_menu.locals.ALIGN_CENTER, )
+    # comment out if no SQL database
+    # def score_menu(self):
+    #     # Scoreboard Menu
+    #     score_menu = pygame_menu.Menu(
+    #         height=self.menu_height,
+    #         width=self.menu_width,
+    #         theme=self.custom_theme,
+    #         title='Scoreboard'
+    #     )
+    #     text = score.display_top_five()
+    #     score_menu.add.button('Top Five Players').set_alignment(
+    #         pygame_menu.locals.ALIGN_CENTER, )
+    #     score_menu.add.button(text[0]).set_alignment(
+    #         pygame_menu.locals.ALIGN_CENTER, )
+    #     score_menu.add.button(text[1]).set_alignment(
+    #         pygame_menu.locals.ALIGN_CENTER, )
+    #     score_menu.add.button(text[2]).set_alignment(
+    #         pygame_menu.locals.ALIGN_CENTER, )
+    #     score_menu.add.button(text[3]).set_alignment(
+    #         pygame_menu.locals.ALIGN_CENTER, )
+    #     score_menu.add.button(text[4]).set_alignment(
+    #         pygame_menu.locals.ALIGN_CENTER, )
 
-        return score_menu
+    #     return score_menu
 
     def profile_menu(self):
         # Profile Menu

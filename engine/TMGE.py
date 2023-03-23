@@ -154,6 +154,9 @@ class TMGE(ABC):
     def set_tile_board(self, board):
         self.tile_board = board
 
+    # def get_tile_board(self) -> :
+    #     return self.tile_board
+
     def update(self):
         self.tile_board.update()
         # self.tile_board.add_falling_shape()

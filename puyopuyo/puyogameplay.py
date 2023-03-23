@@ -12,7 +12,9 @@ from engine.Tile.tileAbstractFactory import TileAbstractFactory
 from engine.Tile.tileFactory import TileFactory
 from puyopuyo.myTiles.Blue import Blue
 from puyopuyo.myTiles.Green import Green
+from puyopuyo.myTiles.Orange import Orange
 
+import pygame
 
 class PuyoGame(TMGE):
     # to do: Singleton Pattern to make sure only one instance of TMGE is created
@@ -25,7 +27,7 @@ class PuyoGame(TMGE):
 
         self.tile_size = 20
         # the reason why we want them to be produced from the same factories is for matching purposes.
-        self.falling_tile_types = ["G", "B"]  # A = green puyo # B = blue puyo
+        self.falling_tile_types = ["G", "B", "O"]  # A = green puyo # B = blue puyo
 
     def overriden(f): # this is just for marking the function as a defined abstract function
         return f
@@ -52,9 +54,11 @@ class PuyoGame(TMGE):
         # blue_factory = TileFactory(Blue, Sprite("images/blue-puyo.png"), "B", False)
         green_factory = TileFactory(Green, Sprite("green-puyo.png"), "G", False)
         blue_factory = TileFactory(Blue, Sprite("blue-puyo.png"), "B", False)
+        orange_factory = TileFactory(Orange, Sprite("orange-tile.png"), "O", False)
         # register individual factories within the main factory
         factory.register_factory("G", green_factory)
         factory.register_factory("B", blue_factory)
+        factory.register_factory("O", orange_factory)
         self.set_factory(factory)
 
     def set_up_my_falling_tile_factories(self):
@@ -64,9 +68,11 @@ class PuyoGame(TMGE):
         # blue_factory = TileFactory(Blue, Sprite("images/blue-pill.png"), "B", False)
         green_factory = TileFactory(Green, Sprite("green-pill.png"), "A", False)
         blue_factory = TileFactory(Blue, Sprite("blue-pill.png"), "B", False)
+        orange_factory = TileFactory(Orange, Sprite("orange-tile.png"), "C", False)
 
         falling_factory.register_factory("G", green_factory)
         falling_factory.register_factory("B", blue_factory)
+        falling_factory.register_factory("O", orange_factory)
         
         self.set_falling_factory(falling_factory)
 
@@ -84,6 +90,7 @@ class PuyoGame(TMGE):
 
 
 if __name__ == '__main__':
+    pygame.init()
     myGUI = GUI()
     myPuyoGame = PuyoGame(60, myGUI)
     myPuyoGame.run()

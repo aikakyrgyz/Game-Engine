@@ -443,8 +443,8 @@ class TilesBoard(ABC):
 
         # if there is no faller on the board, add a new one
         elif self.falling_shape is None and self.just_matched:
-            self.fill_holes()
             self.add_falling_shape()
+            self.fill_holes()
             self.just_matched = False
 
     def set_pivot_tile(self, r, c):

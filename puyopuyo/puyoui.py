@@ -1,3 +1,5 @@
+import pygame
+
 from puyopuyo.puyogameplay import PuyoGame
 from engine.GUI.gui import GUI
 
