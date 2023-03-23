@@ -160,6 +160,8 @@ def compare_dm_score(player1, player2):
     if score1 > score2:
         print(f"{player1} wins!")
         return player1
+    elif score1 == score2:
+        print("It's a tie!")
     else:
         print(f"{player2} wins!")
         return player2
@@ -171,6 +173,8 @@ def compare_puyo_score(player1, player2):
     if score1 > score2:
         print(f"{player1} wins!")
         return player1
+    elif score1 == score2:
+        print("It's a tie!")
     else:
         print(f"{player2} wins!")
         return player2
