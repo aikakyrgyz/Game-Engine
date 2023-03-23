@@ -11,9 +11,13 @@ class DMTileBoard(TilesBoard):
         return f
 
     # want to end the game if all the viruses were eliminated
-    # def viruses_still_present(self):
-    #     for row in self.get_num_rows():
-    #         for col in self.get_num_columns():
+
+    def viruses_still_present(self):
+        for row in range(self.get_num_rows()):
+            for col in range(self.get_num_columns()):
+                if self.get_tile_on_index(row, col).get_letter() == "Y" or self.get_tile_on_index(row, col).get_letter() == "R":
+                    return True
+        return False
 
 
     @overriden
@@ -41,14 +45,22 @@ class DMTileBoard(TilesBoard):
         # if there are still matching tiles present, then it might be possible that it does not end the game,
         # so return False for now
 
+        # we could also do win loss condition
         if self.matched_tiles_present():
+            # will see after one more loop
             return False
 
+        if not self.viruses_still_present():
+            # this would be a win condition
+            print("eliminated all the viruses - game over")
+            return True
+
         for tile in topRowOfBoard:
+            # this would be loss condition, since the viruses still present
             #use below to test the result of the if statement
             #print(tile.get_letter() != " ", tile.status != Status.FALLING, tile.status != Status.FALLEN)
             if tile.get_letter() != " " and tile.status != Status.FALLING and tile.status != Status.FALLEN and tile.status != Status.MATCHED:
-                print("game over")
+                print("game over ")
                 return True
         
         return False
