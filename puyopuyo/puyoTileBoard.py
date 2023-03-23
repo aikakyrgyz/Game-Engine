@@ -4,8 +4,8 @@ from engine.Tile.status import Status
 
 
 class PuyoTileBoard(TilesBoard):
-    def __init__(self, tile_size, tile_factories: TileAbstractFactory, falling_tile_factories: TileAbstractFactory, tile_types, falling_tile_types, min_num_tiles, max_num_tiles, min_match_num):
-        TilesBoard.__init__(self, tile_size, tile_factories, falling_tile_factories, tile_types, falling_tile_types, min_num_tiles, max_num_tiles, min_match_num)
+    def __init__(self, tile_size, tile_factories: TileAbstractFactory, falling_tile_factories: TileAbstractFactory, tile_types, falling_tile_types, min_num_tiles, max_num_tiles, min_match_num, min_score, max_score):
+        TilesBoard.__init__(self, tile_size, tile_factories, falling_tile_factories, tile_types, falling_tile_types, min_num_tiles, max_num_tiles, min_match_num, min_score, max_score)
 
     def overriden(f): # for documentation purposes
         return f
@@ -31,8 +31,11 @@ class PuyoTileBoard(TilesBoard):
         for tile in topRowOfBoard:
             #use below to test the result of the if statement
             #print(tile.get_letter() != " ", tile.status != Status.FALLING, tile.status != Status.FALLEN)
-            if tile.get_letter() != " " and tile.status != Status.FALLING and tile.status != Status.FALLEN and tile.status != Status.MATCHED:
-                print("game over ")
+            # if tile.get_letter() != " " and tile.status != Status.FALLING and tile.status != Status.FALLEN and tile.status != Status.MATCHED:
+            #     print("game over ")
+            #     return True
+            if tile.status == Status.STILL:
+                print("game over")
                 return True
         
         return False
