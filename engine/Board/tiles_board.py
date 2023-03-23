@@ -673,9 +673,9 @@ class TilesBoard(ABC):
                 if next_tile.status != Status.MATCHED and tile.matchable(next_tile):
                     self.groupMatch_dfs(new_row, new_col, visited, matched_tiles)
 
-    def is_stationary_tile(self, row, col):
+    def is_stationary_tile(self, row, col) -> bool:
         # for example, the virus in Dr.Mario is stationary and it will not fall down even though there is empty space below
-        self.get_tile_on_index(row, col).get_stationary()
+        return self.get_tile_on_index(row, col).get_stationary()
 
     @abstractmethod
     def match_all(self):

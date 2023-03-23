@@ -76,6 +76,7 @@ class FallingShape(GameObject):
 
     def set_column(self, column):
         self.column = column
+    
     def get_tile_on_index(self, index):
         # index of the tile in the list, not the index in the board
         if index < 0 or index > self.number_of_tiles:
