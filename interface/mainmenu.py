@@ -6,7 +6,6 @@ import registration as reg
 import profile
 import scoreboard as score
 from database import player
-from database import game as gamesql
 from puyopuyo import puyoui as pm
 from drmario import dmUI as dm
 
@@ -56,6 +55,7 @@ class MainMenu:
             }
 
         pygame.init()
+        pygame.font.init()
         self.surface = pygame.display.set_mode((self.surface_width, self.surface_height))
 
     def set_title(self, title):
@@ -66,6 +66,7 @@ class MainMenu:
     #     self.surface_width = width
 
     def registration(self):
+        two_player = False
         player1 = self.players[0].get_value()
         player2 = self.players[1].get_value()
 
@@ -76,6 +77,10 @@ class MainMenu:
         if player2 != "":
             print(f"Registered Player 2: {player2}")
             reg.register_player(player2)
+            two_player = True
+
+        return two_player
+
 
     def start_selected_game(self):
         """
@@ -83,11 +88,19 @@ class MainMenu:
         :return:
         """
         # needs some work if we want it to be able to start additional games
-        self.registration()
-        print("Starting selected game...")
-        if self.selected_game_index == 0:
+        flag = self.registration()
+        print(flag)
+        if not flag and self.selected_game_index == 0:
+            print("Starting Dr. Mario in 1P...")
             dm.start_menu()
-        elif self.selected_game_index == 1:
+        elif not flag and self.selected_game_index == 1:
+            print("Starting Puyo Puyo in 1P...")
+            pm.start_menu()
+        elif flag and self.selected_game_index == 0:
+            print("Starting Dr. Mario in 2P...")
+            dm.start_menu()
+        elif flag and self.selected_game_index == 1:
+            print("Starting Puyo Puyo in 2P...")
             pm.start_menu()
         else:
             print("No game selected!")
@@ -119,6 +132,8 @@ class MainMenu:
         profile_menu = self.profile_menu()
         # initiate registration menu
         reg_menu = self.reg_menu()
+        # initiate scoreboard menu
+        score_menu = self.score_menu()
 
         # Main Menu ----------------------------------------------------------
         pygame.display.set_caption(self.title)
@@ -140,20 +155,36 @@ class MainMenu:
         self.app_menu.add.button('Profile', profile_menu)
         # self.app_menu.add.vertical_margin(self.menu_width/2)
 
-        self.app_menu.add.button('Scoreboard')
+        # comment out if no SQL database
+        self.app_menu.add.button('Scoreboard', score_menu)
         # self.app_menu.add.horizontal_margin(self.menu_height/2)
         # self.play1 = reg_menu.add.button(f'Play {get_game_list_menu()[1][0]}', self.start_selected_game)
         self.app_menu.add.button('Quit', pygame_menu.events.EXIT)
 
-    def scoreboard(self):
-        # Scoreboard Menu if there is time
-        # scoreboard_menu = pygame_menu.Menu(
-        #     height=self.menu_height,
-        #     width=self.menu_width,
-        #     theme=self.custom_theme,
-        #     title='Scoreboard'
-        # )
-        pass
+    # comment out if no SQL database
+    def score_menu(self):
+        # Scoreboard Menu
+        score_menu = pygame_menu.Menu(
+            height=self.menu_height,
+            width=self.menu_width,
+            theme=self.custom_theme,
+            title='Scoreboard'
+        )
+        text = score.display_top_five()
+        score_menu.add.button('Top Five Players').set_alignment(
+            pygame_menu.locals.ALIGN_CENTER, )
+        score_menu.add.button(text[0]).set_alignment(
+            pygame_menu.locals.ALIGN_CENTER, )
+        score_menu.add.button(text[1]).set_alignment(
+            pygame_menu.locals.ALIGN_CENTER, )
+        score_menu.add.button(text[2]).set_alignment(
+            pygame_menu.locals.ALIGN_CENTER, )
+        score_menu.add.button(text[3]).set_alignment(
+            pygame_menu.locals.ALIGN_CENTER, )
+        score_menu.add.button(text[4]).set_alignment(
+            pygame_menu.locals.ALIGN_CENTER, )
+
+        return score_menu
 
     def profile_menu(self):
         # Profile Menu
@@ -170,15 +201,21 @@ class MainMenu:
                 player.change_username(profile_username, input)
 
             if player.check_if_player_exists(profile_username):
-                input = profile_menu.add.text_input('New Name: ', maxchar=20, onreturn=get_input)
+                input = profile_menu.add.text_input('New Name: ', maxchar=20, onreturn=get_input).set_alignment(
+            pygame_menu.locals.ALIGN_CENTER, )
+                text = profile.display_score(profile_username)
+                profile_menu.add.button(text[0]).set_alignment(
+            pygame_menu.locals.ALIGN_CENTER, )
+                profile_menu.add.button(text[1]).set_alignment(
+            pygame_menu.locals.ALIGN_CENTER, )
 
         self.username = profile_menu.add.text_input('Username: ', maxchar=20, onreturn=check_sql).set_alignment(
             pygame_menu.locals.ALIGN_CENTER, )
-        profile_back_btn = profile_menu.add.button('Back', pygame_menu.events.BACK)
-        profile_quit_btn = profile_menu.add.button('Quit', pygame_menu.events.EXIT)
-
-        profile_back_btn.translate(-210, 190)
-        profile_quit_btn.translate(210, 110)
+        # profile_back_btn = profile_menu.add.button('Back', pygame_menu.events.BACK)
+        # profile_quit_btn = profile_menu.add.button('Quit', pygame_menu.events.EXIT)
+        #
+        # profile_back_btn.translate(-210, 190)
+        # profile_quit_btn.translate(210, 110)
 
         return profile_menu
 
@@ -191,9 +228,9 @@ class MainMenu:
             title='Register Players'
         )
 
-        self.players[0] = reg_menu.add.text_input('Player 1: ', input_underline_hmargin=5) \
+        self.players[0] = reg_menu.add.text_input('Player 1: ', maxchar=20, input_underline_hmargin=5) \
             .set_margin(400, 0).set_alignment(pygame_menu.locals.ALIGN_LEFT, )
-        self.players[1] = reg_menu.add.text_input('Player 2: ', default="") \
+        self.players[1] = reg_menu.add.text_input('Player 2: ', maxchar=20, default="") \
             .set_margin(400, 0).set_alignment(pygame_menu.locals.ALIGN_LEFT, )
 
         self.image_widget = reg_menu.add.image(
@@ -211,15 +248,6 @@ class MainMenu:
             theme=self.custom_theme,
             title='Personal Profile'
         )
-
-
-        # Scoreboard Menu if there is time
-        # scoreboard_menu = pygame_menu.Menu(
-        #     height=self.menu_height,
-        #     width=self.menu_width,
-        #     theme=self.custom_theme,
-        #     title='Scoreboard'
-        # )
 
         self.play_button = reg_menu.add.button(f'Play', self.start_selected_game)
 

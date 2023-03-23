@@ -20,7 +20,7 @@ class GUI:
         self.screen_height = 800
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
         self.score = 0
-        print("Initialuzed pygamedisplay")
+        print("Initialized Pygamedisplay")
         pygame.display.set_caption('Tile Matching Game Environment')
         self.theme = theme
         pygame.init()
