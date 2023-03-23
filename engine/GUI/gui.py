@@ -5,16 +5,21 @@ from engine.Tile.status import Status
 from engine.Sprite.sprite import Sprite
 from engine.Tile.tile import Tile
 
+
 class GUI:
     def __init__(self):
+        pygame.init()
+        # pygame.display.init()
         pygame.font.init() # text added for testing
         self.text_font = pygame.font.SysFont('Arial', 15, False, False) # text added for testing
         self.screen_width = 1200
         self.screen_height = 800
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
+        print("Initialuzed pygamedisplay")
         pygame.display.set_caption('Tile Matching Game Environment')
 
     def draw_board(self, tile_board:TilesBoard):
+        clock = pygame.time.Clock() # slows down the tiles
         self.tile_size = tile_board.get_tile_size() * 3 # multipled for now to increase tile size for visuals
 
         screen_center_x = self.screen_width // 2
@@ -38,26 +43,30 @@ class GUI:
                 if isinstance(tile, EmptyTile):
                     to_print += " " * 3
                     self.draw_tile(tile, x, y, self.tile_size)
-                elif letter == "R":
-                    to_print += f'[{letter}]'
-                    self.draw_tile(tile, x, y, self.tile_size)
-                elif letter == "Y":
-                    to_print += f'[{letter}]'
-                    self.draw_tile(tile, x, y, self.tile_size)
+                # elif letter == "R":
+                #     to_print += f'[{letter}]'
+                #     self.draw_tile(tile, x, y, self.tile_size)
+                # elif letter == "Y":
+                #     to_print += f'[{letter}]'
+                #     self.draw_tile(tile, x, y, self.tile_size)
                 elif status == Status["FALLING"]:
                     to_print += f'[{letter}]'
+                    self.draw_tile(tile, x, y, self.tile_size)
                     self.draw_tile(tile, x, y, self.tile_size)
                 elif status == Status["FALLEN"]:
                     to_print += f'|{letter}|'
                     self.draw_tile(tile, x, y, self.tile_size)
+                    self.draw_tile(tile, x, y, self.tile_size)
                 elif status == Status["MATCHED"]:
                     to_print += f'*{letter}*'
+                    self.draw_tile(tile, x, y, self.tile_size)
                     self.draw_tile(tile, x, y, self.tile_size)
                 else:
                     to_print += " "+ letter + " "
             print(to_print + '|')
         print(f" {3 * tile_board.get_num_columns() * '-' + ' '}")
         pygame.display.update()
+        clock.tick(3) #slows down the tiles
 
     def falling_obj_movement(self, keys_pressed, obj, velocity):
         """
