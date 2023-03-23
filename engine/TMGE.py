@@ -153,6 +153,8 @@ class TMGE(ABC):
     #     self.GUI.draw_board(self.tile_board)
 
     def redraw(self):
+        # should be able to use this but not working
+        # self.GUI.player_start(self.tile_board)
         self.GUI.draw_board(self.tile_board)
         # draw other parts of the screen
 
