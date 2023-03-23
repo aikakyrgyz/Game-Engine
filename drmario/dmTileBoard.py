@@ -19,9 +19,16 @@ class DMTileBoard(TilesBoard):
 
     @overriden
     def ending_condition(self) -> bool:
-        # for now the ending condition of the game is when there is at least one tile 
-        # filed at the top row of the board
-        topRowOfBoard = self.board[0]
+        # For now the ending condition of the game is when there is at least one tile 
+        # filed at the top row of the board. The top row shown in the gui will change
+        # depending on how many tiles are falling at once.
+        # ex. if 2 tiles are falling -> gui will hide row[0] -> must check row[1] for ending condition
+        # ex. if 3 tiles are falling -> gui will hide row[0] and row[1] -> must check row[2] for ending condition
+        topRowOfBoard = self.board[self.max_num_shape_tiles-1]
+
+        # use for testing
+        # print("self.max_num_shape_tiles-1", self.max_num_shape_tiles-1)
+        # print("topRowOfBoard", topRowOfBoard)
 
         for tile in topRowOfBoard:
             #use below to test the result of the if statement

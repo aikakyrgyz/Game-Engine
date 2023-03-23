@@ -49,7 +49,6 @@ class DrMarioGame(TMGE):
         # test stationary tiles
         self.tile_types = [["E", "E", "E", "E"], ["E", "E", "E", "E"], ["E", "E", "R", "E"], ["E", "E", "RV", "E"], ["E", "E", "E", "E"]]
 
->>>>>>> f888928352cb65470ed4a8a6ee712591b90c355a
         self.tile_size = 20
 
         # the reason why we want them to be produced from the same factories is for matching purposes.
