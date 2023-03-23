@@ -5,7 +5,7 @@ import pygame
 # if you are having a engine moduleNotFound error, you will have to include the root directory path to sys.path
 
 sys.path.append(r'/Users/okdrahcir/documents/github/Inf-122-Final-Project')
-sys.path.append(r'/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project')
+# sys.path.append(r'/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project')
 
 from drmario.dmTileBoard import DMTileBoard
 from engine.Sprite.sprite import Sprite
@@ -71,7 +71,7 @@ class DrMarioGame(TMGE):
         my_tile_board = DMTileBoard(self.tile_size,
                                     self.factory, self.falling_factory,
                                     self.tile_types, self.falling_tile_types,
-                                    2, 2, 3, min_score=1, max_score = 2)
+                                    2, 2, 3, min_score=1, max_score=2)
         self.set_tile_board(my_tile_board)
 
     # pre-setup of the tile factory
@@ -113,7 +113,6 @@ class DrMarioGame(TMGE):
         return self.falling_tile_types
 
 if __name__ == '__main__':
-    #delete these since just for testing purpose only
     pygame.init()
     myGUI = GUI()
     myDrMarioGame = DrMarioGame(60, myGUI)

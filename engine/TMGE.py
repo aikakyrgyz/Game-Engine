@@ -19,7 +19,7 @@ from engine.GameObject.direction import ROTATE
 # since TMGE contains one or more abstract functions, it is also an abstract class
 
 class TMGE(ABC):
-    MAX_UPDATES = 2
+    MAX_UPDATES = 1
 
     def __init__(self, FPS, GUI):  # tile_board should not be passed in here
         self.game_objects = []
@@ -59,12 +59,15 @@ class TMGE(ABC):
                 update_count += 1
                 self.redraw()
                 self.tile_board.get_score()
+                # constantly check if the game is over
+                if self.tile_board.ending_condition():
+                    self.game_over = True
+                    # return score here
+                    return self.get_current_score()
             time.sleep(1)
 
-            if self.tile_board.ending_condition():
-                self.game_over = True
-                # return score here
-                return self.get_current_score()
+
+
             self.handle_key_events()
 
 
@@ -178,14 +181,15 @@ class TMGE(ABC):
         Handles each pygame event
         Pressing space, right arrow and left arrow triggers a sound
         """
+        pygame.init()
         for event in pygame.event.get():
-            # this line is giving an error: pygame.display not initialized
-            # if event.type == pygame.QUIT or pygame.K_ESCAPE:
-            #     pygame.quit()
-            #     return
-
             if event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
                 self.tile_board.move_falling_shape(ROTATE)
+            # this line is giving an error: pygame.display not initialized
+            if event.type == pygame.QUIT or pygame.K_ESCAPE:
+                pass
+            #         pygame.quit()
+            #         return
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
                 print("left was pressed")
                 self.tile_board.move_falling_shape(Direction.LEFT)
