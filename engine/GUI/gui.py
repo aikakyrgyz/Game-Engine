@@ -15,6 +15,7 @@ class GUI:
         self.screen_width = 1200
         self.screen_height = 800
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
+        self.score = 0
         print("Initialuzed pygamedisplay")
         pygame.display.set_caption('Tile Matching Game Environment')
 
@@ -104,4 +105,6 @@ class GUI:
         sprite = pygame.transform.scale(sprite, (tile_size, tile_size))
         self.screen.blit(sprite, (x, y))
 
+    def show_score(self):
+        pass
 

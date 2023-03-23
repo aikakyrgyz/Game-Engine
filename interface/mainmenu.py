@@ -7,7 +7,7 @@ import profile
 import scoreboard as score
 from database import player
 from database import game as gamesql
-from puyopuyo import puyoUI as pm
+from puyopuyo import puyoui as pm
 from drmario import dmUI as dm
 
 PROJ_DIR_IMG = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'images')
@@ -27,7 +27,6 @@ def get_game_list_menu():
     # return gamesql.return_game_list()
     # if no database connection, use the below
     return [("Dr. Mario", 0, 'mario_image.jpg'), ("Puyo Puyo", 1, 'puyopuyo_image.jpg')]
-
 
 
 class MainMenu:
@@ -74,7 +73,6 @@ class MainMenu:
         if player2 != "":
             print(f"Registered Player 2: {player2}")
             reg.register_player(player2)
-
 
     def start_selected_game(self):
         """
@@ -137,25 +135,18 @@ class MainMenu:
             title='Personal Profile'
         )
 
-        self.username = profile_menu.add.text_input('Username: ').set_alignment(pygame_menu.locals.ALIGN_CENTER, )
+        def check_sql(profile_username):
+
+            def get_input(input):
+                player.change_username(profile_username, input)
+
+            if player.check_if_player_exists(profile_username):
+                input = profile_menu.add.text_input('New Name: ', maxchar=20, onreturn=get_input)
+
+        self.username = profile_menu.add.text_input('Username: ', maxchar=20, onreturn=check_sql).set_alignment(
+            pygame_menu.locals.ALIGN_CENTER, )
         profile_back_btn = profile_menu.add.button('Back', pygame_menu.events.BACK)
         profile_quit_btn = profile_menu.add.button('Quit', pygame_menu.events.EXIT)
-        profile_username = self.username.get_value()
-        if player.check_if_player_exists(profile_username):
-            pass
-        else:
-            pass
-
-        # profile.change_username(profile_username)
-
-        # Confirmation Profile Menu
-        conf_profile_menu = pygame_menu.Menu(
-            height=self.menu_height,
-            width=self.menu_width,
-            theme=self.custom_theme,
-            title='Personal Profile'
-        )
-
 
         # Scoreboard Menu if there is time
         # scoreboard_menu = pygame_menu.Menu(
@@ -181,8 +172,8 @@ class MainMenu:
         self.play_button.translate(0, -80)
         back_btn.translate(-75, -70)
         quit_btn.translate(75, -146)
-        profile_back_btn.translate(-75, -70)
-        profile_quit_btn.translate(75, -146)
+        profile_back_btn.translate(-210, 190)
+        profile_quit_btn.translate(210, 110)
 
         pygame.display.set_caption(self.title)
         self.app_menu = pygame_menu.Menu(height=self.menu_height,
