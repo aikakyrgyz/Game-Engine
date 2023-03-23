@@ -1,10 +1,10 @@
 import os
 import sys
 
-# sys.path.append(r'/Users/okdrahcir/documents/github/Inf-122-Final-Project')
+sys.path.append(r'/Users/okdrahcir/documents/github/Inf-122-Final-Project')
 
 # if you are having a engine moduleNotFound error, you will have to include the root directory path to sys.path
-# sys.path.append(r'/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project')
+sys.path.append(r'/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project')
 # if you are having an engine moduleNotFound error, you will have to include the root directory path to sys.path
 
 from drmario.dmTileBoard import DMTileBoard
@@ -70,10 +70,13 @@ class DrMarioGame(TMGE):
         # create the main factory
         factory = TileAbstractFactory()
         # initialize each inidividual factory
+
         # yellow_factory = TileFactory(Yellow, Sprite("images/yellow-tile.png"), "Y", False)
         # red_factory = TileFactory(Red, Sprite("images/red-tile.png"), "R", False)
         yellow_factory = TileFactory(Yellow, Sprite("yellow-tile.png"), "Y", False)
         red_factory = TileFactory(Red, Sprite("red-tile.png"), "R", False)
+        # yellow_factory = TileFactory(Yellow, Sprite("/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project/images/yellow-tile.png"), "Y", False)
+        # red_factory = TileFactory(Red, Sprite("/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project/images/red-tile.png"), "R", False)
 
         # register individual factories within the main factory
         factory.register_factory("Y", yellow_factory)
@@ -84,10 +87,13 @@ class DrMarioGame(TMGE):
         falling_factory = TileAbstractFactory()
         # we can take advantage of the sprite, it is still yellow tile
         # but this time it is yellow pill not the virus and since these are different factories there is not conflict between the two
+
         # yellow_factory = TileFactory(Yellow, Sprite("images/yellow-pill.png"), "A", False)
         # red_factory = TileFactory(Red, Sprite("images/red-pill.png"), "B", False)
         yellow_factory = TileFactory(Yellow, Sprite("yellow-pill.png"), "A", False)
         red_factory = TileFactory(Red, Sprite("red-pill.png"), "B", False)
+        # yellow_factory = TileFactory(Yellow, Sprite("/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project/images/yellow-pill.png"), "A", False)
+        # red_factory = TileFactory(Red, Sprite("/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project/images/red-pill.png"), "B", False)
 
         falling_factory.register_factory("Y", yellow_factory)
         falling_factory.register_factory("R", red_factory)
@@ -108,5 +114,5 @@ class DrMarioGame(TMGE):
 if __name__ == '__main__':
     #delete these since just for testing purpose only
     myGUI = GUI()
-    myDrMarioGame = DrMarioGame(0.08, myGUI)
+    myDrMarioGame = DrMarioGame(60, myGUI)
     myDrMarioGame.run()

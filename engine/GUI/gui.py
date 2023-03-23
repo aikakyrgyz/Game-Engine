@@ -12,11 +12,14 @@ from interface import apptheme
 
 class GUI:
     def __init__(self, theme=apptheme):
-        pygame.font.init()  # text added for testing
-        self.text_font = pygame.font.SysFont('Arial', 15, False, False)  # text added for testing
+        pygame.init()
+        # pygame.display.init()
+        pygame.font.init() # text added for testing
+        self.text_font = pygame.font.SysFont('Arial', 15, False, False) # text added for testing
         self.screen_width = 1200
         self.screen_height = 800
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
+        print("Initialuzed pygamedisplay")
         pygame.display.set_caption('Tile Matching Game Environment')
         self.theme = theme
         pygame.init()
@@ -56,6 +59,8 @@ class GUI:
 
     def draw_board(self, tile_board: TilesBoard):
         self.tile_size = tile_board.get_tile_size() * 3  # multipled for now to increase tile size for visuals
+        # clock = pygame.time.Clock() # slows down the tiles
+        self.tile_size = tile_board.get_tile_size() * 3 # multipled for now to increase tile size for visuals
 
         screen_center_x = self.screen_width // 2
         screen_center_y = self.screen_height // 2
@@ -87,14 +92,18 @@ class GUI:
                 elif status == Status["FALLING"]:
                     to_print += f'[{letter}]'
                     self.draw_tile(tile, x, y, self.tile_size)
+                    self.draw_tile(tile, x, y, self.tile_size)
                 elif status == Status["FALLEN"]:
                     to_print += f'|{letter}|'
+                    self.draw_tile(tile, x, y, self.tile_size)
                     self.draw_tile(tile, x, y, self.tile_size)
                 elif status == Status["MATCHED"]:
                     to_print += f'*{letter}*'
                     self.draw_tile(tile, x, y, self.tile_size)
+                    self.draw_tile(tile, x, y, self.tile_size)                
                 else:
                     to_print += " " + letter + " "
+                    self.draw_tile(tile, x, y, self.tile_size)
             print(to_print + '|')
         print(f" {3 * tile_board.get_num_columns() * '-' + ' '}")
         pygame.display.update()
@@ -162,6 +171,7 @@ class GUI:
                                                     margin=(0, 30),
                                                     shadow_width=10,
                                                     )
+
 
 if __name__ == '__main__':
     gui = GUI()

@@ -10,6 +10,8 @@ class EmptyTile(Tile):
     def __init__(self):
         # self.sprite = Sprite("images_/empty-default-tile.png"); AS A JOKE
         # self.sprite = Sprite("empty-default-tile.jpg");
-        self.sprite = Sprite(os.path.join(IMG_PATH, "empty-default-tile.jpg"))
+        self.sprite = Sprite("empty-default-tile.jpg")
+        # self.sprite = Sprite("/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project/images/empty-default-tile.jpg")
+
         Tile.__init__(self, self.sprite, ' ', False)
 
