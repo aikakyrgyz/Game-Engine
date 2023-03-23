@@ -23,6 +23,7 @@ class DMTileBoard(TilesBoard):
 
         for tile in topRowOfBoard:
             if tile.get_letter() != "E" or not(tile.status.falling) or not(tile.status.landing):
+                print("game over")
                 return False
         
         return True
