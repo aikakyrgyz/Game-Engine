@@ -4,8 +4,8 @@ from engine.Tile.status import Status
 
 
 class DMTileBoard(TilesBoard):
-    def __init__(self, tile_size, tile_factories: TileAbstractFactory, falling_tile_factories: TileAbstractFactory, tile_types, falling_tile_types, min_num_tiles, max_num_tiles, min_match_num):
-        TilesBoard.__init__(self, tile_size, tile_factories, falling_tile_factories, tile_types, falling_tile_types, min_num_tiles, max_num_tiles, min_match_num)
+    def __init__(self, tile_size, tile_factories: TileAbstractFactory, falling_tile_factories: TileAbstractFactory, tile_types, falling_tile_types, min_num_tiles, max_num_tiles, min_match_num, min_score, max_score):
+        TilesBoard.__init__(self, tile_size, tile_factories, falling_tile_factories, tile_types, falling_tile_types, min_num_tiles, max_num_tiles, min_match_num, min_score, max_score)
 
     def overriden(f): # for documentation purposes
         return f
@@ -25,7 +25,7 @@ class DMTileBoard(TilesBoard):
         # for DR mario we want both matches
         self.horizontal_match()
         self.vertical_match()
-        self.group_match()
+        #self.group_match()
 
 
     @overriden
@@ -36,6 +36,7 @@ class DMTileBoard(TilesBoard):
         # ex. if 2 tiles are falling -> gui will hide row[0] -> must check row[1] for ending condition
         # ex. if 3 tiles are falling -> gui will hide row[0] and row[1] -> must check row[2] for ending condition
         ## oops, it is supposed to be 2
+
         topRowOfBoard = self.board[self.max_num_shape_tiles-2]
 
         # use for testing

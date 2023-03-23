@@ -18,7 +18,7 @@ from engine.Tile.status import Status
 
 class TilesBoard(ABC):
     def __init__(self, tile_size, tile_factories: TileAbstractFactory, falling_tile_factories: TileAbstractFactory,
-                 tile_types, falling_tile_types, min_num_tiles, max_num_tiles, min_match_num):
+                 tile_types, falling_tile_types, min_num_tiles, max_num_tiles, min_match_num, min_score=1, max_score=1):
         self.tile_factories = tile_factories
         self.tile_size = tile_size
         self.falling_tile_factories = falling_tile_factories
@@ -55,6 +55,8 @@ class TilesBoard(ABC):
         self.just_matched = False
 
         # keep track of the score
+        self.min_score = min_score
+        self.max_score = max_score
 
         self.score  = 0
     # create the full board with the tiles
@@ -154,6 +156,10 @@ class TilesBoard(ABC):
 
     def is_empty_tile(self, r, c) -> bool:
         return isinstance(self.board[r][c], EmptyTile)
+
+    def empty_tile(self, tile):
+        return isinstance(tile, EmptyTile)
+
 
     def get_tile_on_index(self, r: int, c: int) -> Tile:
         return self.board[r][c]
@@ -420,7 +426,6 @@ class TilesBoard(ABC):
         # this function needs to be made simpler ... match_all should be only called once
         # update: match all is called once
 
-
         if self.falling_shape is not None and self.falling_shape.get_status() == Status.FALLEN:
             self.just_landed()
 
@@ -443,8 +448,8 @@ class TilesBoard(ABC):
 
         # if there is no faller on the board, add a new one
         elif self.falling_shape is None and self.just_matched:
-            self.fill_holes()
             self.add_falling_shape()
+            self.fill_holes()
             self.just_matched = False
 
     def set_pivot_tile(self, r, c):
@@ -575,6 +580,7 @@ class TilesBoard(ABC):
     def horizontal_match(self):
         """Defines the logic for the horizontal match"""
         matched_tiles = []
+        max_match = 0
         for row in range(self.num_rows - 1, -1, -1):
             for col in range(self.num_cols):
                 tile = self.get_tile_on_index(row, col)
@@ -594,12 +600,23 @@ class TilesBoard(ABC):
                             # update the score somewhere here?
                             # tile now has a matched status
                             t.set_status(Status.MATCHED)
+                            # check score
+                            if not self.empty_tile(matched_tiles[0]):
+                                new_match = len(matched_tiles)
+                                if new_match > max_match:
+                                    max_match = new_match
                         # all have been set to matched
                         # clear out the matched list
+
                     if not matched_tiles[-1].matchable(tile):
+                        if max_match >= self.min_match_num:
+                            print("match in horizontal")
+                            self.update_score(max_match)
+                            max_match = 0
                         matched_tiles = []
                         matched_tiles.append(tile)
                         last_matched_index += 1
+
             matched_tiles = []
 
     def clear_out_matches(self):
@@ -630,6 +647,7 @@ class TilesBoard(ABC):
     def vertical_match(self):
         """Defines the logic for vertical match"""
         matched_tiles = []
+        max_match = 0
         for col in range(self.num_cols):
             for row in range(self.num_rows - 1, -1, -1):
                 tile = self.get_tile_on_index(row, col)
@@ -647,23 +665,50 @@ class TilesBoard(ABC):
                             # update the score ?
                             t.set_status(Status.MATCHED)
                         # all have been set to matched
+
+                        # check score
+                        # need to discard empty matches
+                        if not self.empty_tile(matched_tiles[0]):
+                            new_match = len(matched_tiles)
+                            if new_match > max_match:
+                                max_match = new_match
                     if not matched_tiles[-1].matchable(tile):
+                        if max_match >= self.min_match_num:
+                            print("match in vertical")
+                            self.update_score(max_match)
+                            max_match = 0
                         matched_tiles = []
                         matched_tiles.append(tile)
                         last_matched_index -= 1
             matched_tiles = []
 
+    def update_score(self, max_match):
+        # print("Points for min: ", self.min_match_num * self.min_score)
+        # print("Points for additional", self.max_score * (max_match - self.min_match_num))
+        self.score += self.min_match_num * self.min_score + (self.max_score * (max_match - self.min_match_num))
+
     def group_match(self):
         """Defines the logic for group match"""
         # keeps track of cells visited per function call
-        visited = set() 
+        visited = set()
+        max_match = 0
         for col in range(self.num_cols):
             for row in range(self.num_rows -1, -1, -1):
+                if max_match >= self.min_match_num:
+                    print("match in group")
+                    self.update_score(max_match)
+                    max_match = 0
                 matched_tiles = []
                 self.groupMatch_dfs(row, col, visited, matched_tiles)
                 if len(matched_tiles) >= self.min_match_num:
                     for t in matched_tiles:
                         t.set_status(Status.MATCHED)
+                    # check if more match found
+                    if not self.empty_tile(matched_tiles[0]):
+                        new_match = len(matched_tiles)
+                        if new_match > max_match:
+                            max_match = new_match
+
 
     def groupMatch_dfs(self, row, col, visited, matched_tiles):
         """helper function to perform recursive call around grid"""
@@ -684,6 +729,10 @@ class TilesBoard(ABC):
     def is_stationary_tile(self, row, col) -> bool:
         # for example, the virus in Dr.Mario is stationary and it will not fall down even though there is empty space below
         return self.get_tile_on_index(row, col).get_stationary()
+
+    def get_score(self):
+        print("current score is: ", self.score)
+        return self.score
 
     @abstractmethod
     def match_all(self):
