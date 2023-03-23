@@ -60,9 +60,10 @@ class GUI:
                 elif status == Status["MATCHED"]:
                     to_print += f'*{letter}*'
                     self.draw_tile(tile, x, y, self.tile_size)
-                    self.draw_tile(tile, x, y, self.tile_size)
+                    self.draw_tile(tile, x, y, self.tile_size)                
                 else:
                     to_print += " "+ letter + " "
+                    self.draw_tile(tile, x, y, self.tile_size)
             print(to_print + '|')
         print(f" {3 * tile_board.get_num_columns() * '-' + ' '}")
         pygame.display.update()
