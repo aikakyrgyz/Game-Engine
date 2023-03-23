@@ -64,7 +64,6 @@ class MainMenu:
     # def set_window_dimensions(self, width, height):
     #     self.surface_height = height
 
-
     def start_selected_game(self):
         """
         register players and start the selected game
@@ -155,7 +154,7 @@ class MainMenu:
         # self.play1 = reg_menu.add.button(f'Play {get_game_list_menu()[1][0]}', self.start_selected_game)
         self.app_menu.add.button('Quit', pygame_menu.events.EXIT)
 
-    # comment out if no SQL database
+    # comment out below function if no SQL database
     # def score_menu(self):
     #     # Scoreboard Menu
     #     score_menu = pygame_menu.Menu(
@@ -177,7 +176,6 @@ class MainMenu:
     #         pygame_menu.locals.ALIGN_CENTER, )
     #     score_menu.add.button(text[4]).set_alignment(
     #         pygame_menu.locals.ALIGN_CENTER, )
-
     #     return score_menu
 
     def profile_menu(self):

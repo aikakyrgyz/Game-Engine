@@ -159,8 +159,16 @@ def return_top_five():
 def compare_dm_score(player1, player2):
     score1 = return_dm_score(player1)
     score2 = return_dm_score(player2)
+    if score1 > score2:
+        return player1
+    else:
+        return player2
 
 
 def compare_puyo_score(player1, player2):
     score1 = return_puyo_score(player1)
     score2 = return_puyo_score(player2)
+    if score1 > score2:
+        return player1
+    else:
+        return player2
