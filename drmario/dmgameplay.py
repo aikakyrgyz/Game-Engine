@@ -1,9 +1,11 @@
 import sys
 
-# if you are having a engine moduleNotFound error, you will have to include the root directory path to sys.path
-#sys.path.append(r'/Users/okdrahcir/documents/github/Inf-122-Final-Project')
-sys.path.append(r'/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project')
+import pygame
 
+# if you are having a engine moduleNotFound error, you will have to include the root directory path to sys.path
+
+sys.path.append(r'/Users/okdrahcir/documents/github/Inf-122-Final-Project')
+sys.path.append(r'/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project')
 
 from drmario.dmTileBoard import DMTileBoard
 from engine.Sprite.sprite import Sprite
@@ -112,6 +114,9 @@ class DrMarioGame(TMGE):
 
 if __name__ == '__main__':
     #delete these since just for testing purpose only
+    pygame.init()
     myGUI = GUI()
     myDrMarioGame = DrMarioGame(60, myGUI)
-    myDrMarioGame.run()
+    score = myDrMarioGame.run()
+    
+

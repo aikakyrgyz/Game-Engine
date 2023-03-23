@@ -41,6 +41,7 @@ def check_if_player_exists(name):
             print("Player confirmed.")
             return True
         else:
+            print("Player does not exist in database. Please try again.")
             return False
 
     except mysql.connector.Error as error:
@@ -80,16 +81,15 @@ def change_username(old, new):
 def display_player_score(name):
     try:
         connection = mysql.connector.connect(host='localhost',
-                                             database='player',
+                                             database='players',
                                              user='root',
                                              password='wit122')
 
         cursor = connection.cursor()
-        cursor.execute("""SELECT Dmscore, Puyscore, (Dmscore + Puyoscore) as Totalscore FROM Players 
+        cursor.execute("""SELECT Dmscore, Puyoscore, (Dmscore + Puyoscore) as Totalscore FROM Players 
                                 WHERE Username = %s""", (name,))
 
         results = cursor.fetchall()
-
         return results
 
     except mysql.connector.Error as error:

@@ -22,7 +22,7 @@ class PuyoTileBoard(TilesBoard):
         # depending on how many tiles are falling at once.
         # ex. if 2 tiles are falling -> gui will hide row[0] -> must check row[1] for ending condition
         # ex. if 3 tiles are falling -> gui will hide row[0] and row[1] -> must check row[2] for ending condition
-        topRowOfBoard = self.board[self.max_num_shape_tiles-1]
+        topRowOfBoard = self.board[self.max_num_shape_tiles-2]
 
         # use for testing
         # print("self.max_num_shape_tiles-1", self.max_num_shape_tiles-1)
@@ -31,8 +31,8 @@ class PuyoTileBoard(TilesBoard):
         for tile in topRowOfBoard:
             #use below to test the result of the if statement
             #print(tile.get_letter() != " ", tile.status != Status.FALLING, tile.status != Status.FALLEN)
-            if tile.get_letter() != " " and tile.status != Status.FALLING and tile.status != Status.FALLEN:
-                print("game over")
+            if tile.get_letter() != " " and tile.status != Status.FALLING and tile.status != Status.FALLEN and tile.status != Status.MATCHED:
+                print("game over ")
                 return True
         
         return False

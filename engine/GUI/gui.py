@@ -12,7 +12,7 @@ from interface import apptheme
 
 class GUI:
     def __init__(self, theme=apptheme):
-        pygame.init()
+        #pygame.init()
         # pygame.display.init()
         pygame.font.init() # text added for testing
         self.text_font = pygame.font.SysFont('Arial', 15, False, False) # text added for testing
@@ -20,10 +20,10 @@ class GUI:
         self.screen_height = 800
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
         self.score = 0
-        print("Initialuzed pygamedisplay")
+        print("Initialized Pygamedisplay")
         pygame.display.set_caption('Tile Matching Game Environment')
         self.theme = theme
-        pygame.init()
+        # pygame.init()
         self.setup_game()
         self.game_display = pygame_menu.Menu(height=self.screen_height,
                                              position=(875, 25, False),
@@ -173,6 +173,7 @@ class GUI:
                                                     margin=(0, 30),
                                                     shadow_width=10,
                                                     )
+
 
 
 if __name__ == '__main__':

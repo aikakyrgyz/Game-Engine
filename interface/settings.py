@@ -1,1 +1,0 @@
-# Volume, difficulty, maybe 1P/2P (boolean value)

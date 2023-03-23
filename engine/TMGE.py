@@ -63,6 +63,7 @@ class TMGE(ABC):
 
             if self.tile_board.ending_condition():
                 self.game_over = True
+                # return score here
                 return self.get_current_score()
             self.handle_key_events()
 
@@ -158,6 +159,9 @@ class TMGE(ABC):
     def set_tile_board(self, board):
         self.tile_board = board
 
+    # def get_tile_board(self) -> :
+    #     return self.tile_board
+
     def update(self):
         self.tile_board.update()
         # self.tile_board.add_falling_shape()
@@ -182,7 +186,6 @@ class TMGE(ABC):
 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
                 self.tile_board.move_falling_shape(ROTATE)
-            
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
                 print("left was pressed")
                 self.tile_board.move_falling_shape(Direction.LEFT)
@@ -194,7 +197,6 @@ class TMGE(ABC):
             if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
                 print("down was pressed")
                 self.tile_board.move_falling_shape(Direction.DOWN)
-            
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 print("space was pressed")
                 self.tile_board.rotate_shape_on_board()
