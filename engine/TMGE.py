@@ -19,7 +19,7 @@ from engine.GameObject.direction import ROTATE
 # since TMGE contains one or more abstract functions, it is also an abstract class
 
 class TMGE(ABC):
-    MAX_UPDATES = 1
+    MAX_UPDATES = 2
 
     def __init__(self, FPS, GUI):  # tile_board should not be passed in here
         self.game_objects = []
@@ -52,8 +52,6 @@ class TMGE(ABC):
 
             # checks the board if the condition(tiles passing a specific line)
             # if true then end the game
-            if (self.tile_board.ending_condition()):
-                return
             
             while (time_ns() - self.last_update > self.delta and update_count < self.MAX_UPDATES):
                 self.update()
@@ -61,7 +59,12 @@ class TMGE(ABC):
                 update_count += 1
                 self.redraw()
             time.sleep(1)
+
+            if self.tile_board.ending_condition():
+                self.game_over = True
+                return
             self.handle_key_events()
+
 
     # def run(self):
     #     self.time_between_updates()

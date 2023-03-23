@@ -124,6 +124,13 @@ class TilesBoard(ABC):
     def get_num_rows(self) -> int:
         return self.num_rows
 
+    def matched_tiles_present(self):
+        for row in range(self.num_rows):
+            for col in range(self.num_cols):
+                if self.board[row][col].get_status() == Status.MATCHED:
+                    return True
+        return False
+
     # check if the index is not out of boundaries
     def is_valid_location(self, r, c) -> bool:
         if r >= self.num_rows or r < 0 or c >= self.num_cols or c < 0:
@@ -413,6 +420,7 @@ class TilesBoard(ABC):
         # this function needs to be made simpler ... match_all should be only called once
         # update: match all is called once
 
+
         if self.falling_shape is not None and self.falling_shape.get_status() == Status.FALLEN:
             self.just_landed()
 
@@ -675,7 +683,7 @@ class TilesBoard(ABC):
 
     def is_stationary_tile(self, row, col):
         # for example, the virus in Dr.Mario is stationary and it will not fall down even though there is empty space below
-        self.get_tile_on_index(row, col).get_stationary()
+        return self.get_tile_on_index(row, col).get_stationary()
 
     @abstractmethod
     def match_all(self):

@@ -2,7 +2,7 @@ import sys
 
 # if you are having a engine moduleNotFound error, you will have to include the root directory path to sys.path
 #sys.path.append(r'/Users/okdrahcir/documents/github/Inf-122-Final-Project')
-#sys.path.append(r'/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project')
+sys.path.append(r'/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project')
 
 
 from drmario.dmTileBoard import DMTileBoard
@@ -37,8 +37,8 @@ class DrMarioGame(TMGE):
         # self.tile_types = [["E", "E", "E"],["E", "E", "Y"], ["E", "E", "Y"], ["E", "E", "Y"], ["E", "R", "Y"],["E", "Y", "Y"], ["E", "R", "Y"], ["Y", "R", "R"]] #vertical matching case 5
 
         # horizontal matching
-        self.tile_types = [["E", "E", "E", "E"], ["E", "E", "E", "Y"], ["E", "E", "E", "Y"], ["E", "E", "R", "R"],
-                           ["R", "Y", "Y", "Y"],  ["E", "E", "E", "E"],["E", "E", "E", "E"], ["E", "E", "E", "E" ]]  # horizontal matching test 1
+        self.tile_types = [["E", "E", "E", "E"], ["E", "E", "E", "Y"], ["E", "Y", "E", "Y"], ["E", "Y", "R", "R"],
+                           ["R", "Y", "E", "Y"],  ["E", "E", "E", "E"],["E", "E", "E", "E"], ["E", "E", "E", "E" ]]  # horizontal matching test 1
         # self.tile_types = [["E", "E", "E", "E"], ["E", "E", "E", "E"],["E", "E", "E", "Y"],["E", "E", "E", "Y"], ["E", "E", "Y", "Y"], ["Y", "Y", "Y", "Y"]] #horizontal matching test 2
         # self.tile_types = [ ["Y", "Y", "Y", "Y", "R", "Y", "Y", "Y" ], ["Y", "Y", "Y", "Y", "R", "R", "Y", "R"]] #horizontal matching test 3
         #
@@ -47,7 +47,7 @@ class DrMarioGame(TMGE):
         # self.tile_types = [ ["Y", "Y", "Y", "Y", "R", "Y", "Y", "Y" ], ["Y", "Y", "Y", "Y", "R", "R", "Y", "R"]] #horizontal matching test 3
 
         # test stationary tiles
-        self.tile_types = [["E", "E", "E", "E"], ["E", "E", "E", "E"], ["E", "E", "R", "E"], ["E", "E", "RV", "E"], ["E", "E", "E", "E"]]
+        # self.tile_types = [["E", "E", "E", "E"], ["E", "E", "E", "E"], ["E", "E", "R", "E"], ["E", "E", "RV", "E"], ["E", "E", "E", "E"]]
 
         self.tile_size = 20
 
@@ -77,30 +77,27 @@ class DrMarioGame(TMGE):
         factory = TileAbstractFactory()
         # initialize each inidividual factory
 
-        # yellow_factory = TileFactory(Yellow, Sprite("images/yellow-tile.png"), "Y", False)
-        # red_factory = TileFactory(Red, Sprite("images/red-tile.png"), "R", False)
-        yellow_factory = TileFactory(Yellow, Sprite("yellow-tile.png"), "Y", False)
-        red_factory = TileFactory(Red, Sprite("red-tile.png"), "R", False)
-        # yellow_factory = TileFactory(Yellow, Sprite("/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project/images/yellow-tile.png"), "Y", False)
-        # red_factory = TileFactory(Red, Sprite("/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project/images/red-tile.png"), "R", False)
+        yellow_factory = TileFactory(Yellow, Sprite("images/yellow-tile.png"), "Y", False)
+        red_factory = TileFactory(Red, Sprite("images/red-tile.png"), "R", False)
 
-        red_virus_factory = TileFactory(RedVirus, Sprite("red-tile.png"), "RV", True)
+        # yellow_factory = TileFactory(Yellow, Sprite("/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project/images/yellow-tile.png"), "Y", True)
+        # red_factory = TileFactory(Red, Sprite("/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project/images/red-tile.png"), "R", False)
+        #
+        # red_virus_factory = TileFactory(RedVirus, Sprite("red-tile.png"), "RV", True)
 
         # register individual factories within the main factory
         factory.register_factory("Y", yellow_factory)
         factory.register_factory("R", red_factory)
-        factory.register_factory("RV", red_virus_factory)
+        # factory.register_factory("RV", red_virus_factory)
         self.set_factory(factory)
 
     def set_up_my_falling_tile_factories(self):
         falling_factory = TileAbstractFactory()
         # we can take advantage of the sprite, it is still yellow tile
         # but this time it is yellow pill not the virus and since these are different factories there is not conflict between the two
-        # yellow_factory = TileFactory(Yellow, Sprite("/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project/images/yellow-pill.png"), "A", False)
-        # red_factory = TileFactory(Red, Sprite("/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project/images/red-pill.png"), "B", False)
 
-        yellow_factory = TileFactory(Yellow, Sprite("yellow-tile.png"), "A", False)
-        red_factory = TileFactory(Red, Sprite("red-tile.png"), "B", False)
+        yellow_factory = TileFactory(Yellow, Sprite("yellow-pill.png"), "A", False)
+        red_factory = TileFactory(Red, Sprite("red-pill.png"), "B", False)
 
         falling_factory.register_factory("Y", yellow_factory)
         falling_factory.register_factory("R", red_factory)

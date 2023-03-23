@@ -10,12 +10,19 @@ class DMTileBoard(TilesBoard):
     def overriden(f): # for documentation purposes
         return f
 
+    # want to end the game if all the viruses were eliminated
+    # def viruses_still_present(self):
+    #     for row in self.get_num_rows():
+    #         for col in self.get_num_columns():
+
+
     @overriden
     def match_all(self):
         # for DR mario we want both matches
         self.horizontal_match()
-        self.group_match()
         self.vertical_match()
+        self.group_match()
+
 
     @overriden
     def ending_condition(self) -> bool:
@@ -24,17 +31,26 @@ class DMTileBoard(TilesBoard):
         # depending on how many tiles are falling at once.
         # ex. if 2 tiles are falling -> gui will hide row[0] -> must check row[1] for ending condition
         # ex. if 3 tiles are falling -> gui will hide row[0] and row[1] -> must check row[2] for ending condition
-        topRowOfBoard = self.board[self.max_num_shape_tiles-1]
+        ## oops, it is supposed to be 2
+        topRowOfBoard = self.board[self.max_num_shape_tiles-2]
 
         # use for testing
         # print("self.max_num_shape_tiles-1", self.max_num_shape_tiles-1)
         # print("topRowOfBoard", topRowOfBoard)
 
+        # if there are still matching tiles present, then it might be possible that it does not end the game,
+        # so return False for now
+
+        if self.matched_tiles_present():
+            return False
+
         for tile in topRowOfBoard:
             #use below to test the result of the if statement
             #print(tile.get_letter() != " ", tile.status != Status.FALLING, tile.status != Status.FALLEN)
-            if tile.get_letter() != " " and tile.status != Status.FALLING and tile.status != Status.FALLEN:
+            if tile.get_letter() != " " and tile.status != Status.FALLING and tile.status != Status.FALLEN and tile.status != Status.MATCHED:
                 print("game over")
                 return True
         
         return False
+
+

@@ -3,7 +3,6 @@ from engine.Tile.status import Status
 from engine.Sprite.sprite import Sprite
 
 
-
 class Tile:
     def __init__(self, sprite:Sprite, letter:str, stationary:bool):
         self.sprite = sprite
