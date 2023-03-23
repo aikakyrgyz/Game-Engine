@@ -10,7 +10,7 @@ class Scoreboard:
         return self.scoreboard
 
 
-def insert_dm_score(dmscore):
+def insert_dm_score(player, dmscore):
     try:
         connection = mysql.connector.connect(host='localhost',
                                              database='players',
@@ -18,12 +18,11 @@ def insert_dm_score(dmscore):
                                              password='wit122')
 
         cursor = connection.cursor()
-        mysql_insert_query = """INSERT INTO Players (Dmscore)
-                                VALUES (%s)"""
+        mysql_insert_query = """UPDATE players SET Dmscore =%s WHERE Username =%s"""
 
-        cursor.execute(mysql_insert_query, (dmscore,))
+        cursor.execute(mysql_insert_query, (dmscore, player))
         connection.commit()
-        print("Dr. Mario score inserted successfully into Players table!")
+        print(f"{player}'s Dr. Mario score has been updated to {dmscore}!")
 
     except mysql.connector.Error as error:
         print("Failed to insert score into Players table.\n{}".format(error) + '.')
@@ -35,7 +34,7 @@ def insert_dm_score(dmscore):
             print("MySQL connection has been closed.")
 
 
-def insert_puyo_score(puyoscore):
+def insert_puyo_score(player, puyoscore):
     try:
         connection = mysql.connector.connect(host='localhost',
                                              database='players',
@@ -43,12 +42,11 @@ def insert_puyo_score(puyoscore):
                                              password='wit122')
 
         cursor = connection.cursor()
-        mysql_insert_query = """INSERT INTO Players (Puyoscore)
-                                VALUES (%s)"""
+        mysql_insert_query = """UPDATE players SET Puyoscore =%s WHERE Username =%s"""
 
-        cursor.execute(mysql_insert_query, (puyoscore,))
+        cursor.execute(mysql_insert_query, (puyoscore, player))
         connection.commit()
-        print("Puyo Puyo score inserted successfully into Players table!")
+        print(f"{player}'s Dr. Mario score has been updated to {puyoscore}!")
 
     except mysql.connector.Error as error:
         print("Failed to insert score into Players table.\n{}".format(error) + '.')
@@ -160,8 +158,10 @@ def compare_dm_score(player1, player2):
     score1 = return_dm_score(player1)
     score2 = return_dm_score(player2)
     if score1 > score2:
+        print(f"{player1} wins!")
         return player1
     else:
+        print(f"{player2} wins!")
         return player2
 
 
@@ -169,6 +169,8 @@ def compare_puyo_score(player1, player2):
     score1 = return_puyo_score(player1)
     score2 = return_puyo_score(player2)
     if score1 > score2:
+        print(f"{player1} wins!")
         return player1
     else:
+        print(f"{player2} wins!")
         return player2
