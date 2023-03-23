@@ -12,6 +12,7 @@ import pygame
 # >>> int(delta.total_seconds() * 1000) # milliseconds
 # 5077
 from engine.Board.tiles_board import TilesBoard
+from engine.GameObject.direction import ROTATE
 
 
 # since TMGE contains one or more abstract functions, it is also an abstract class
@@ -147,7 +148,9 @@ class TMGE(ABC):
             if event.type == pygame.QUIT or pygame.K_ESCAPE:
                     pygame.quit()
                     return
-            
+
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
+                self.tile_board.move_falling_shape(ROTATE)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
                 self.tile_board.move_falling_shape("LEFT")
                 # self._play_sound('move')
