@@ -154,7 +154,7 @@ class TMGE(ABC):
         # draw other parts of the screen
 
     def get_current_score(self):
-        self.tile_board.get_score()
+        return self.tile_board.get_score()
 
     def set_tile_board(self, board):
         self.tile_board = board
