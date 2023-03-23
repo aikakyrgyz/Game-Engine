@@ -38,7 +38,7 @@ def check_if_player_exists(name):
 
         result = cursor.fetchone()
         if result is not None:
-            print("Player username inserted successfully into Players table!")
+            print("Player confirmed.")
             return True
         else:
             return False

@@ -128,3 +128,13 @@ def return_combined_score(name):
             cursor.close()
             connection.close()
             print("MySQL connection has been closed.")
+
+
+def compare_dm_score(player1, player2):
+    score1 = return_dm_score(player1)
+    score2 = return_dm_score(player2)
+
+
+def compare_puyo_score(player1, player2):
+    score1 = return_puyo_score(player1)
+    score2 = return_puyo_score(player2)
