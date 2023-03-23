@@ -175,6 +175,7 @@ class GUI:
                                                     )
 
 
+
 if __name__ == '__main__':
     gui = GUI()
     print(LEFT.direction)

@@ -63,23 +63,6 @@ class MainMenu:
 
     # def set_window_dimensions(self, width, height):
     #     self.surface_height = height
-    #     self.surface_width = width
-
-    def registration(self):
-        two_player = False
-        player1 = self.players[0].get_value()
-        player2 = self.players[1].get_value()
-
-        reg.register_player(player1)
-        print(f"Registered Player 1: {player1}")
-        # register player 1
-        # best to validate here or in registration?
-        if player2 != "":
-            print(f"Registered Player 2: {player2}")
-            reg.register_player(player2)
-            two_player = True
-
-        return two_player
 
 
     def start_selected_game(self):
@@ -88,20 +71,31 @@ class MainMenu:
         :return:
         """
         # needs some work if we want it to be able to start additional games
-        flag = self.registration()
+        two_player = False
+        player1 = self.players[0].get_value()
+        player2 = self.players[1].get_value()
+
+        reg.register_player(player1)
+        print(f"Registered Player 1: {player1}")
+        if player2 != "":
+            print(f"Registered Player 2: {player2}")
+            reg.register_player(player2)
+            two_player = True
+
+        flag = two_player
         print(flag)
         if not flag and self.selected_game_index == 0:
             print("Starting Dr. Mario in 1P...")
-            dm.start_menu()
+            dm.start_menu_1p(player1)
         elif not flag and self.selected_game_index == 1:
             print("Starting Puyo Puyo in 1P...")
-            pm.start_menu()
+            pm.start_menu_1p(player1)
         elif flag and self.selected_game_index == 0:
             print("Starting Dr. Mario in 2P...")
-            dm.start_menu()
+            dm.start_menu_2p(player1, player2)
         elif flag and self.selected_game_index == 1:
             print("Starting Puyo Puyo in 2P...")
-            pm.start_menu()
+            pm.start_menu_2p(player1, player2)
         else:
             print("No game selected!")
 
@@ -196,18 +190,17 @@ class MainMenu:
         )
 
         def check_sql(profile_username):
-
             def get_input(input):
                 player.change_username(profile_username, input)
 
             if player.check_if_player_exists(profile_username):
                 input = profile_menu.add.text_input('New Name: ', maxchar=20, onreturn=get_input).set_alignment(
-            pygame_menu.locals.ALIGN_CENTER, )
+                    pygame_menu.locals.ALIGN_CENTER, )
                 text = profile.display_score(profile_username)
                 profile_menu.add.button(text[0]).set_alignment(
-            pygame_menu.locals.ALIGN_CENTER, )
+                    pygame_menu.locals.ALIGN_CENTER, )
                 profile_menu.add.button(text[1]).set_alignment(
-            pygame_menu.locals.ALIGN_CENTER, )
+                    pygame_menu.locals.ALIGN_CENTER, )
 
         self.username = profile_menu.add.text_input('Username: ', maxchar=20, onreturn=check_sql).set_alignment(
             pygame_menu.locals.ALIGN_CENTER, )
@@ -270,6 +263,7 @@ class MainMenu:
     #     quit_btn = menu.add.button('Quit', pygame_menu.events.EXIT)
     #
     #     return back_btn, quit_btn
+
 
 if __name__ == '__main__':
     menu = MainMenu(app_theme.APP_TITLE, (app_theme.SURFACE_HEIGHT, app_theme.SURFACE_WIDTH), app_theme.get_theme())
