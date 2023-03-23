@@ -62,7 +62,8 @@ class TMGE(ABC):
 
             if self.tile_board.ending_condition():
                 self.game_over = True
-                return
+                # return score here
+                break
             self.handle_key_events()
 
 
