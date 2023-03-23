@@ -14,22 +14,16 @@ class GUI:
     def __init__(self, theme=apptheme):
         #pygame.init()
         # pygame.display.init()
-        pygame.font.init() # text added for testing
-        self.text_font = pygame.font.SysFont('Arial', 15, False, False) # text added for testing
-        self.screen_width = 1200
-        self.screen_height = 800
+        pygame.font.init()  # text added for testing
+        self.text_font = pygame.font.SysFont('Arial', 15, False, False)  # text added for testing
+        self.screen_width = theme.SURFACE_WIDTH
+        self.screen_height = theme.SURFACE_HEIGHT
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
         self.score = 0
         print("Initialized Pygamedisplay")
         pygame.display.set_caption('Tile Matching Game Environment')
         self.theme = theme
         # pygame.init()
-        self.setup_game()
-        self.game_display = pygame_menu.Menu(height=self.screen_height,
-                                             position=(875, 25, False),
-                                             theme=self.theme.get_theme(),
-                                             title='',
-                                             width=250)
 
     def draw_board(self, tile_board:TilesBoard):
         self.game_display.add.vertical_margin(10)
@@ -51,18 +45,10 @@ class GUI:
                                          selection_box_width=200,
                                          selection_option_font_size=20,
                                          shadow_width=20)
-        self.game_display.add.vertical_margin(10)
-        start_button = self.game_display.add.button('Start',
-                                                    button_id='run_game',
-                                                    font_size=20,
-                                                    margin=(0, 30),
-                                                    shadow_width=10,
-                                                    )
 
     def draw_board(self, tile_board: TilesBoard):
         self.tile_size = tile_board.get_tile_size() * 3  # multipled for now to increase tile size for visuals
         # clock = pygame.time.Clock() # slows down the tiles
-        self.tile_size = tile_board.get_tile_size() * 3 # multipled for now to increase tile size for visuals
 
         screen_center_x = self.screen_width // 2
         screen_center_y = self.screen_height // 2
@@ -102,13 +88,13 @@ class GUI:
                 elif status == Status["MATCHED"]:
                     to_print += f'*{letter}*'
                     self.draw_tile(tile, x, y, self.tile_size)
-                    self.draw_tile(tile, x, y, self.tile_size)                
                 else:
                     to_print += " " + letter + " "
                     self.draw_tile(tile, x, y, self.tile_size)
             print(to_print + '|')
         print(f" {3 * tile_board.get_num_columns() * '-' + ' '}")
         pygame.display.update()
+        # clock.tick(3) #slows down the tiles
 
     def falling_obj_movement(self, keys_pressed, obj: TilesBoard, velocity=1):
         """
@@ -173,6 +159,36 @@ class GUI:
                                                     margin=(0, 30),
                                                     shadow_width=10,
                                                     )
+
+    def in_game_dash(self):
+        dash = pygame_menu.Menu(title='',
+                                height=self.screen_height,
+                                mouse_motion_selection=True,
+                                position=(875, 25, False),
+                                width=200)
+        # score
+        dash.add.label('Current Score',
+                       font_name=pygame_menu.font.FONT_FIRACODE_BOLD,
+                       font_size=22,
+                       margin=(0, 5)
+                       )
+        # pause
+        dash.add.button('Pause',
+                        button_id='run_game',
+                        font_size=20,
+                        margin=(0, 30),
+                        shadow_width=10,
+                        # action=pygame_menu.events.
+                        )
+        # quit game, not app
+        dash.add.button('Quit',
+                        button_id='quit_game',
+                        font_size=20,
+                        margin=(0, 30),
+                        shadow_width=10,
+                        action=pygame_menu.events.CLOSE
+                        )
+        return dash
 
 
 
