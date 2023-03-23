@@ -7,7 +7,7 @@ from engine.Tile.tile import Tile
 
 
 class GUI:
-    def __init__(self):
+    def __init__(self, ):
         pygame.init()
         # pygame.display.init()
         pygame.font.init() # text added for testing
@@ -19,7 +19,7 @@ class GUI:
         pygame.display.set_caption('Tile Matching Game Environment')
 
     def draw_board(self, tile_board:TilesBoard):
-        clock = pygame.time.Clock() # slows down the tiles
+        # clock = pygame.time.Clock() # slows down the tiles
         self.tile_size = tile_board.get_tile_size() * 3 # multipled for now to increase tile size for visuals
 
         screen_center_x = self.screen_width // 2
@@ -67,7 +67,7 @@ class GUI:
             print(to_print + '|')
         print(f" {3 * tile_board.get_num_columns() * '-' + ' '}")
         pygame.display.update()
-        clock.tick(3) #slows down the tiles
+        # clock.tick(3) #slows down the tiles
 
     def falling_obj_movement(self, keys_pressed, obj, velocity):
         """

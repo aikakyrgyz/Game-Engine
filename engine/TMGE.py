@@ -166,8 +166,8 @@ class TMGE(ABC):
             #         pygame.quit()
             #         return
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-                self.tile_board.move_falling_shape(Direction.LEFT)
                 print("left was pressed")
+                self.tile_board.move_falling_shape(Direction.LEFT)
                 # self._play_sound('move')
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
                 print("right was pressed")
@@ -179,3 +179,4 @@ class TMGE(ABC):
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 print("space was pressed")
                 self.tile_board.rotate_shape_on_board()
+

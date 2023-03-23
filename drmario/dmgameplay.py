@@ -38,10 +38,10 @@ class DrMarioGame(TMGE):
 
         # horizontal matching
         self.tile_types = [["E", "E", "E", "E"], ["E", "E", "E", "Y"], ["E", "E", "E", "Y"], ["E", "E", "R", "R"],
-                           ["R", "Y", "Y", "Y"]]  # horizontal matching test 1
+                           ["R", "Y", "Y", "Y"],  ["E", "E", "E", "E"],["E", "E", "E", "E"], ["E", "E", "E", "E" ]]  # horizontal matching test 1
         # self.tile_types = [["E", "E", "E", "E"], ["E", "E", "E", "E"],["E", "E", "E", "Y"],["E", "E", "E", "Y"], ["E", "E", "Y", "Y"], ["Y", "Y", "Y", "Y"]] #horizontal matching test 2
         # self.tile_types = [ ["Y", "Y", "Y", "Y", "R", "Y", "Y", "Y" ], ["Y", "Y", "Y", "Y", "R", "R", "Y", "R"]] #horizontal matching test 3
-
+        #
         self.tile_size = 20
 
         # the reason why we want them to be produced from the same factories is for matching purposes.
