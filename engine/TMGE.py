@@ -181,14 +181,15 @@ class TMGE(ABC):
         Handles each pygame event
         Pressing space, right arrow and left arrow triggers a sound
         """
+        pygame.init()
         for event in pygame.event.get():
-            # this line is giving an error: pygame.display not initialized
-            # if event.type == pygame.QUIT or pygame.K_ESCAPE:
-            #     pygame.quit()
-            #     return
-
             if event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
                 self.tile_board.move_falling_shape(ROTATE)
+            # this line is giving an error: pygame.display not initialized
+            if event.type == pygame.QUIT or pygame.K_ESCAPE:
+                pass
+            #         pygame.quit()
+            #         return
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
                 print("left was pressed")
                 self.tile_board.move_falling_shape(Direction.LEFT)
