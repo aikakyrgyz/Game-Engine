@@ -58,12 +58,13 @@ class TMGE(ABC):
                 self.last_update += self.delta
                 update_count += 1
                 self.redraw()
+                self.tile_board.get_score()
             time.sleep(1)
 
             if self.tile_board.ending_condition():
                 self.game_over = True
                 # return score here
-                break
+                return self.get_current_score()
             self.handle_key_events()
 
 
@@ -151,6 +152,9 @@ class TMGE(ABC):
     def redraw(self):
         self.GUI.draw_board(self.tile_board)
         # draw other parts of the screen
+
+    def get_current_score(self):
+        self.tile_board.get_score()
 
     def set_tile_board(self, board):
         self.tile_board = board
