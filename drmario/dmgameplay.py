@@ -80,8 +80,8 @@ class DrMarioGame(TMGE):
 
         # yellow_factory = TileFactory(Yellow, Sprite("images/yellow-tile.png"), "Y", False)
         # red_factory = TileFactory(Red, Sprite("images/red-tile.png"), "R", False)
-        yellow_virus_factory = TileFactory(YellowVirus, Sprite("yellow-virus.png"), "Y", True)
-        red_virus_factory = TileFactory(RedVirus, Sprite("red-virus.png"), "R", True)
+        yellow_virus_factory = TileFactory(Yellow, Sprite("yellow-virus.png"), "Y", True)
+        red_virus_factory = TileFactory(Red, Sprite("red-virus.png"), "R", True)
         # yellow_factory = TileFactory(Yellow, Sprite("/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project/images/yellow-tile.png"), "Y", False)
         # red_factory = TileFactory(Red, Sprite("/Users/aigerimkubanychbekova/Desktop/final-women/Inf-122-Final-Project/images/red-tile.png"), "R", False)
 
