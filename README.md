@@ -33,7 +33,7 @@ to receive user input. If only one name is entered, then the chosen game begins 
 mode, the user's score is recorded in the database and the GUI exits.
 
 5. If two names are entered, then the game begins in 2P mode. The first player plays and when the game reaches its end,
-the first player's score is entered in the database. Afterwards, the second player can press a button to begin their
+the first player's score is entered in the database. Afterwards, the second player must press enter to begin their
 turn. Their score is also entered into the database after game completion. Finally, both players' scores are pulled
 from the database to compare who the winner is. This will be stated in the terminal itself.
 
