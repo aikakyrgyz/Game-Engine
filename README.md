@@ -16,12 +16,14 @@ provided in the images below:
 </p>
 
 2. After the database is installed, the following two syntax can be run to create the tables needed.
-CREATE TABLE players (Playerid int AUTO_INCREMENT, Username varchar(255) NOT NULL UNIQUE, Dmscore int, Puyoscore int, Totalscore int, PRIMARY KEY (Playerid));
-CREATE TABLE games (Gameid int AUTO_INCREMENT, Gamename varchar(255) NOT NULL UNIQUE, PRIMARY KEY (Gameid));
-The game can then be started from the file "mainmenu.py" under the "interface" directory. Unfortunately, 
-the scoreboard menu is programmed to work if the Players table has more than five entries in it. 
-This code is commented out in this final version, but can be found on lines 129, 152, and 159. They can be
-used if the Players table has more than five entries in it.
+
+- CREATE TABLE players (Playerid int AUTO_INCREMENT, Username varchar(255) NOT NULL UNIQUE, Dmscore int, Puyoscore int, Totalscore int, PRIMARY KEY (Playerid));
+- CREATE TABLE games (Gameid int AUTO_INCREMENT, Gamename varchar(255) NOT NULL UNIQUE, PRIMARY KEY (Gameid));
+
+  The game can then be started from the file "mainmenu.py" under the "interface" directory. Unfortunately, 
+  the scoreboard menu is programmed to work if the Players table has more than five entries in it. 
+  This code is commented out in this final version, but can be found on lines 129, 152, and 159. They can be
+  used if the Players table has more than five entries in it.
 
 3. A choice of a game can be selected by clicking the "Play Game < [Game Name] >" button. The "Profile" menu allows one
 to enter a pre-existing username already registered into the system. Once entered, the scores for the player will be
