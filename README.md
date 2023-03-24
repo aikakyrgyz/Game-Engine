@@ -45,10 +45,15 @@ It is recommended to run the games directly from their files as the GUI is expli
 well as allow 1P/2P mode.
 This can be found in the following two respective files.
 
+Run individual games by accessing the corresponding files listed:
+
 Dr. Mario:
 - drmario/dmgameplay.py
 
 Puyo Puyo:
 - puyopuyo/puyogameplay.py
+
+Run the app through the following file: 
+- app.py
 
 Additionally, if the GUI is not working, the game can still be seen and played from the terminal itself.
