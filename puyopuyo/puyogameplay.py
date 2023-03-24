@@ -23,7 +23,7 @@ class PuyoGame(TMGE):
         TMGE.__init__(self, FPS, GUI)
 
         #puyopuyo starts with an empty board always
-        self.tile_types = [["E", "E", "E"],["E", "E", "E"], ["E", "E", "E"], ["E", "E", "E"], ["E", "E", "E"],["E", "E", "E"], ["E", "E", "E"], ["E", "E", "E"]] #vertical matching case 2
+        self.tile_types = [["E", "E", "E", "E", "E"],["E", "E", "E", "E", "E"], ["E", "E", "E", "E", "E"], ["E", "E", "E", "E", "E"], ["E", "E", "E", "E", "E"],["E", "E", "E", "E", "E"], ["E", "E", "E", "E", "E"], ["E", "E", "E", "E", "E"]] #vertical matching case 2
 
         self.tile_size = 20
         # the reason why we want them to be produced from the same factories is for matching purposes.
@@ -92,7 +92,8 @@ class PuyoGame(TMGE):
 if __name__ == '__main__':
     pygame.init()
     myGUI = GUI()
-    myPuyoGame = PuyoGame(60, myGUI)
-    myPuyoGame.run()
+    myPuyoGame = PuyoGame(120, myGUI)
+    score = myPuyoGame.run()
+    print("Score in Puyo Puyo: ", score)
 
 

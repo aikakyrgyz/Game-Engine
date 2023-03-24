@@ -58,7 +58,7 @@ class FallingShape(GameObject):
             tile.set_status(Status.FALLING)
             tile.set_index(i, self.get_column())
             self._instance.append(tile)
-        print("The faller has been created")
+        print(f"The faller {self.orientation} has been created")
         print([tile.get_letter() for tile in self._instance])
 
     def update(self):

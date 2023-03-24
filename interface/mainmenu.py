@@ -75,10 +75,13 @@ class MainMenu:
         player2 = self.players[1].get_value()
 
         reg.register_player(player1)
-        print(f"Registered Player 1: {player1}")
-        if player2 != "":
+        if player1 != "":
+            reg.register_player(player1)
+            print(f"Registered Player 1: {player1}")
+        elif player2 != "":
             print(f"Registered Player 2: {player2}")
             reg.register_player(player2)
+        elif player1 != "" and player2 != "":
             two_player = True
 
         flag = two_player
@@ -125,7 +128,7 @@ class MainMenu:
         profile_menu = self.profile_menu()
         # initiate registration menu
         reg_menu = self.reg_menu()
-        # initiate scoreboard menu
+        # initiate scoreboard menu (comment out line 129 if no SQL database)
         # score_menu = self.score_menu()
 
         # Main Menu ----------------------------------------------------------
@@ -148,8 +151,9 @@ class MainMenu:
         self.app_menu.add.button('Profile', profile_menu)
         # self.app_menu.add.vertical_margin(self.menu_width/2)
 
-        # comment out if no SQL database
-        #self.app_menu.add.button('Scoreboard', score_menu)
+        # comment out line 159 if no SQL database
+        # self.app_menu.add.button('Scoreboard', score_menu)
+
         # self.app_menu.add.horizontal_margin(self.menu_height/2)
         # self.play1 = reg_menu.add.button(f'Play {get_game_list_menu()[1][0]}', self.start_selected_game)
         self.app_menu.add.button('Quit', pygame_menu.events.EXIT)
@@ -176,6 +180,7 @@ class MainMenu:
     #         pygame_menu.locals.ALIGN_CENTER, )
     #     score_menu.add.button(text[4]).set_alignment(
     #         pygame_menu.locals.ALIGN_CENTER, )
+    #
     #     return score_menu
 
     def profile_menu(self):
