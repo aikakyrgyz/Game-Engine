@@ -11,7 +11,7 @@ code under the database folder) was set for the database, but no other settings 
 created, but one ended up not being used in our final version of the code (the games schema was intended to pass the 
 list of games dynamically through the GUI, but we were having issues with GUI display). An idea of the set-up is
 provided in the images below:
-![https://i.imgur.com/E2UulYF.png]
+![](https://i.imgur.com/E2UulYF.png)
 2. After the database is installed, the following two syntax can be run to create the tables needed.
 CREATE TABLE players (Playerid int AUTO_INCREMENT, Username varchar(255) NOT NULL UNIQUE, Dmscore int, Puyoscore int, Totalscore int, PRIMARY KEY (Playerid));
 CREATE TABLE games (Gameid int AUTO_INCREMENT, Gamename varchar(255) NOT NULL UNIQUE, PRIMARY KEY (Gameid));
