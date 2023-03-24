@@ -45,6 +45,7 @@ It is recommended to run the games directly from their files as the GUI is expli
 well as allow 1P/2P mode.
 This can be found in the following two respective files.
 
+
 Run individual games by accessing the corresponding files listed:
 
 Dr. Mario:
@@ -55,5 +56,16 @@ Puyo Puyo:
 
 Run the app through the following file: 
 - app.py
+
+
+Folow the prompts on the menu. 
+- Arrow over or click to choose a game
+- Click 'Play' to start the game 
+- Click 'Profile' to view a registered players profile, change user name, and view high scores * NOTE: this feature will only work if the database is up and running
+
+After clicking 'Play'
+- enter a 1 or 2 players, click 'Start' to start the game
+- if 2 players are playing, utilize the terminal to begin player 2 playtime & return to the gui
+
 
 Additionally, if the GUI is not working, the game can still be seen and played from the terminal itself.
