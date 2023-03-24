@@ -5,7 +5,7 @@ import pygame_menu
 
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-from interface import mainmenu as mm
+from interface.mainmenu import MainMenu
 from interface.mainmenu import PROJ_DIR_IMG
 
 
@@ -36,7 +36,7 @@ def get_game_list_menu():
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    TMapp = mm.MainMenu(title="TM App")
+    TMapp = MainMenu(title="TM App")
     TMapp.start_menu()
     TMapp.app_menu.mainloop(TMapp.surface, bgfun=draw_background)
 

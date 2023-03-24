@@ -1,10 +1,10 @@
 import os
 import pygame
 import pygame_menu
-import apptheme as app_theme
-import registration as reg
+from interface import apptheme as app_theme
+from interface import registration as reg
 import profile
-import scoreboard as score
+from interface import scoreboard as score
 from database import player
 from puyopuyo import puyoui as pm
 from drmario import dmUI as dm
@@ -29,7 +29,7 @@ def get_game_list_menu():
 
 
 class MainMenu:
-    def __init__(self, title, surface_dimensions, theme=app_theme.get_theme()):
+    def __init__(self, title, surface_dimensions=(app_theme.SURFACE_HEIGHT, app_theme.SURFACE_WIDTH), theme=app_theme.get_theme()):
         # self.conf_profile_menu = None
         self.play_button = None
         self.image_widget = None
