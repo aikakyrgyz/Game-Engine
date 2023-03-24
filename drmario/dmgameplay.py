@@ -42,7 +42,8 @@ class DrMarioGame(TMGE):
 
         # horizontal matching
         self.tile_types = [["E", "E", "E", "E"], ["E", "E", "E", "Y"], ["E", "E", "E", "Y"], ["E", "E", "R", "R"],
-                           ["R", "Y", "Y", "Y"],  ["E", "E", "E", "E"],["E", "E", "E", "E"], ["E", "E", "E", "E" ]]  # horizontal matching test 1
+                           ["R", "Y", "Y", "Y"], ["E", "E", "E", "E"], ["E", "E", "E", "E"],
+                           ["E", "E", "E", "E"]]  # horizontal matching test 1
         # self.tile_types = [["E", "E", "E", "E"], ["E", "E", "E", "E"],["E", "E", "E", "Y"],["E", "E", "E", "Y"], ["E", "E", "Y", "Y"], ["Y", "Y", "Y", "Y"]] #horizontal matching test 2
         # self.tile_types = [ ["Y", "Y", "Y", "Y", "R", "Y", "Y", "Y" ], ["Y", "Y", "Y", "Y", "R", "R", "Y", "R"]] #horizontal matching test 3
 
@@ -113,11 +114,10 @@ class DrMarioGame(TMGE):
     def get_falling_tile_types(self):
         return self.falling_tile_types
 
+
 if __name__ == '__main__':
     pygame.init()
     myGUI = GUI()
     myDrMarioGame = DrMarioGame(60, myGUI)
     score = myDrMarioGame.run()
-    print("SCORE IN DR MARIO", score)
-    
-
+    print("Score in Dr. Mario: ", score)
