@@ -1,4 +1,4 @@
-TGME game for "Women in Tech" Group AKA Group 11. The following contain the instructions to run the game.
+TGME game for "Women in Tech" Group AKA Group 11. The following README contains the instructions needed to run the game engine.
 
 As this project uses a database, there are two ways to run the game after cloning the repository.
 - With SQL.
@@ -50,3 +50,5 @@ Dr. Mario:
 
 Puyo Puyo:
 - puyopuyo/puyogameplay.py
+
+Additionally, if the GUI is not working, the game can still be seen and played from the terminal itself.
